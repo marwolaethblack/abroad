@@ -16,3 +16,4 @@ class FrontPagePost extends Component {
 }
 
 export default FrontPagePost;
+

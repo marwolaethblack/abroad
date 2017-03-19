@@ -15,6 +15,7 @@ const postSchema = new mongoose.Schema({
    content: String,
    image: String,
    upvotes: Number,
+   downvotes: Number,
    comments: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "Comment"

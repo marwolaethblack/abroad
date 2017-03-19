@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { fetchPosts } from '../actions';
+import React, { Component, PropTypes } from 'react';
+import { connect, bindActionCreators } from 'react-redux';
+import { fetchPosts, filterUpdate } from '../actions';
 
 import SearchFilter from '../components/SearchFilter';
 import SortFilter from '../components/SortFilter';
@@ -10,16 +10,21 @@ import Post from '../components/Post.js';
 class PostsPage extends Component {
   
   componentDidMount() {
-      this.props.loadPosts();
+      this.props.loadPosts(this.props.filterQuery);
   }
   
   render() {
     return (
     <section>
-        <SearchFilter />
+
+        <SearchFilter 
+         query={this.props.filterQuery}
+         filterUpdate={this.props.updateFilterValue} 
+         getPosts={this.props.loadPosts} />
+
         <SortFilter />
         <div className="posts-page">
-           {this.props.posts.map((post,index) => <Post {...post} key={post.id}/> )}
+           {this.props.posts.map((post,index) => <Post key={post._id} {...post} /> )}
         </div>
     </section>
     )
@@ -27,17 +32,19 @@ class PostsPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  test: "Test text in mapStateToProps",
-  posts: state.posts
+  posts: state.posts,
+  filterQuery: state.filter
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        loadPosts: () => {
-      dispatch(fetchPosts());
+        loadPosts(query) {
+          dispatch(fetchPosts(query));
+        },
+        updateFilterValue(name,value){
+          dispatch(filterUpdate(name,value));
+        }
     }
-  }
 }
-
 
 export default connect(mapStateToProps,mapDispatchToProps)(PostsPage);
