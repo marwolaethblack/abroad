@@ -1,18 +1,26 @@
 import React, { Component } from 'react';
+import postDateDiff from '../services/dateDifference';
 
 class ExtendedPost extends Component {
     
   render() {
-    const { title,content,category } = this.props;
-    
+    const { upvotes, image, title, content, category, date, author, comments,_id } = this.props;
+    const datePosted = postDateDiff(_id);
+
     return (
-      <div>
-        <h2>{ title }</h2>
-        <h4>{ category }</h4>
-        <p>{ content }</p>
-        <p>{this.props.upvotes}</p>
-        <p>{this.props.author !== undefined && this.props.author.username}</p>
-      </div>
+      <article>
+        <span>Upvotes {upvotes}</span>
+            <img src={image}/>
+            <h3>{title}</h3>
+            <span>Submitted {datePosted} ago by {author !== undefined&& author.username } to {category}</span>
+            <span>{comments !== undefined&& comments.length}</span>
+            <section className="post-content">
+            { content }
+            </section>
+            <section className="post-comments">
+
+            </section>
+      </article>
     )
   }
 }

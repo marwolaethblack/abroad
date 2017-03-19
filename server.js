@@ -3,6 +3,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import PostModel from './models/Post';
+import CommentModel from './models/Comment';
 
 
 const app = express();
@@ -30,7 +31,7 @@ app.get('/api/posts',(req,res) => {
 
 //Get a single post
 app.get('/api/singlePost',(req,res) => {
-	PostModel.findById(req.query.id).lean().exec((err,singlePost) => {
+	PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec((err,singlePost) => {
 		if(err) console.log(err);
 		res.json(singlePost);
 	});
