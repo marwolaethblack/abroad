@@ -9,7 +9,7 @@ import FrontPage from './containers/FrontPage';
 import PostsPage from './containers/PostsPage';
 
 ReactDOM.render(
-  <Provider store={store}>
+  <Provider store={store()}>
   	<Router history={browserHistory}>
   		<Route path="/" component={App}>
   		<IndexRoute component={FrontPage} />
