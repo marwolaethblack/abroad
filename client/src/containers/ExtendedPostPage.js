@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchSinglePost } from '../actions';
-import ExtendedPost from '../components/ExtendedPost';
 
+import Post from '../components/Post';
+import ExtendedPost from '../components/ExtendedPost';
 
 
 class ExtendedPostPage extends Component {
@@ -13,9 +14,8 @@ class ExtendedPostPage extends Component {
   
   render() {
     const { singlePost, isFetching } = this.props;
-    console.log(singlePost);
     return ( 
-       <h1>aa</h1>
+     <ExtendedPost {...singlePost} />
      );
   }
 }

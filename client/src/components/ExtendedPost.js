@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
+import postDateDiff from '../services/dateDifference';
 
 class ExtendedPost extends Component {
     
   render() {
-    const { upvotes, image, title, content, category, date, author, comments } = this.props;
-    
+    const { upvotes, image, title, content, category, date, author, comments,_id } = this.props;
+    const datePosted = postDateDiff(_id);
+
     return (
       <article>
         <span>Upvotes {upvotes}</span>
             <img src={image}/>
             <h3>{title}</h3>
-            <span>Submitted {date} ago by {author !== undefined&& author.username } to {category}</span>
+            <span>Submitted {datePosted} ago by {author !== undefined&& author.username } to {category}</span>
             <span>{comments !== undefined&& comments.length}</span>
             <section className="post-content">
             { content }

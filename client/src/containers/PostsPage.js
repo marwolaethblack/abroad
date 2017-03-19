@@ -4,7 +4,7 @@ import { fetchPosts, filterUpdate } from '../actions';
 
 import SearchFilter from '../components/SearchFilter';
 import SortFilter from '../components/SortFilter';
-import Post from '../components/Post.js';
+import Post from '../components/Post';
 
 
 class PostsPage extends Component {
