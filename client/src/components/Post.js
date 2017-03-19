@@ -1,25 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import moment from 'moment';
 
 class Post extends Component {
     render() {
+
+        const { upvotes,downvotes,img,_id,title,author,comments,category } = this.props;
+        const date = new Date(parseInt(_id.substring(0, 8), 16) * 1000);
+        const diff = moment.preciseDiff(date, moment(), true); 
+        console.log(diff);
+
         return(
-// <<<<<<< HEAD
-//         	<div>
-// 	        	<h2>{this.props.title}</h2>
-// 	        	<h4>{this.props.category}</h4>
-// 	        	<p>{this.props.content}</p>
-// 	        	<ul>
-// 	        		<li>upvotes: {this.props.upvotes}</li>
-// 	        		<li>downvotes: {this.props.downvotes}</li>
-// 	        	</ul>
-//         	</div>
         	<article>
-	        	<span>Upvotes {this.props.upvotes}</span>
-	        	<img src={this.props.img}/>
-	        	<Link to={`posts/${this.props.id}`}><h3>{this.props.title}</h3></Link>
-	        	<span>Submitted {this.props.date} ago by {this.props.author} to {this.props.category}</span>
-	        	<span>{this.props.comments.length}</span>
+	        	<span>Upvotes: {upvotes}</span>
+                <span>Downvotes: {downvotes}</span>
+	        	<img src={img}/>
+	        	<Link to={`posts/${_id}/${title}`}><h3>{title}</h3></Link>
+	        	<span>Submitted {this.props.date} ago by {author.username} to {category}</span>
+	        	<span>{comments.length}</span>
         	</article>
         );
     }
