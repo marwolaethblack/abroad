@@ -15,7 +15,7 @@ ReactDOM.render(
   		<Route path="/" component={App}>
   		<IndexRoute component={FrontPage} />
   			<Route path="/posts" component={PostsPage} />
-  		  <Route path="/posts/view/:id/:title" component={PostsPage} />
+  		  <Route path="/posts/view/:id/:title" component={ExtendedPostPage} />
   		</Route>
   	</Router>
   </Provider>,

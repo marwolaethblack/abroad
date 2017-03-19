@@ -7,7 +7,7 @@ import { fetchSinglePost } from '../actions';
 class ExtendedPostPage extends Component {
   
   componentDidMount() {
-      this.props.loadPost(this.props.params.id);
+      this.props.loadPost({id: this.props.params.id});
   }
   
   render() {
