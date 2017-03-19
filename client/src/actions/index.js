@@ -24,6 +24,31 @@ export const fetchPosts = filter => dispatch => {
         });
 };
 
+
+//Gets a single post
+export const fetchSinglePost = id => dispatch => {
+    
+    dispatch({ type: ActionTypes.FETCH_SINGLE_POST });
+
+    axios.get('/api/singlePost',{params:id })
+        .then(resp => {
+            dispatch({
+                type: ActionTypes.RECEIVED_SINGLE_POST,
+                singlePost: resp.data
+            });
+            dispatch({
+                type: ActionTypes.FETCH_SINGLE_POST_DONE
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.FETCH_SINGLE_POST_ERROR,
+                message: err
+            });
+        });
+};
+
 export const filterUpdate = (name,value) => {
     return {
         type: ActionTypes.FILTER_UPDATE,
