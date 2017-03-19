@@ -22,15 +22,20 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", er
 
 
 app.get('/api/posts',(req,res) => {
-  PostModel.find({},(err,posts) => {
-    if(err) console.log(err);
-    res.json(posts);
-  });
 	PostModel.find(req.query,(err,posts) => {
 		if(err) console.log(err);
 		res.json(posts);
 	});
 });
+
+app.get('/api/post',(req,res) => {
+	PostModel.findById(req.query.id).lean.exec((err,singlePOst) => {
+		if(err) console.log(err);
+		res.json(singlePost);
+	});
+});
+
+
 
 
 
