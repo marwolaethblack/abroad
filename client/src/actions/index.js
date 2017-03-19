@@ -1,13 +1,18 @@
 import { ActionTypes } from '../constants';
 import axios from 'axios';
 
-export const fetchPosts = category => dispatch => {
+export const fetchPosts = filter => dispatch => {
     
-    axios.get('api/posts')
+    dispatch({ type: ActionTypes.FETCH_POSTS });
+
+    axios.get('/api/posts',{params:filter})
         .then(resp => {
             dispatch({
                 type: ActionTypes.RECEIVED_POSTS,
                 posts: resp.data
+            });
+            dispatch({
+                type: ActionTypes.FETCH_POSTS_DONE
             });
         })
         .catch(err => {
@@ -17,4 +22,12 @@ export const fetchPosts = category => dispatch => {
                 message: err
             });
         });
+};
+
+export const filterUpdate = (name,value) => {
+    return {
+        type: ActionTypes.FILTER_UPDATE,
+        name,
+        value
+    }
 };

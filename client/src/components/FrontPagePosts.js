@@ -7,7 +7,7 @@ class FrontPagePosts extends Component {
     return (
       <div>
         {this.props.posts.map(post => 
-            <FrontPagePost key={post._id} title={post.title} category={post.category} content={post.category} />
+            <FrontPagePost key={post._id} title={post.title} category={post.category} content={post.content} />
         )}
       </div>
     );

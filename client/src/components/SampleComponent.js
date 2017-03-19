@@ -1,13 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 
-class Footer extends Component {
+class SampleComponent extends Component {
+    
   render() {
     return (
       <div>
-        FOOTER COMPONENT
+        Sample Component Content
       </div>
     )
   }
 }
 
-export default Footer;
+export default SampleComponent;

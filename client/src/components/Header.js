@@ -7,6 +7,7 @@ class Header extends Component {
     return (
       <header>
         <section className="brand-logo">
+          <Link to="/">Abroad</Link>
         </section>
         <nav>
           <ul>
