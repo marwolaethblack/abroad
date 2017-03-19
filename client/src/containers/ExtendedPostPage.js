@@ -1,26 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchSinglePost } from '../actions';
+import Post from '../components/Post';
 
 
 
 class ExtendedPostPage extends Component {
+
   
   componentDidMount() {
       this.props.loadPost({id: this.props.params.id});
   }
   
   render() {
-    console.log(this.props.post);
-    return (
-      <h1>a</h1>
-    )
+    const { singlePost } = this.props;
+
+    return ( 
+      <h1>aaa</h1>
+     );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     singlePost: state.singlePost,
+    isFetching: state.isFetching
   }
 }
 
