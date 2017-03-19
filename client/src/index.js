@@ -7,6 +7,7 @@ import store from './store/store';
 import App from './containers/App';
 import FrontPage from './containers/FrontPage';
 import PostsPage from './containers/PostsPage';
+import ExtendedPostPage from './containers/ExtendedPostPage';
 
 ReactDOM.render(
   <Provider store={store()}>
@@ -14,7 +15,7 @@ ReactDOM.render(
   		<Route path="/" component={App}>
   		<IndexRoute component={FrontPage} />
   			<Route path="/posts" component={PostsPage} />
-  		}
+  		  <Route path="/posts/view/:id/:title" component={ExtendedPostPage} />
   		</Route>
   	</Router>
   </Provider>,

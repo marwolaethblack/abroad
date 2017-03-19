@@ -22,15 +22,23 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", er
 
 
 app.get('/api/posts',(req,res) => {
-	PostModel.find(req.query,(err,posts) => {
+	PostModel.find(req.query).lean().exec((err,posts) => {
 		if(err) console.log(err);
 		res.json(posts);
 	});
 });
 
-app.get('*', function (request, response){
-  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-})
+//Get a single post
+app.get('/api/singlePost',(req,res) => {
+	PostModel.findById(req.query.id).lean().exec((err,singlePost) => {
+		if(err) console.log(err);
+		res.json(singlePost);
+	});
+});
+
+
+
+
 
 // app.get('/api/todos/:id',(req,res) => {
 //  const todoId = mongoose.Types.ObjectId(req.params.id);

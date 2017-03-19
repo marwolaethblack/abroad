@@ -16,7 +16,7 @@ class SearchFilter extends Component {
 
     render() {
     	const { country_from, country_in, category } = this.props.query;
-
+    	console.log(this.props.query);
         return(
         	<div>
 	        	<h1>SearchFilter Component</h1>

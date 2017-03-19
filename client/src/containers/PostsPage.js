@@ -10,7 +10,7 @@ import Post from '../components/Post';
 class PostsPage extends Component {
   
   componentDidMount() {
-      this.props.loadPosts(this.props.filterQuery);
+      this.props.loadPosts(this.props.location.query);
   }
   
   render() {
