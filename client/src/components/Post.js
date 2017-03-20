@@ -5,9 +5,10 @@ import postDateDiff from '../services/dateDifference';
 
 class Post extends Component {
     render() {
-        const { upvotes,downvotes,img,_id,title,author,comments,category } = this.props;
+        console.log("POST RENDER");
+        const { upvotes,image,_id,title,author,comments,category } = this.props;
         const datePosted = postDateDiff(_id);
-        
+
         return(
         	<article>
 	        	<span>Upvotes {upvotes}</span>
