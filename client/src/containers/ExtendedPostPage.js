@@ -8,7 +8,7 @@ import ExtendedPost from '../components/ExtendedPost';
 
 class ExtendedPostPage extends Component {
 
-  componentDidMount() {
+  componentWillMount() {
       this.props.loadPost({id: this.props.params.id});
   }
   
