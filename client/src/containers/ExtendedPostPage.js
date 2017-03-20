@@ -13,9 +13,10 @@ class ExtendedPostPage extends Component {
   }
   
   render() {
+    console.log("ExtendedPostPage RENDER");
     const { singlePost, isFetching } = this.props;
     return ( 
-     <ExtendedPost {...singlePost} />
+     !isFetching && <ExtendedPost {...singlePost} />
      );
   }
 }
@@ -26,8 +27,6 @@ const mapStateToProps = (state) => {
     isFetching: state.isFetching
   }
 }
-
-
 const mapDispatchToProps = (dispatch) => {
     return {
         loadPost(id) {

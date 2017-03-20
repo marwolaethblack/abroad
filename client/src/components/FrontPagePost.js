@@ -6,7 +6,7 @@ class FrontPagePost extends Component {
   render() {
     const { title,content,category,author,_id } = this.props;
     const datePosted = postDateDiff(_id);
-
+    console.log("FrontPagePost RENDER");
     return (
       <div>
         <h2>{ title }</h2>
