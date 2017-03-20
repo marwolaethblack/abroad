@@ -4,16 +4,12 @@ import Comment from './Comment';
 
 class ExtendedPost extends Component {
 
-  constructor(){
-    super();
-    this.renderComments = this.renderComments.bind(this);
-  }
 
   renderComments = (comments) => {
         if(comments !== undefined) {
             if(comments.length !== 0)
             {
-               return comments.map(comment => <Comment {...comment} />) 
+               return comments.map(comment => <Comment {...comment} key={comment._id}/>) 
             }
         }
         return "No comments to show";
