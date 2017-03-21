@@ -8,7 +8,7 @@ import SimplePostFilter from '../components/SimplePostFilter';
 class FrontPage extends Component {
   
   componentDidMount(){
-    this.props.loadPosts(this.props.filterQuery);
+    this.props.loadPosts({...this.props.filterQuery,category:"All"});
   }
   
   render() {

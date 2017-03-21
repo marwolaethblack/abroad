@@ -4,16 +4,24 @@ import { fetchPosts, filterUpdate } from '../actions';
 
 import SearchFilter from '../components/SearchFilter';
 import SortFilter from '../components/SortFilter';
-import Post from '../components/Post';
+import AllPosts from '../components/AllPosts';
 
 
 class PostsPage extends Component {
   
   componentWillMount() {
-      this.props.loadPosts(this.props.location.query);
+      this.props.loadPosts(this.props.filterQuery);
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.location.query !== this.props.location.query){
+        this.props.loadPosts(this.props.filterQuery);
+    }
   }
   
   render() {
+    const { posts } = this.props;
+
     return (
     <section>
 
@@ -23,9 +31,12 @@ class PostsPage extends Component {
          getPosts={this.props.loadPosts} />
 
         <SortFilter />
-        <div className="posts-page">
-           {this.props.posts.map((post,index) => <Post key={post._id} {...post} /> )}
-        </div>
+
+        { (posts.length > 0) ? 
+          <AllPosts posts={this.props.posts} /> :
+          <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
+        }
+
     </section>
     )
   }

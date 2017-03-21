@@ -5,7 +5,14 @@ export const fetchPosts = filter => dispatch => {
     
     dispatch({ type: ActionTypes.FETCH_POSTS });
 
-    axios.get('/api/posts',{params:filter})
+    let category = [];
+    if(filter.category !== undefined){
+        if(filter.category.indexOf("All") === -1){
+            category = [...filter.category];
+        }
+    }
+    
+    axios.get('/api/posts',{params:{...filter,category}})
         .then(resp => {
             dispatch({
                 type: ActionTypes.RECEIVED_POSTS,

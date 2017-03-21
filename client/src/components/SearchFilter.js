@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 import countries from '../constants/countries';
-import categories from '../constants/categories';
 import FilterDropdown from './parts/FilterDropdown';
 import CheckboxGroupCategories from './parts/CheckboxGroupCategories';
 

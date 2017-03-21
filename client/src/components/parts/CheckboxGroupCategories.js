@@ -15,12 +15,16 @@ class CheckboxGroupCategories extends Component {
 		let newCategories = [];
 
 		if(checkBox.checked){
-			newCategories = (checkBox.value === "All") ? ["All"] : [...checkedOptions,checkBox.value];
-		}else{
-			const i = this.props.checkedOptions.indexOf(checkBox.value);
-			newCategories = checkedOptions.filter((option) => {
-				return option !== "All" && option !== checkedOptions[i];
-			});
+			newCategories = (checkBox.value === "All") ?
+							 categories : 
+							 [...checkedOptions,checkBox.value];
+		} else{
+			if(checkBox.value !== "All"){
+
+				newCategories = checkedOptions.filter((option) => {
+					return option !== checkBox.value && option !== "All";
+				});
+			}
 		}
 
 		this.props.onCategoryChange("category",newCategories);

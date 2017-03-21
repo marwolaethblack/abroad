@@ -3,7 +3,7 @@ import { ActionTypes } from '../constants';
 const DEFAULT_FILTER = {
 	country_from: "Slovakia",
 	country_in: "Denmark",
-	category: "work"
+	category: ["All"]
 }
 
 export const filter = (state=DEFAULT_FILTER,action) => {

@@ -23,6 +23,7 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", er
 
 
 app.get('/api/posts',(req,res) => {
+	console.log("FUCK: "+JSON.stringify(req.query));
 	PostModel.find(req.query).lean().exec((err,posts) => {
 		if(err) console.log(err);
 		res.json(posts);
