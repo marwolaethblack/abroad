@@ -9,7 +9,9 @@ import CheckboxGroupCategories from './parts/CheckboxGroupCategories';
 class SearchFilter extends Component {
 
     render() {
-    	const { country_from, country_in, category } = this.props.query;
+    	const query = this.props.stateQuery;
+    	const { country_from, country_in, category } = query;
+    	const { filterUpdate } = this.props;
         return(
         	<div>
 	        	<h1>SearchFilter Component</h1>
@@ -18,19 +20,19 @@ class SearchFilter extends Component {
 		          options={countries}
 		          name="country_from" 
 		          defaultValue={country_from} 
-		          optionChanged={this.props.filterUpdate} />
+		          optionChanged={filterUpdate} />
 	 
 		        <FilterDropdown
 		          options={countries}
 		          name="country_in" 
 		          defaultValue={country_in} 
-		          optionChanged={this.props.filterUpdate} />
+		          optionChanged={filterUpdate} />
 
 		          <CheckboxGroupCategories
 		           checkedOptions={category}
-		           onCategoryChange={this.props.filterUpdate} />
+		           onCategoryChange={filterUpdate} />
 
-		          <Link to={{pathname:"/posts", query:this.props.query}}>
+		          <Link to={{pathname:"/posts", query}}>
 		          	<button>FILTER!</button>
 		          </Link>
 	          </div>

@@ -4,9 +4,16 @@ import Post from '../components/Post';
 class AllPosts extends Component {
     
   render() {
+  	const { posts } = this.props;
+
     return (
      <div className="posts-page">
-           {this.props.posts.map((post,index) => <Post key={post._id} {...post} /> )}
+     	{ (posts.length > 0) ?
+		   posts.map((post,index) => <Post key={post._id} {...post} /> ) :
+		  <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
+     	}
+           
+     	
      </div>
     )
   }

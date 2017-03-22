@@ -8,7 +8,7 @@ export const fetchPosts = filter => dispatch => {
     let category = [];
     if(filter.category !== undefined){
         if(filter.category.indexOf("All") === -1){
-            category = [...filter.category];
+            category = Array.isArray(filter.category) ? [...filter.category] : filter.category;
         }
     }
     
@@ -57,6 +57,9 @@ export const fetchSinglePost = id => dispatch => {
 };
 
 export const filterUpdate = (name,value) => {
+    if(name === "category" && !Array.isArray(value)){
+        value = [value];
+    }
     return {
         type: ActionTypes.FILTER_UPDATE,
         name,

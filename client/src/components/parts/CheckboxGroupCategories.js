@@ -20,7 +20,6 @@ class CheckboxGroupCategories extends Component {
 							 [...checkedOptions,checkBox.value];
 		} else{
 			if(checkBox.value !== "All"){
-
 				newCategories = checkedOptions.filter((option) => {
 					return option !== checkBox.value && option !== "All";
 				});

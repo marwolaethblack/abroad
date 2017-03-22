@@ -5,46 +5,56 @@ import { fetchPosts, filterUpdate } from '../actions';
 import SearchFilter from '../components/SearchFilter';
 import SortFilter from '../components/SortFilter';
 import AllPosts from '../components/AllPosts';
+import categories from '../constants/categories'
 
 
 class PostsPage extends Component {
   
-  componentWillMount() {
-      this.props.loadPosts(this.props.filterQuery);
+  componentDidMount() {
+      const urlQuery = this.props.location.query;
+      this.props.loadPosts(urlQuery);
+
+      Object.keys(urlQuery).forEach(filterKey => {
+        if(filterKey === "category" && urlQuery.category.indexOf("All") > -1){
+          urlQuery[filterKey] = categories;
+        }
+        this.props.updateFilterValue(filterKey,urlQuery[filterKey]);
+      });
   }
 
   componentDidUpdate(prevProps) {
     if(prevProps.location.query !== this.props.location.query){
-        this.props.loadPosts(this.props.filterQuery);
+        this.props.loadPosts(this.props.location.query);
     }
   }
   
   render() {
-    const { posts } = this.props;
+    const { posts, isFetching } = this.props;
 
     return (
-    <section>
+      <section>
 
-        <SearchFilter 
-         query={this.props.filterQuery}
-         filterUpdate={this.props.updateFilterValue} 
-         getPosts={this.props.loadPosts} />
+          <SearchFilter 
+           stateQuery={this.props.stateQuery}
+           filterUpdate={this.props.updateFilterValue} />
 
-        <SortFilter />
+          <SortFilter />
+          {
+            isFetching ?
+            <span style={{fontSize:"2em",color:"red"}}>loading posts</span> :
+            <AllPosts posts={this.props.posts} />
+          }
 
-        { (posts.length > 0) ? 
-          <AllPosts posts={this.props.posts} /> :
-          <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
-        }
 
-    </section>
+      </section>
     )
   }
 }
 
 const mapStateToProps = (state) => ({
   posts: state.posts,
-  filterQuery: state.filter
+  stateQuery: state.filter,
+  isFetching: state.isFetching
 });
 
 const mapDispatchToProps = (dispatch) => {

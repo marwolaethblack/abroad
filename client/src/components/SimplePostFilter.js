@@ -7,6 +7,7 @@ import FilterDropdown from './parts/FilterDropdown';
 class SimplePostFilter extends Component {
 
   render() {
+    //default query from state
     const { query } = this.props;
 
     return (

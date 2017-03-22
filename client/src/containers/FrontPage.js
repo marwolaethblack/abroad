@@ -8,7 +8,9 @@ import SimplePostFilter from '../components/SimplePostFilter';
 class FrontPage extends Component {
   
   componentDidMount(){
-    this.props.loadPosts({...this.props.filterQuery,category:"All"});
+    //posts on the front-page will be generated more dynamic later 
+    this.props.updateFilterValue("category",["All"]);
+    this.props.loadPosts({...this.props.filterQuery,category:["All"]});
   }
   
   render() {
@@ -24,7 +26,7 @@ class FrontPage extends Component {
 
 const mapStateToProps = (state) => ({
   posts: state.posts,
-  filterQuery: state.filter
+  filterQuery: state.filter //query used only for default filter
 });
 
 const mapDispatchToProps = (dispatch) => ({
