@@ -23,9 +23,6 @@ class CheckboxGroupCategories extends Component {
 			if(checkedOptions.length === categories.length-2){
 				newCategories = [...newCategories,"All"];
 			}
-			console.log("Fuck");
-			console.log("checkedOptions: "+checkedOptions.length);
-			console.log("categories: "+categories.length);
 		} else{
 			if(checkBox.value !== "All"){
 				newCategories = checkedOptions.filter((option) => {

@@ -26,7 +26,7 @@ class SimplePostFilter extends Component {
             <FilterDropdown
              options={countries}
              name="country_in" 
-             defaultValue={query.country_in} 
+             defaultValue={query.country_in}
              optionChanged={this.props.filterUpdate} />
         </div>
 

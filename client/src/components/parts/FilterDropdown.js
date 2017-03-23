@@ -1,7 +1,4 @@
   import React, { Component, PropTypes } from 'react';
-  // import { countries } from '../../constants/countries';
-
-  // import  { countryCodes }  from '../../constants/countries';
 
 class FilterDropdown extends Component {
 
@@ -18,12 +15,12 @@ class FilterDropdown extends Component {
   	const { defaultValue, name, options, onChange } = this.props;
 
     return (
-      <select defaultValue={defaultValue} name={name} onChange={this.optionChanged}>
+      <select value={defaultValue} name={name} onChange={this.optionChanged}>
 
         {Object.keys(options).map(k => 
           <option key={k} value={options[k]}>{options[k]}</option>
         )}
-              
+
       </select>
     )
   }

@@ -1,9 +1,9 @@
 import { ActionTypes } from '../constants';
+import categories from '../constants/categories'
 
-const DEFAULT_FILTER = {
+let DEFAULT_FILTER = {
 	country_from: "Slovakia",
-	country_in: "Denmark",
-	category: ["All"]
+	category: categories
 }
 
 export const filter = (state=DEFAULT_FILTER,action) => {

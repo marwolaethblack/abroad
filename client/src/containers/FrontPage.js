@@ -1,16 +1,26 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+
 import { fetchPosts,filterUpdate } from '../actions';
 import FrontPageTitle from '../components/parts/FrontPageTitle';
 import FrontPagePosts from '../components/FrontPagePosts';
 import SimplePostFilter from '../components/SimplePostFilter';
+import { getUserCountryCode }  from '../services/userLocation';
+import countries from '../constants/countries';
 
 class FrontPage extends Component {
+
+  componentWillMount(){
+
+        getUserCountryCode().then(countryCode => {
+          this.props.updateFilterValue("country_in",countries[countryCode]);      
+        });
+
+        this.props.updateFilterValue("category",["All"]);  
+  }
   
   componentDidMount(){
-    //posts on the front-page will be generated more dynamic later 
-    this.props.updateFilterValue("category",["All"]);
-    this.props.loadPosts({...this.props.filterQuery,category:["All"]});
+      this.props.loadPosts({...this.props.filterQuery});   
   }
   
   render() {

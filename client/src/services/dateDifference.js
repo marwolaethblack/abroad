@@ -1,7 +1,7 @@
 import moment from 'moment';
 import rangePlugin from 'moment-precise-range-plugin';
 
-//returns time/date difference between date post was created and now
+//returns time/date difference between the date when post was created and current date
 const postDateDiff = (mongoObjectId) => {
 	const datePosted = new Date(parseInt(mongoObjectId.substring(0, 8), 16) * 1000);
 	const dateDiffObject = moment.preciseDiff(datePosted, moment(), true); 
