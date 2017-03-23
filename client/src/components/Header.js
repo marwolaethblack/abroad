@@ -5,14 +5,14 @@ import { Link } from 'react-router';
 class Header extends Component {
   render() {
     return (
-      <header>
+      <header className="container">
         <section className="brand-logo">
           <Link to="/">Abroad</Link>
         </section>
         <nav>
           <ul>
-            <li></li>
-            <li></li>
+            <li>Register</li>
+            <li>Login</li>
           </ul>
         </nav>
       </header>

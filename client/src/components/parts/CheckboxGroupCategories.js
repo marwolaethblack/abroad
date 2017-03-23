@@ -18,6 +18,14 @@ class CheckboxGroupCategories extends Component {
 			newCategories = (checkBox.value === "All") ?
 							 categories : 
 							 [...checkedOptions,checkBox.value];
+			//check "All" checkbox if all other options are checked
+			//-2 because the current checked option is not in state yet
+			if(checkedOptions.length === categories.length-2){
+				newCategories = [...newCategories,"All"];
+			}
+			console.log("Fuck");
+			console.log("checkedOptions: "+checkedOptions.length);
+			console.log("categories: "+categories.length);
 		} else{
 			if(checkBox.value !== "All"){
 				newCategories = checkedOptions.filter((option) => {
@@ -32,9 +40,9 @@ class CheckboxGroupCategories extends Component {
     render() {
     	const { checkedOptions } = this.props;
         return(
-        	<div>
+        	<div className="container">
 				{categories.map((category, index) =>
-			       <div key={index}>
+			       <div key={index} className="one column" style={{marginLeft:"7em"}} >
 			       	 <label htmlFor={category}>{category}</label>
 			         <input
 			          name={category}

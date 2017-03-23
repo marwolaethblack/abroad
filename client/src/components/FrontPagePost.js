@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import postDateDiff from '../services/dateDifference';
 
 class FrontPagePost extends Component {
@@ -9,7 +10,7 @@ class FrontPagePost extends Component {
     console.log("FrontPagePost RENDER");
     return (
       <div>
-        <h2>{ title }</h2>
+        <Link to={`posts/view/${_id}/${title}`}><h2>{ title }</h2></Link>
         <h4>{ category }</h4>
         <p>{ content }</p>
         <span>Posted {datePosted} ago</span>

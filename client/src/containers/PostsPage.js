@@ -13,19 +13,28 @@ class PostsPage extends Component {
   componentDidMount() {
       const urlQuery = this.props.location.query;
       this.props.loadPosts(urlQuery);
-
-      Object.keys(urlQuery).forEach(filterKey => {
-        if(filterKey === "category" && urlQuery.category.indexOf("All") > -1){
-          urlQuery[filterKey] = categories;
-        }
-        this.props.updateFilterValue(filterKey,urlQuery[filterKey]);
-      });
+      this.updateStateFilterOnPageLoad(urlQuery);  
   }
 
   componentDidUpdate(prevProps) {
     if(prevProps.location.query !== this.props.location.query){
         this.props.loadPosts(this.props.location.query);
     }
+  }
+
+  updateStateFilterOnPageLoad(urlQuery){
+    Object.keys(urlQuery).forEach(filterKey => {
+        if(filterKey === "category"){
+          if(urlQuery.category.indexOf("All") > -1){
+            urlQuery[filterKey] = categories;
+          } else {
+              if(urlQuery["category"].length === categories.length-1){
+                urlQuery["category"] = [...urlQuery["category"],"All"]
+              }
+          }
+        } 
+      this.props.updateFilterValue(filterKey,urlQuery[filterKey]);
+    });
   }
   
   render() {

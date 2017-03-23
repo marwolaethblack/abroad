@@ -13,24 +13,30 @@ class SearchFilter extends Component {
     	const { country_from, country_in, category } = query;
     	const { filterUpdate } = this.props;
         return(
-        	<div>
-	        	<h1>SearchFilter Component</h1>
-
-	        	 <FilterDropdown
-		          options={countries}
-		          name="country_from" 
-		          defaultValue={country_from} 
-		          optionChanged={filterUpdate} />
+        	<div className="container">
+        		<div className="six columns">
+	            	<label htmlFor="country_from">From</label>
+		        	 <FilterDropdown
+			          options={countries}
+			          name="country_from" 
+			          defaultValue={country_from} 
+			          optionChanged={filterUpdate} />
+		        </div>
 	 
-		        <FilterDropdown
-		          options={countries}
-		          name="country_in" 
-		          defaultValue={country_in} 
-		          optionChanged={filterUpdate} />
+	 			<div className="six columns">
+	           		<label htmlFor="country_in">In</label>
+			        <FilterDropdown
+			          options={countries}
+			          name="country_in" 
+			          defaultValue={country_in} 
+			          optionChanged={filterUpdate} />
+		         </div>
 
+		         <div style={{paddingTop:"5em"}}>
 		          <CheckboxGroupCategories
 		           checkedOptions={category}
 		           onCategoryChange={filterUpdate} />
+		         </div>
 
 		          <Link to={{pathname:"/posts", query}}>
 		          	<button>FILTER!</button>

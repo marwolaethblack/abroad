@@ -7,13 +7,11 @@ class AllPosts extends Component {
   	const { posts } = this.props;
 
     return (
-     <div className="posts-page">
+     <div className="posts-page container">
      	{ (posts.length > 0) ?
 		   posts.map((post,index) => <Post key={post._id} {...post} /> ) :
 		  <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
      	}
-           
-     	
      </div>
     )
   }
