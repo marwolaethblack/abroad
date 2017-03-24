@@ -12,7 +12,7 @@ class FilterDropdown extends Component {
   }
     
   render() {
-  	const { defaultValue, name, options, onChange } = this.props;
+  	const { defaultValue, name, options } = this.props;
 
     return (
       <select value={defaultValue} name={name} onChange={this.optionChanged}>
@@ -24,6 +24,12 @@ class FilterDropdown extends Component {
       </select>
     )
   }
+}
+
+FilterDropdown.propTypes = {
+  defaultValue: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  options: PropTypes.any.isRequired
 }
 
 export default FilterDropdown;

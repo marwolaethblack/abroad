@@ -45,4 +45,12 @@ class SimplePostFilter extends Component {
   }
 }
 
+SimplePostFilter.propTypes = {
+    query: PropTypes.shape({
+        country_in: PropTypes.string.isRequired,
+        country_from: PropTypes.string.isRequired,
+        category: PropTypes.array.isRequired
+    }).isRequired
+}
+
 export default SimplePostFilter;

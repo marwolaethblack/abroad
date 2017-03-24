@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import postDateDiff from '../services/dateDifference';
 import Comment from './Comment';
 
 class ExtendedPost extends Component {
-
 
   renderComments = (comments) => {
         if(comments !== undefined) {
@@ -13,17 +12,17 @@ class ExtendedPost extends Component {
             }
         }
         return "No comments to show";
-}
+  }
     
   render() {
-    const { upvotes, image, title, content, category, date, author, comments, _id } = this.props;
+    const { upvotes, image, title, content, category, author, comments, _id } = this.props;
     const datePosted = (_id !== undefined) ? postDateDiff(_id) : "";
 
   
     return (
       <article>
         <span>Upvotes {upvotes}</span>
-            <img src={image}/>
+            <img alt={title} src={image}/>
             <p>{_id}</p>
             <h3>{title}</h3>
             <span>Submitted {datePosted} ago by {author !== undefined&& author.username } to {category}</span>

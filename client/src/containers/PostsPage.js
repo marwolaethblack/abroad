@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { connect, bindActionCreators } from 'react-redux';
+import { connect } from 'react-redux';
 import { fetchPosts, filterUpdate } from '../actions';
 
 import SearchFilter from '../components/SearchFilter';
@@ -21,7 +21,7 @@ class PostsPage extends Component {
   }
   
   componentDidMount() {
-      const urlQuery = this.props.location.query;
+      const urlQuery = [...this.props.location.query];
       this.props.loadPosts(urlQuery);
       this.updateStateFilterOnPageLoad(urlQuery);  
   }
@@ -43,28 +43,29 @@ class PostsPage extends Component {
               }
           }
         }
+        if(filterKey === "country_in" && urlQuery[filterKey] === null){
+          urlQuery[filterKey] = "Denmark"
+        }
       this.props.updateFilterValue(filterKey,urlQuery[filterKey]);
     });
   }
   
   render() {
-    const { posts, isFetching } = this.props;
+    const { posts, isFetching,stateQuery,updateFilterValue } = this.props;
 
     return (
       <section>
-
           <SearchFilter 
-           stateQuery={this.props.stateQuery}
-           filterUpdate={this.props.updateFilterValue} />
+           stateQuery={stateQuery}
+           filterUpdate={updateFilterValue} />
 
           <SortFilter />
+          { isFetching && <span style={{fontSize:"2em",color:"red"}}>loading posts</span> }
           {
-            isFetching ?
-            <span style={{fontSize:"2em",color:"red"}}>loading posts</span> :
-            <AllPosts posts={this.props.posts} />
+            (posts.length > 0) ? 
+            <AllPosts posts={posts} /> :
+            <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
           }
-
-
       </section>
     )
   }
@@ -86,5 +87,22 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 }
+
+PostsPage.propTypes = {
+   posts: PropTypes.arrayOf(PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    country_from: PropTypes.string.isRequired,
+    country_in: PropTypes.string.isRequired,
+    upvotes: PropTypes.number.isRequired,
+    image: PropTypes.string,
+    author: PropTypes.object.isRequired,
+    comments: PropTypes.array.isRequired
+
+  }))
+}
+
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(PostsPage);

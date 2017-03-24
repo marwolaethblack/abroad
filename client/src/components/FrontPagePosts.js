@@ -19,4 +19,15 @@ class FrontPagePosts extends Component {
   }
 }
 
+FrontPagePosts.propTypes = {
+	posts: PropTypes.arrayOf(PropTypes.shape({
+	    title: PropTypes.string.isRequired,
+	    category: PropTypes.string.isRequired,
+	    content: PropTypes.string.isRequired,
+	    country_from: PropTypes.string.isRequired,
+	    country_in: PropTypes.string.isRequired,
+	    _id: PropTypes.string.isRequired
+  })).isRequired
+}
+
 export default FrontPagePosts;

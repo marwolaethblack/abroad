@@ -12,10 +12,10 @@ class Post extends Component {
         return(
         	<article>
 	        	<span>Upvotes {upvotes}</span>
-	        	<img src={image}/>
+	        	<img src={image} alt={title} />
 	        	<Link to={`posts/view/${_id}/${title}`}><h3>{title}</h3></Link>
 	        	<span>Submitted {datePosted} ago by {author !== undefined && author.username } to {category}</span>
-	        	<span>{comments !== undefined&& comments.length}</span>
+	        	<p>Comments: {comments !== undefined&& comments.length}</p>
         	</article>
         );
     }

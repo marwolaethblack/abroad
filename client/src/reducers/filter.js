@@ -3,6 +3,7 @@ import categories from '../constants/categories'
 
 let DEFAULT_FILTER = {
 	country_from: "Slovakia",
+    country_in: "Denmark",
 	category: categories
 }
 

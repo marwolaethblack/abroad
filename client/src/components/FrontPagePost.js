@@ -5,7 +5,7 @@ import postDateDiff from '../services/dateDifference';
 class FrontPagePost extends Component {
     
   render() {
-    const { title,content,category,author,_id } = this.props;
+    const { title,content,category,_id } = this.props;
     const datePosted = postDateDiff(_id);
     console.log("FrontPagePost RENDER");
     return (
@@ -14,10 +14,16 @@ class FrontPagePost extends Component {
         <h4>{ category }</h4>
         <p>{ content }</p>
         <span>Posted {datePosted} ago</span>
-        <p>Author: {author !== undefined && author.username}</p>
       </div>
     )
   }
+}
+
+FrontPagePost.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  category: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired
 }
 
 export default FrontPagePost;
