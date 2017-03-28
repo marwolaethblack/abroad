@@ -2,6 +2,8 @@ import express from 'express';
 import path from 'path';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
+import cors from 'cors';
+import morgan from 'morgan';
 import PostModel from './models/Post';
 import CommentModel from './models/Comment';
 
@@ -13,30 +15,20 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.urlencoded({extended : true}));
-app.use(bodyParser.json());
+//app.use(morgan('combined'));
+app.use(cors());
+app.use(bodyParser.json({type: '*/*'}));
 
 // mongoose.Promise = global.Promise; only if the browser-console shows promise Warning
 mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", err => {
   if(err) console.log(err);
 });
 
-
-app.get('/api/posts',(req,res) => {
-	console.log("FUCK: "+JSON.stringify(req.query));
-	PostModel.find(req.query).lean().exec((err,posts) => {
-		if(err) console.log(err);
-		res.json(posts);
-	});
-});
-
-//Get a single post
-app.get('/api/singlePost',(req,res) => {
-	PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec((err,singlePost) => {
-		if(err) console.log(err);
-		res.json(singlePost);
-	});
-});
+//Routes
+import PostRoutes from './routes/posts';
+import AuthenticationRoutes from './routes/auth';
+app.use(PostRoutes);
+app.use(AuthenticationRoutes);
 
 
 
