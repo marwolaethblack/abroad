@@ -1,0 +1,119 @@
+#react-container>div {
+	display: flex;
+	flex-direction: column;
+}
+
+/*Mobile header styles*/
+.main {
+	margin-top: 20%;
+}
+
+#mobile-menu-button {
+	display: block;
+	position: fixed;
+	top: 0;
+	right: 4%;
+	z-index: 2;
+	background: white;
+	margin: 2rem;
+}
+
+.main-header {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 5%;
+	width: 100%;
+	transition: all 0.3s;
+	visibility: hidden;
+	width: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: 1;
+	background: rgba(0,0,0,0.85);
+	height: 100%;
+	font-size: 3rem;
+	text-align: center;
+	opacity: 0;
+}
+
+.brand-logo {
+	height: 10%;
+	margin-top: 8rem;
+}
+
+.navigation-links {
+	height: 20%;
+	white-space: nowrap;
+}
+
+.navigation-links ul {
+	display: flex;
+	flex-direction: column;
+}
+
+.navigation-link {
+	width: 100%;
+	color: white;
+	display: block;
+	text-decoration: none;
+}
+
+.navigation-link>a {
+	color:white;
+	display: block;
+	text-decoration: none;
+}
+
+.navigation-link:hover {
+	background: rgba(0,0,0,0.75);
+	color: white;
+} 
+
+
+.show {
+	visibility: visible;
+	width: 60%;
+	opacity: 1;
+}
+
+/*Desktop header styles*/
+
+@media (min-width: 600px) {
+	#mobile-menu-button {
+		display: none;
+	}
+
+	.main {
+		margin: 0;	}
+
+	.main-header {
+		visibility: visible;
+		position: relative;
+		width: 100%;
+		opacity: 1;
+		height: 7%;
+		flex-direction: row;
+	}
+	.brand-logo {
+		height: auto;
+		margin: 0;
+	}
+
+	.navigation-links {
+		height: auto;
+		align-items: center;
+	}
+
+	.navigation-links ul {
+		display: flex;
+		flex-direction: row;
+		margin: 0;
+	}
+
+	.navigation-link {
+		margin: 0;
+	}
+
+
+}

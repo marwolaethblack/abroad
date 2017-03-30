@@ -8,17 +8,21 @@ class Header extends Component {
   renderLinks() {
     if(this.props.authenticated) {
       //show a link to sign out
-    return (
-    <li>
-      <Link to="/" onClick={() => this.props.signout()}>Sign Out</Link>
-    </li> );
+    return [
+    <li className="navigation-link">
+      <Link to="/"  onClick={() => this.props.signout()}>Sign Out</Link>
+    </li> ,
+    <li className="navigation-link">
+      <Link to="/user"  >Profile</Link>
+    </li>
+     ];
     } else {
       //show link to sign in or sign up
       return [
-      <li key={1}>
+      <li key={1} className="navigation-link">
         <Link to="/signin">Sign In</Link>
       </li>,
-      <li key={2}>
+      <li key={2} className="navigation-link">
         <Link to="/signup">Sign Up</Link>
       </li>
       ];
@@ -29,11 +33,11 @@ class Header extends Component {
 
   render() {
     return (
-      <header className="container">
+      <header className={this.props.show ? "main-header show" : "main-header"}>
         <section className="brand-logo">
-          <Link to="/">Abroad</Link>
+          <Link to="/" className="navigation-link">Abroad</Link>
         </section>
-        <nav>
+        <nav className="navigation-links">
           <ul>
             {this.renderLinks()}
           </ul>
