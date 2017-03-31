@@ -8,6 +8,7 @@ import App from './containers/App';
 import FrontPage from './containers/FrontPage';
 import PostsPage from './containers/PostsPage';
 import ExtendedPostPage from './containers/ExtendedPostPage';
+import UserPage from './containers/UserPage';
 
 import Signin from './containers/auth/signin';
 import Signup from './containers/auth/signup';
@@ -20,8 +21,9 @@ import RequireAuth from './containers/auth/requireAuth';
 import { ActionTypes } from './constants';
 
 const token = localStorage.getItem("token");
+const id = localStorage.getItem('id');
 if(token) {
-  store.dispatch({type: ActionTypes.AUTH_USER});
+  store.dispatch({type: ActionTypes.AUTH_USER, id});
 }
 
 
@@ -30,8 +32,9 @@ ReactDOM.render(
   	<Router history={browserHistory}>
   		<Route path="/" component={App}>
   		  <IndexRoute component={FrontPage} />
-  			<Route path="/posts" component={PostsPage} />
-  		  <Route path="/posts/view/:id/:title" component={ExtendedPostPage} />
+  			<Route path="posts" component={PostsPage} />
+  		  <Route path="posts/view/:id/:title" component={ExtendedPostPage} />
+        <Route path="user/:id" component={UserPage} />
         <Route path="signin" component={Signin} />
         <Route path="signup" component={Signup} />
   		</Route>

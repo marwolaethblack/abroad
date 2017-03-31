@@ -28,6 +28,10 @@ const Signup = (props) => {
 		return(
 			<form onSubmit={handleSubmit(handleFormSubmit)}>
 				<Field 
+					name="username" 
+					component={renderField} 
+					label="Username" type="text"  />
+				<Field 
 					name="email" 
 					component={renderField} 
 					label="Email" type="email"  />
@@ -49,15 +53,32 @@ const Signup = (props) => {
 
 const validate = (formProps) => {
 	const errors = {};
-	const fields = ["email", "password", "confirmPassword"];
+	const fields = ["email", "password", "confirmPassword", "username"];
+	const { password, confirmPassword, email, username } = formProps;
+	const emailRegExp = new RegExp('.+@.+');
 
+	//Check if fields are not empty
 	fields.forEach((field) => {
 		if(!formProps[field]) {
 			errors[field] = "Required";
 		}
 	});
 
-	const { password, confirmPassword, email } = formProps;
+	//Check if email is valid
+	if(email) {
+		if(!emailRegExp.test(email)) {
+			errors.email = "Invalid email";
+		}
+	}
+
+	
+	if(username) {
+		if(username.length < 3 || username.length > 10) {
+			errors.username = "Username must be between 3 and 10 characters long";
+		}
+	}
+
+	
 	if(password !== confirmPassword) {
 		errors.password = "Passwords must match";
 	}

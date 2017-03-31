@@ -4,8 +4,17 @@ const bcrypt = require("bcrypt-nodejs");
 
 //Define our model
 const userSchema = new Schema({
+	username: String,
 	email: { type: String, unique: true, lowercase: true },
-	password: String
+	password: String,
+	posts: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Post"
+    }],
+    comments: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Comment"
+    }] 
 });
 
 //On save hook
