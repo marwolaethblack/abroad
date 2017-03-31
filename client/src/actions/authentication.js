@@ -11,11 +11,11 @@ export function signinUser({ email, password }) {
 		.then(response =>{
 			//If request is good...
 			// - Update state to indicate user is authenticated
-			dispatch({type: ActionTypes.AUTH_USER})
-			//- Save the JWT token
+			dispatch({type: ActionTypes.AUTH_USER, id: response.data.id})
+			//- Save the JWT token and user ID
 			localStorage.setItem('token', response.data.token);
+			localStorage.setItem('id', response.data.id);
 			// redirect to route /feature
-			console.log(browserHistory);
 			browserHistory.goBack();
 
 		})
@@ -38,18 +38,23 @@ export function authError(error) {
 
 export function signoutUser() {
 localStorage.removeItem("token");
+localStorage.removeItem("id");
+
 
 	return {
 		type: ActionTypes.UNAUTH_USER,
 	}
 }
 
-export function signUpUser({ email, password }) {
+export function signUpUser({ email, password, username }) {
 	return function(dispatch) {
-		axios.post("/signup", {email, password})
+		axios.post("/signup", {email, password, username})
 			.then(response => {
-				dispatch({type: ActionTypes.AUTH_USER});
+				dispatch({type: ActionTypes.AUTH_USER, id: response.data.id});
+				//Save token and user ID to local storage
 				localStorage.setItem('token', response.data.token);
+				localStorage.setItem('id', response.data.id);
+				//Redirect back
 				browserHistory.goBack();
 			})
 			.catch(error => {

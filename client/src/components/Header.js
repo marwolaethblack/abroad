@@ -9,11 +9,11 @@ class Header extends Component {
     if(this.props.authenticated) {
       //show a link to sign out
     return [
-    <li className="navigation-link">
+    <li className="navigation-link" key={2}>
+      <Link to={"/user/" + this.props.id} >Profile</Link>
+    </li>,
+    <li className="navigation-link" key={1}>
       <Link to="/"  onClick={() => this.props.signout()}>Sign Out</Link>
-    </li> ,
-    <li className="navigation-link">
-      <Link to="/user"  >Profile</Link>
     </li>
      ];
     } else {
@@ -49,7 +49,8 @@ class Header extends Component {
 
 function mapStateToProps(state) {
   return {
-    authenticated: state.auth.authenticated
+    authenticated: state.auth.authenticated,
+    id: state.auth.id
   }
 }
 

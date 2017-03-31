@@ -3,9 +3,9 @@ import { ActionTypes } from '../constants';
 export default function(state={}, action) {
 	switch(action.type) {
 		case ActionTypes.AUTH_USER:
-			return {...state, error:"", authenticated: true };
+			return {...state, error:"", authenticated: true, id: action.id };
 		case ActionTypes.UNAUTH_USER:
-			return {...state, authenticated: false };
+			return {...state, authenticated: false, id:"" };
 		case ActionTypes.AUTH_ERROR:
 			return {...state, error:action.payload };
 		case "@@redux-form/DESTROY": //when navigating away from the signin/signup pages clear errors
