@@ -7,7 +7,7 @@ import { ActionTypes } from '../constants';
 export function signinUser({ email, password }) {
 	return function(dispatch) {
 	//Submit email pasword to server
-	axios.post("/signin", {email, password})
+	axios.post("/api/signin", {email, password})
 		.then(response =>{
 			//If request is good...
 			// - Update state to indicate user is authenticated
@@ -48,7 +48,7 @@ localStorage.removeItem("id");
 
 export function signUpUser({ email, password, username }) {
 	return function(dispatch) {
-		axios.post("/signup", {email, password, username})
+		axios.post("/api/signup", {email, password, username})
 			.then(response => {
 				dispatch({type: ActionTypes.AUTH_USER, id: response.data.id});
 				//Save token and user ID to local storage

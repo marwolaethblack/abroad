@@ -20,6 +20,9 @@ export const ActionTypes = {
     
     AUTH_USER: 'AUTH_USER',
     UNAUTH_USER: 'UNAUTH_USER',
-    AUTH_ERROR: 'AUTH_ERROR'
+    AUTH_ERROR: 'AUTH_ERROR',
+
+    FETCH_USER: 'GET_USER',
+    FETCH_USER_ERROR: 'FETCH_USER_ERROR'
 
 }

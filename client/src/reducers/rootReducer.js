@@ -5,6 +5,7 @@ import { singlePost }  from './singlePost';
 import { filter } from './filter';
 import { errors } from './errors';
 import { loading } from './loading';
+import user from './user';
 import auth from './auth';
 
 import { reducer as form } from 'redux-form';
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     filter,
     errors,
     auth,
+    user,
     form,
     isFetching: loading,
     router: routerReducer

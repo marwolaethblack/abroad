@@ -4,8 +4,6 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import morgan from 'morgan';
-import PostModel from './models/Post';
-import CommentModel from './models/Comment';
 
 
 const app = express();
@@ -25,9 +23,12 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", er
 });
 
 //Routes
+import UserRoutes from './routes/user';
 import PostRoutes from './routes/posts';
 import AuthenticationRoutes from './routes/auth';
+
 app.use(PostRoutes);
+app.use(UserRoutes);
 app.use(AuthenticationRoutes);
 
 
