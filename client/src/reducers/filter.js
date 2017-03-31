@@ -3,7 +3,7 @@ import categories from '../constants/categories'
 
 let DEFAULT_FILTER = {
 	country_from: "Slovakia",
-    country_in: "Denmark",
+    // country_in: "Denmark", obtained from user IP
 	category: categories
 }
 
