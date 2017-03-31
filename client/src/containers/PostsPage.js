@@ -21,7 +21,7 @@ class PostsPage extends Component {
   }
   
   componentDidMount() {
-      const urlQuery = [...this.props.location.query];
+      const urlQuery = this.props.location.query;
       this.props.loadPosts(urlQuery);
       this.updateStateFilterOnPageLoad(urlQuery);  
   }
@@ -33,9 +33,11 @@ class PostsPage extends Component {
   }
 
   updateStateFilterOnPageLoad(urlQuery){
+
     Object.keys(urlQuery).forEach(filterKey => {
+
         if(filterKey === "category"){
-          if(urlQuery.category.indexOf("All") > -1){
+          if(urlQuery.category.indexOf("All") > -1 || urlQuery.category === "All"){
             urlQuery[filterKey] = categories;
           } else {
               if(urlQuery["category"].length === categories.length-1){
