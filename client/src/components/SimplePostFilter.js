@@ -47,7 +47,7 @@ class SimplePostFilter extends Component {
 
 SimplePostFilter.propTypes = {
     query: PropTypes.shape({
-        country_in: PropTypes.string.isRequired,
+        country_in: PropTypes.string,
         country_from: PropTypes.string.isRequired,
         category: PropTypes.array.isRequired
     }).isRequired

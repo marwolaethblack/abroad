@@ -54,7 +54,7 @@ FrontPage.propTypes = {
     category: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     country_from: PropTypes.string.isRequired,
-    country_in: PropTypes.string.isRequired
+    country_in: PropTypes.string
   }))
 }
 
