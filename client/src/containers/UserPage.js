@@ -2,19 +2,26 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchUser } from '../actions/userActions';
 
-class UserPage extends Component {
+import UserPage from '../components/pages/User';
+import Loader from '../components/parts/Loader';
+
+class UserPageContainer extends Component {
 	componentDidMount() {
 		const { id } = this.props.params;
 		this.props.getUser(id);
-
 	}
 
 	render() {
-		return(
-
-			<div><span>{this.props.error&& this.props.error}</span>
-			{this.props.user&& this.props.user.username}</div>
-		);
+		const { loading, user } = this.props;
+		if(!user.userData) {
+			if(loading) {
+				return (<Loader />);
+			} else {
+				return (<h1>No user found</h1>);
+			}
+		} else {
+			return (<UserPage {...user} />);
+		}
 	}
 }
 
@@ -22,8 +29,8 @@ class UserPage extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		user: state.user.userData,
-		error: state.user.error
+		user: state.user,
+		loading: state.isFetching
 	}
 };
 
@@ -35,4 +42,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserPageContainer);

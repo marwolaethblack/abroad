@@ -3,13 +3,14 @@ import axios from 'axios';
 
 export function fetchUser(id) {
 	return function(dispatch) {
+		 dispatch({ type: ActionTypes.FETCH_USER });
 
-		axios.get('/api/user', {params: { id } })
+		return axios.get('/api/user', {params: { id } })
 			.then(response => {
-				dispatch({type: ActionTypes.FETCH_USER, payload: response.data});
+				dispatch({type: ActionTypes.RECEIVED_USER, payload: response.data});
 			})
 			.catch(err => {
-				dispatch({type: ActionTypes.FETCH_USER_ERROR, error: err.response.data.error});
+				dispatch({type: ActionTypes.FETCH_USER_ERROR, error: err.message});
 			});
 	}
 

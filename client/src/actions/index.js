@@ -18,9 +18,6 @@ export const fetchPosts = filter => dispatch => {
                 type: ActionTypes.RECEIVED_POSTS,
                 posts: resp.data
             });
-            dispatch({
-                type: ActionTypes.FETCH_POSTS_DONE
-            });
         })
         .catch(err => {
             console.log(err);
@@ -42,9 +39,6 @@ export const fetchSinglePost = id => dispatch => {
             dispatch({
                 type: ActionTypes.RECEIVED_SINGLE_POST,
                 singlePost: resp.data
-            });
-            dispatch({
-                type: ActionTypes.FETCH_SINGLE_POST_DONE
             });
         })
         .catch(err => {
