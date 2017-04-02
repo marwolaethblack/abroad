@@ -14,13 +14,12 @@ class ExtendedPostPage extends Component {
   render() {
     const { singlePost, loading } = this.props;
     const isEmpty = Object.keys(singlePost).length === 0;
-    if(isEmpty) {
-      if(loading) {
+    if(loading) {
         return (<Loader />);
-      } else {
-        return (<h1>No post found</h1>);
-      }
     } else {
+      if(isEmpty) {
+        return (<h1>No post found</h1>)
+      }
       return (<ExtendedPost {...singlePost}/>);
     } 
   }

@@ -13,13 +13,12 @@ class UserPageContainer extends Component {
 
 	render() {
 		const { loading, user } = this.props;
-		if(!user.userData) {
-			if(loading) {
-				return (<Loader />);
-			} else {
-				return (<h1>No user found</h1>);
-			}
+		if(loading) {
+			return (<Loader />);
 		} else {
+			if(!user.userData) {
+				return(<h1>No user found</h1>)
+			}
 			return (<UserPage {...user} />);
 		}
 	}
