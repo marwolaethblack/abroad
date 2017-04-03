@@ -60,15 +60,13 @@ class PostsPage extends Component {
 
           <SortFilter />
           { isFetching && <span style={{fontSize:"2em",color:"red"}}>loading posts</span> }
-          {
-            (true) ? 
+
               <AllPosts posts={posts}
                loadPosts={this.props.loadPosts} 
                isFetching={isFetching}
                query={stateQuery} 
-               urlQuery={this.props.location.query} /> :
-              <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
-          }
+               urlQuery={this.props.location.query} />
+
       </section>
     )
   }

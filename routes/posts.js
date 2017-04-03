@@ -20,13 +20,11 @@ router.get('/api/posts',(req,res) => {
 		query = req.query;
 	}
 
-
 	console.log("======================================");
 	console.log("REQ.QUERY: "+JSON.stringify(query));
 	console.log("======================================");
 	console.log("======================================");
 
-	// setTimeout(()=>{
 		PostModel.find(query).limit(POSTS_NO_PER_LOAD).lean().exec((err,posts) => {
 		if(err){
 			console.log(err);
@@ -34,15 +32,7 @@ router.get('/api/posts',(req,res) => {
 			res.json(posts);
 		}
 	});
-	// },10000)
 
-	// PostModel.find(query).limit(POSTS_NO_PER_LOAD).lean().exec((err,posts) => {
-	// 	if(err){
-	// 		console.log(err);
-	// 	} else {
-	// 		res.json(posts);
-	// 	}
-	// });
 });
 
 //Get a single post

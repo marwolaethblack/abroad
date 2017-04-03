@@ -41,7 +41,9 @@ class AllPosts extends Component {
 
   render() {
   	const { posts,isFetching } = this.props;
-    if(this.state.loadedPosts.length < 1) return null;
+    if(this.state.loadedPosts.length === 0 && !isFetching) 
+      return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
+
     return (
      <div className="posts-page container" style={{height:"100%"}}>
 
