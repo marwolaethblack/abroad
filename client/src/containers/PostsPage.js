@@ -59,7 +59,6 @@ class PostsPage extends Component {
            filterUpdate={updateFilterValue} />
 
           <SortFilter />
-          { isFetching && <span style={{fontSize:"2em",color:"red"}}>loading posts</span> }
 
               <AllPosts posts={posts}
                loadPosts={this.props.loadPosts} 
