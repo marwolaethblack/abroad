@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import postDateDiff from '../../services/dateDifference';
 import Comment from '../Comment';
+import AddComment from '../parts/AddComment';
 
 class ExtendedPost extends Component {
 
@@ -26,10 +27,11 @@ class ExtendedPost extends Component {
             <span>Submitted {datePosted} ago by {author.username } to {category}</span>
             <span>{comments.length}</span>
             <section className="post-content">
-            { content }
+              { content }
             </section>
             <section className="post-comments">
-            {this.renderComments(comments)}
+              <AddComment />
+              {this.renderComments(comments)}
             </section>
       </article>
     )

@@ -4,9 +4,15 @@ const bcrypt = require("bcrypt-nodejs");
 
 //Define our model
 const userSchema = new Schema({
-	username: String,
-	email: { type: String, unique: true, lowercase: true },
+	username: {type:String, unique: true, dropDups: true},
+	email: { type: String, unique: true, lowercase: true, dropDups: true },
 	password: String,
+	image: String,
+	country_from: String,
+	country_in: {
+		country: String,
+		city: String
+	},
 	posts: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "Post"

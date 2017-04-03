@@ -25,10 +25,12 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", er
 //Routes
 import UserRoutes from './routes/user';
 import PostRoutes from './routes/posts';
+import CommentRoutes from './routes/comments';
 import AuthenticationRoutes from './routes/auth';
 
 app.use(PostRoutes);
 app.use(UserRoutes);
+app.use(CommentRoutes);
 app.use(AuthenticationRoutes);
 
 

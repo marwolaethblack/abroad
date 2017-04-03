@@ -17,4 +17,6 @@ const commentSchema = new mongoose.Schema({
   
 });
 
+commentSchema.index({upvotes: -1});
+
 export default mongoose.model("Comment", commentSchema);

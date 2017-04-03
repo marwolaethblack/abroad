@@ -11,7 +11,7 @@ export function signinUser({ email, password }) {
 		.then(response =>{
 			//If request is good...
 			// - Update state to indicate user is authenticated
-			dispatch({type: ActionTypes.AUTH_USER, id: response.data.id})
+			dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username})
 			//- Save the JWT token and user ID
 			localStorage.setItem('token', response.data.token);
 			localStorage.setItem('id', response.data.id);
@@ -37,9 +37,9 @@ export function authError(error) {
 }
 
 export function signoutUser() {
-localStorage.removeItem("token");
-localStorage.removeItem("id");
-
+	localStorage.removeItem("token");
+	localStorage.removeItem("id");
+	localStorage.removeItem('username');
 
 	return {
 		type: ActionTypes.UNAUTH_USER,
@@ -50,12 +50,13 @@ export function signUpUser({ email, password, username }) {
 	return function(dispatch) {
 		axios.post("/api/signup", {email, password, username})
 			.then(response => {
-				dispatch({type: ActionTypes.AUTH_USER, id: response.data.id});
+				dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username});
 				//Save token and user ID to local storage
 				localStorage.setItem('token', response.data.token);
 				localStorage.setItem('id', response.data.id);
+				localStorage.setItem('username', response.data.username);
 				//Redirect back
-				browserHistory.goBack();
+				browserHistory.push('/posts');
 			})
 			.catch(error => {
 				dispatch(authError(error.response.data.error));

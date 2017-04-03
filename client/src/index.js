@@ -22,8 +22,9 @@ import { ActionTypes } from './constants';
 
 const token = localStorage.getItem("token");
 const id = localStorage.getItem('id');
+const username = localStorage.getItem('username');
 if(token) {
-  store.dispatch({type: ActionTypes.AUTH_USER, id});
+  store.dispatch({type: ActionTypes.AUTH_USER, id, username});
 }
 
 ReactDOM.render(

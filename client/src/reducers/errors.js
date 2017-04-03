@@ -4,6 +4,8 @@ export const errors = (state="",action) => {
     switch (action.type) {
         case ActionTypes.FETCH_POSTS_ERROR:
             return action.message;
+        case ActionTypes.ADD_COMMENT_ERROR:
+        	return action.message;
         default:
             return state;
     }
