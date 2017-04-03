@@ -1,18 +1,44 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { fetchUser } from '../actions/userActions';
 
-class UserPage extends Component {
+import UserPage from '../components/pages/User';
+import Loader from '../components/parts/Loader';
+
+class UserPageContainer extends Component {
 	componentDidMount() {
 		const { id } = this.props.params;
-
+		this.props.getUser(id);
 	}
 
 	render() {
-		return(<div>User page</div>);
+		const { loading, user } = this.props;
+		if(loading) {
+			return (<Loader />);
+		} else {
+			if(!user.userData) {
+				return(<h1>No user found</h1>)
+			}
+			return (<UserPage {...user} />);
+		}
 	}
 }
 
 
 
+const mapStateToProps = (state) => {
+	return {
+		user: state.user,
+		loading: state.isFetching
+	}
+};
 
-export default UserPage;
+const mapDispatchToProps = (dispatch) => {
+	return {
+		getUser(id) {
+			dispatch(fetchUser(id));
+		}
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserPageContainer);

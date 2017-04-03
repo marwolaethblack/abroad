@@ -1,27 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchSinglePost } from '../actions';
-import ExtendedPost from '../components/ExtendedPost';
+import ExtendedPost from '../components/pages/ExtendedPost';
+import Loader from '../components/parts/Loader';
 
 
 class ExtendedPostPage extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
       this.props.loadPost({id: this.props.params.id});
   }
   
   render() {
-    const { singlePost, isFetching } = this.props;
-    return ( 
-     !isFetching && <ExtendedPost {...singlePost} />
-     );
+    const { singlePost, loading } = this.props;
+    const isEmpty = Object.keys(singlePost).length === 0;
+    if(loading) {
+        return (<Loader />);
+    } else {
+      if(isEmpty) {
+        return (<h1>No post found</h1>)
+      }
+      return (<ExtendedPost {...singlePost}/>);
+    } 
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     singlePost: state.singlePost,
-    isFetching: state.isFetching
+    loading: state.isFetching
   }
 }
 const mapDispatchToProps = (dispatch) => {

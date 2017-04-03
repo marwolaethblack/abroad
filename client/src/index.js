@@ -26,7 +26,6 @@ if(token) {
   store.dispatch({type: ActionTypes.AUTH_USER, id});
 }
 
-
 ReactDOM.render(
   <Provider store={store}>
   	<Router history={browserHistory}>
