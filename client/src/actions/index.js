@@ -18,6 +18,9 @@ export const fetchPosts = filter => dispatch => {
                 type: ActionTypes.RECEIVED_POSTS,
                 posts: resp.data
             });
+             dispatch({     
+                 type: ActionTypes.FETCH_POSTS_DONE        
+             });
         })
         .catch(err => {
             console.log(err);

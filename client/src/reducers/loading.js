@@ -5,7 +5,7 @@ export const loading = (state=false,action) => {
         case ActionTypes.FETCH_POSTS: {
             return true;
         }
-         case ActionTypes.RECEIVED_POSTS: {
+         case ActionTypes.FETCH_POSTS_DONE: {
             return false;
         }
         case ActionTypes.FETCH_SINGLE_POST: {
