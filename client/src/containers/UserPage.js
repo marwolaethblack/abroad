@@ -13,13 +13,14 @@ class UserPageContainer extends Component {
 
 	render() {
 		const { loading, user } = this.props;
+		const { id } = this.props.params; //The ID from the URL used as a prop for <UserPage/>
 		if(loading) {
 			return (<Loader />);
 		} else {
 			if(!user.userData) {
 				return(<h1>No user found</h1>)
 			}
-			return (<UserPage {...user} />);
+			return (<UserPage {...user} id ={ id } />);
 		}
 	}
 }

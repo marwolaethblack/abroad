@@ -28,7 +28,8 @@ class ExtendedPostPage extends Component {
 const mapStateToProps = (state) => {
   return {
     singlePost: state.singlePost,
-    loading: state.isFetching
+    loading: state.isFetching,
+    authenticated: state.auth.authenticated
   }
 }
 const mapDispatchToProps = (dispatch) => {

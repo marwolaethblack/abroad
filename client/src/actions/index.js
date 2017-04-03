@@ -63,3 +63,27 @@ export const filterUpdate = (name,value) => {
         value
     }
 };
+
+export const addComment = (authorId, postId, authorUsername, comment) => (dispatch) =>{
+
+    dispatch({type:ActionTypes.ADDING_COMMENT});
+
+    axios.put('/api/addComment',
+              {authorId, postId, authorUsername, comment}, 
+              {headers: {authorization: localStorage.getItem('token')}
+        })
+        .then(resp => {
+            dispatch({
+                type: ActionTypes.COMMENT_ADDED,
+                updatedPost: resp.data
+            });
+            console.log(resp.data);
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.ADD_COMMENT_ERROR,
+                message: err
+            });
+        });
+}

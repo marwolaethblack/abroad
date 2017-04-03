@@ -10,7 +10,7 @@ function tokenForUser(user) {
 
 exports.signin = function(req, res, next) {
     //User has already their email and password authd we just need to give them a token
-    res.send({ token: tokenForUser(req.user), id: req.user.id});
+    res.send({ token: tokenForUser(req.user), id: req.user.id, username:req.user.username});
     console.log(req.user);
 }
 
@@ -25,12 +25,15 @@ exports.signup = function(req,res,next){
     if(!isEmail(email)) {
         return res.status(422).send({error: "Invalid email"});
     }
-    //see if given user exists
-    User.findOne({email: email}, function(err, existingUser){
+    //see if given user with email or username exists
+    User.findOne({$or: [{'email': email}, {'username': username}]}).lean().exec(function(err, existingUser){
         if(err) { return next(err); }
         
         //if yes return error
         if(existingUser) {
+            if(existingUser.username === username) {
+               return res.status(422).send({error: "Username already in use"}); 
+            }   
             return res.status(422).send({error: "Email already in use"});
         }
         
@@ -45,7 +48,8 @@ exports.signup = function(req,res,next){
             if(err) {return next(err);}
             res.json({
                 token: tokenForUser(user),
-                id: user.id });
+                id: user.id,
+                username: user.username });
         });
     });
    
