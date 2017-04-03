@@ -82,6 +82,11 @@ div.redux-infinite-scroll {
   height:auto !important;
 }
 
+/*sortFilter component*/
+.selected-sort{
+	background: yellow;
+}
+
 /*Desktop header styles*/
 
 @media (min-width: 600px) {

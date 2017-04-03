@@ -50,7 +50,7 @@ class PostsPage extends Component {
   }
   
   render() {
-    const { posts, isFetching,stateQuery,updateFilterValue,loadPosts } = this.props;
+    const { posts, isFetching,stateQuery,updateFilterValue,loadPosts, location } = this.props;
 
     return (
       <section>
@@ -58,12 +58,11 @@ class PostsPage extends Component {
            stateQuery={stateQuery}
            filterUpdate={updateFilterValue} />
 
-          <SortFilter />
+          <SortFilter location={location} />
 
               <AllPosts posts={posts}
                loadPosts={this.props.loadPosts} 
                isFetching={isFetching}
-               query={stateQuery} 
                urlQuery={this.props.location.query} />
 
       </section>

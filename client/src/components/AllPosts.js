@@ -31,14 +31,23 @@ class AllPosts extends Component {
     if(!this.state.allPostsAreLoaded){
       const { loadedPosts } = this.state;
 
-      let lastPostId = (loadedPosts.length > 0) ? loadedPosts[loadedPosts.length-1]._id : false;
-      this.props.loadPosts({...this.props.query, _id:lastPostId});
-      // this.props.loadPosts({_id:lastPostId});
+      let lastPost = {};
+      if(loadedPosts.length > 0){
+        lastPost = {
+          _id: loadedPosts[loadedPosts.length-1]._id,
+          upvotes: loadedPosts[loadedPosts.length-1].upvotes
+        }
+      }
+
+      this.props.loadPosts(
+        {...this.props.urlQuery,
+         _id:lastPost._id,
+         upvotes:lastPost.upvotes,
+         loadedPostsNo:loadedPosts.length}
+      );
     }
-    }
+  }
   
-
-
   render() {
   	const { posts,isFetching } = this.props;
     if(this.state.loadedPosts.length === 0 && !isFetching) 

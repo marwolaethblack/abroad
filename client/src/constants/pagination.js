@@ -1,1 +1,1 @@
-export const POSTS_NO_PER_LOAD = 2;
+export const POSTS_NO_PER_LOAD = 1;
