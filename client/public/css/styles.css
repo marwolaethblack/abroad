@@ -77,6 +77,11 @@
 	opacity: 1;
 }
 
+/*infinite scroll - AllPosts page*/
+div.redux-infinite-scroll {
+  height:auto !important;
+}
+
 /*Desktop header styles*/
 
 @media (min-width: 600px) {

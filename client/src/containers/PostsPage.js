@@ -27,6 +27,7 @@ class PostsPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    // loads new posts when FILTER-btn is clicked and state.filter has been changed
     if(prevProps.location.query !== this.props.location.query){
         this.props.loadPosts(this.props.location.query);
     }
@@ -35,7 +36,6 @@ class PostsPage extends Component {
   updateStateFilterOnPageLoad(urlQuery){
 
     Object.keys(urlQuery).forEach(filterKey => {
-
         if(filterKey === "category"){
           if(urlQuery.category.indexOf("All") > -1 || urlQuery.category === "All"){
             urlQuery[filterKey] = categories;
@@ -45,15 +45,12 @@ class PostsPage extends Component {
               }
           }
         }
-        if(filterKey === "country_in" && urlQuery[filterKey] === null){
-          urlQuery[filterKey] = "Denmark"
-        }
       this.props.updateFilterValue(filterKey,urlQuery[filterKey]);
     });
   }
   
   render() {
-    const { posts, isFetching,stateQuery,updateFilterValue } = this.props;
+    const { posts, isFetching,stateQuery,updateFilterValue,loadPosts } = this.props;
 
     return (
       <section>
@@ -64,9 +61,13 @@ class PostsPage extends Component {
           <SortFilter />
           { isFetching && <span style={{fontSize:"2em",color:"red"}}>loading posts</span> }
           {
-            (posts.length > 0) ? 
-            <AllPosts posts={posts} /> :
-            <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
+            (true) ? 
+              <AllPosts posts={posts}
+               loadPosts={this.props.loadPosts} 
+               isFetching={isFetching}
+               query={stateQuery} 
+               urlQuery={this.props.location.query} /> :
+              <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
           }
       </section>
     )

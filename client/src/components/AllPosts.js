@@ -1,17 +1,60 @@
 import React, { Component, PropTypes } from 'react';
 import Post from '../components/Post';
-import Pagination from '../components/parts/Pagination';
+import InfiniteScroll from 'redux-infinite-scroll';
 
 class AllPosts extends Component {
-    
-  render() {
-  	const { posts } = this.props;
-  	const perPage = 1;
 
+  constructor(props){
+    super(props);
+    this.handlePostsLoadOnScroll = this.handlePostsLoadOnScroll.bind(this);
+    this.state = {
+      loadedPosts:[],
+      allPostsAreLoaded:false
+    }
+  }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.urlQuery !== this.props.urlQuery){
+      this.setState({loadedPosts:[],allPostsAreLoaded:false});
+    }
+
+    if(prevProps.posts !== this.props.posts){
+      this.setState((prevState)=>({loadedPosts:[...prevState.loadedPosts,...this.props.posts]}));
+      if(this.props.posts.length === 0){
+        this.setState({allPostsAreLoaded: true});
+      } 
+    }
+  }
+
+  handlePostsLoadOnScroll(){
+
+    if(!this.state.allPostsAreLoaded){
+      const { loadedPosts } = this.state;
+
+      let lastPostId = (loadedPosts.length > 0) ? loadedPosts[loadedPosts.length-1]._id : false;
+      this.props.loadPosts({...this.props.query, _id:lastPostId});
+      // this.props.loadPosts({_id:lastPostId});
+    }
+    }
+  
+
+
+  render() {
+  	const { posts,isFetching } = this.props;
+    if(this.state.loadedPosts.length < 1) return null;
     return (
-     <div className="posts-page container">
-     	{ posts.map((post,index) => <Post key={post._id} {...post} />) }
-     	{ (posts.length > perPage) && <Pagination elementsNo={posts.length} perPage={perPage} /> }
+     <div className="posts-page container" style={{height:"100%"}}>
+
+        <InfiniteScroll
+          loadingMore={isFetching}
+          elementIsScrollable={false}
+          loadMore={this.handlePostsLoadOnScroll}
+          threshold={100} >
+          
+           {this.state.loadedPosts.map((post,index) => <Post key={post._id} {...post} />)}
+          
+        </InfiniteScroll>
+
      </div>
     )
   }
