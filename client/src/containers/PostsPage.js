@@ -28,7 +28,9 @@ class PostsPage extends Component {
 
   componentDidUpdate(prevProps) {
     // loads new posts when FILTER-btn is clicked and state.filter has been changed
-    if(prevProps.location.query !== this.props.location.query){
+    //JSON.stringify() can be used for comparism because urlQuery is always a simple object
+    //and query properties are in the same order
+    if(JSON.stringify(prevProps.location.query) !== JSON.stringify(this.props.location.query)){
         this.props.loadPosts(this.props.location.query);
     }
   }

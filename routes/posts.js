@@ -29,7 +29,8 @@ router.get('/api/posts',(req,res) => {
 	if(lastPostId){
 		switch(sortBy){
 			case "top":{
-				// query = {...query, upvotes:{$lte: lastPostUpvotes}, _id:{$ne:lastPostId}}
+				//sortBy "top" uses skip() to load posts
+				// query = {...query, upvotes:{$lte: lastPostUpvotes}}
 				break;
 			}
 			case "oldest":{

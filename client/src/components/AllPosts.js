@@ -13,9 +13,15 @@ class AllPosts extends Component {
     }
   }
 
+  componentWillUpdate(){
+    console.log("componentWillUpdate urlQuery: "+JSON.stringify(this.props.urlQuery));
+  }
+
   componentDidUpdate(prevProps){
-    if(prevProps.urlQuery !== this.props.urlQuery){
+    if(JSON.stringify(prevProps.urlQuery) !== JSON.stringify(this.props.urlQuery)){
       this.setState({loadedPosts:[],allPostsAreLoaded:false});
+       console.log("componentDidUpdate prevProps.urlQuery: "+JSON.stringify(prevProps.urlQuery));
+       console.log("componentDidUpdate this.props.urlQuery: "+JSON.stringify(this.props.urlQuery));
     }
 
     if(prevProps.posts !== this.props.posts){
@@ -50,6 +56,7 @@ class AllPosts extends Component {
   
   render() {
   	const { posts,isFetching } = this.props;
+
     if(this.state.loadedPosts.length === 0 && !isFetching) 
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
 
