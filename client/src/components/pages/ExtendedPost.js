@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 import postDateDiff from '../../services/dateDifference';
 import Comment from '../Comment';
 import AddComment from '../parts/AddComment';
@@ -15,6 +16,7 @@ class ExtendedPost extends Component {
     
   render() {
     const { upvotes, image, title, content, category, author, comments, _id } = this.props;
+    const { authenticated } = this.props;
     const datePosted = postDateDiff(_id);
 
   
@@ -22,7 +24,6 @@ class ExtendedPost extends Component {
       <article>
         <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>
-            <p>{_id}</p>
             <h3>{title}</h3>
             <span>Submitted {datePosted} ago by {author.username } to {category}</span>
             <span>{comments.length}</span>
@@ -30,7 +31,7 @@ class ExtendedPost extends Component {
               { content }
             </section>
             <section className="post-comments">
-              <AddComment />
+              {authenticated ? <AddComment /> : <Link to="/signin">Sign in to add a comment.</Link>}
               {this.renderComments(comments)}
             </section>
       </article>

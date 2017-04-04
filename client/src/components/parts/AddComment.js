@@ -35,6 +35,7 @@ const mapStateToProps = (state) => {
 		authorId: state.auth.id,
 		authorUsername: state.auth.username,
 		postId: state.singlePost._id,
+		errorMessage: state.errors
 	}
 }
 
