@@ -12,7 +12,7 @@ class ExtendedPostPage extends Component {
   }
   
   render() {
-    const { singlePost, loading } = this.props;
+    const { singlePost, loading, authenticated } = this.props;
     const isEmpty = Object.keys(singlePost).length === 0;
     if(loading) {
         return (<Loader />);
@@ -20,7 +20,7 @@ class ExtendedPostPage extends Component {
       if(isEmpty) {
         return (<h1>No post found</h1>)
       }
-      return (<ExtendedPost {...singlePost}/>);
+      return (<ExtendedPost {...singlePost} authenticated={authenticated}/>);
     } 
   }
 }

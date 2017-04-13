@@ -83,7 +83,7 @@ export const addComment = (authorId, postId, authorUsername, comment) => (dispat
             console.log(err);
             dispatch({
                 type: ActionTypes.ADD_COMMENT_ERROR,
-                message: err
+                message: err.response.data.error
             });
         });
 }
