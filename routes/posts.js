@@ -83,11 +83,8 @@ router.get('/api/posts',(req,res) => {
 		}
 	}
 	
-
 	console.log("======================================");
 	console.log("REQ.QUERY: "+JSON.stringify(query));
-	console.log("======================================");
-	console.log("sortQuery: "+JSON.stringify(sortQuery));
 
 	const loadPosts = (findQuery, sortQuery={ _id:-1 }, skip=0, limit=POSTS_NO_PER_LOAD) => {
 		PostModel.find(findQuery).sort(sortQuery).limit(limit).skip(skip).lean().exec((err,posts) => {

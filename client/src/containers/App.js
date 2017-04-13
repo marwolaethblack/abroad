@@ -12,7 +12,7 @@ class App extends Component {
   }
 
 
-  showMobileMenu = () => {
+  toggleMobileMenu = () => {
     this.setState( { show : !this.state.show } );
   }
 
@@ -20,7 +20,7 @@ class App extends Component {
     const { children } = this.props;
         return (
       <div className="main">
-        <button id="mobile-menu-button" onClick={this.showMobileMenu} >X</button>
+        <button id="mobile-menu-button" onClick={this.toggleMobileMenu} >X</button>
         <Header show={this.state.show}/>
         {children}
         <Footer />

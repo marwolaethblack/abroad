@@ -5,22 +5,25 @@ import { fetchPosts,filterUpdate } from '../actions';
 import FrontPageTitle from '../components/parts/FrontPageTitle';
 import FrontPagePosts from '../components/FrontPagePosts';
 import SimplePostFilter from '../components/SimplePostFilter';
+
 import { getUserCountryCode }  from '../services/userLocation';
 import countries from '../constants/countries';
+import defaultPostsFilter from '../constants/defaultPostsFilter';
 
 class FrontPage extends Component {
 
   componentWillMount(){
-
-        getUserCountryCode().then(countryCode => {
-          this.props.updateFilterValue("country_in",countries[countryCode]);      
-        });
-
-        this.props.updateFilterValue("category",["All"]);  
+     this.props.updateFilterValue("category",["All"]);  
   }
   
   componentDidMount(){
-      this.props.loadPosts({...this.props.filterQuery});   
+    getUserCountryCode().then(countryCode => {
+      const countryIn = countries[countryCode];
+      this.props.updateFilterValue("country_in",countryIn);
+      // posts must be loaded in getUserCountryCode()
+      // because it is asynchronous
+      this.props.loadPosts({...defaultPostsFilter,country_in:countryIn});
+    });
   }
   
   render() {
