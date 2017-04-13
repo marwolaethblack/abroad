@@ -13,15 +13,12 @@ class AllPosts extends Component {
     }
   }
 
-  componentWillUpdate(){
-    console.log("componentWillUpdate urlQuery: "+JSON.stringify(this.props.urlQuery));
-  }
 
   componentDidUpdate(prevProps){
+    //JSON.stringify() can be used for comparism because urlQuery is always a simple object
+    //and query properties are in the same order
     if(JSON.stringify(prevProps.urlQuery) !== JSON.stringify(this.props.urlQuery)){
       this.setState({loadedPosts:[],allPostsAreLoaded:false});
-       console.log("componentDidUpdate prevProps.urlQuery: "+JSON.stringify(prevProps.urlQuery));
-       console.log("componentDidUpdate this.props.urlQuery: "+JSON.stringify(this.props.urlQuery));
     }
 
     if(prevProps.posts !== this.props.posts){

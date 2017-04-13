@@ -30,8 +30,10 @@ class PostsPage extends Component {
     // loads new posts when FILTER-btn is clicked and state.filter has been changed
     //JSON.stringify() can be used for comparism because urlQuery is always a simple object
     //and query properties are in the same order
-    if(JSON.stringify(prevProps.location.query) !== JSON.stringify(this.props.location.query)){
-        this.props.loadPosts(this.props.location.query);
+    const currentUrlQuery = this.props.location.query;
+    if(JSON.stringify(prevProps.location.query) !== JSON.stringify(currentUrlQuery)){
+        this.props.loadPosts(currentUrlQuery);
+        this.updateStateFilterOnPageLoad(currentUrlQuery);
     }
   }
 

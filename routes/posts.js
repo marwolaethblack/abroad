@@ -1,6 +1,7 @@
 import PostModel from '../models/Post';
 import CommentModel from '../models/Comment';
 import express from 'express';
+import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
 import { POSTS_NO_PER_LOAD } from '../client/src/constants/pagination';
 
 const router = express.Router();
@@ -22,29 +23,50 @@ router.get('/api/posts',(req,res) => {
 	const loadedPostsNo = Number(req.query.loadedPostsNo) || 0;
 	delete req.query["loadedPostsNo"];
 
+	//date-range when posts were published
+	const datePosted = req.query.date_posted;
+	delete req.query["date_posted"];
+
+	const getIdDateRange = (datePosted) => {
+		if(datePosted && Object.values(date_ranges).indexOf(datePosted) > -1){
+			if(datePosted !== "Anytime"){
+				const dateTimestamp = getDateTimestamp(datePosted);
+				const objectIdFromTimestamp = 
+							Math.floor(dateTimestamp/1000).toString(16) + "0000000000000000";
+				const idDateRange = {$gte: objectIdFromTimestamp};
+				return idDateRange;
+			}
+		}
+		return {$gte: "000000000000000000000000"};
+	}
+
 
 	let query = req.query;
 	let sortQuery = {_id:-1};
+
+	const idDateRange = getIdDateRange(datePosted);
+	query = {...query, $and:[{ _id:idDateRange }] }
 	//adds lastPostId to dbQuery to optimize searching
 	if(lastPostId){
 		switch(sortBy){
 			case "top":{
 				//sortBy "top" uses skip() to load posts
-				// query = {...query, upvotes:{$lte: lastPostUpvotes}}
 				break;
 			}
 			case "oldest":{
-				query = {...query, _id:{$gt: lastPostId}}
-				break;
+				query = {...query, $and:[{ _id:{$gt: lastPostId}}, {_id:idDateRange}] }
+				break; 
 			}
 			case "latest":
 			default:{
-				query = {...query, _id:{$lt: lastPostId}}
+				query = {...query, $and:[ {_id:{$lt: lastPostId}}, {_id:idDateRange} ]}
 				break;
 			}
 		}
 	}
 
+
+//posts sorting
 	switch(sortBy){
 		case "top":{
 			sortQuery = { upvotes:-1, _id:-1}
@@ -76,11 +98,9 @@ router.get('/api/posts',(req,res) => {
 				}
 			});
 	}
-
 	
 	if(sortBy === "top"){
 		//if posts are sorted by number of upvotes, skip() must be used
-		console.log("skip: "+loadedPostsNo);
 		loadPosts(query,sortQuery,loadedPostsNo);
 	} else {
 		loadPosts(query,sortQuery);
