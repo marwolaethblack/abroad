@@ -7,26 +7,38 @@ import { POSTS_NO_PER_LOAD } from '../client/src/constants/pagination';
 const router = express.Router();
 
 router.get('/api/posts',(req,res) => {
+
+	let query = req.query;
 	
 	// req.query._id/upvotes are false if no posts are loaded yet
-	const lastPostId = req.query._id;
-	delete req.query["_id"];
+	const lastPostId = query._id;
+	delete query["_id"];
 
-	const lastPostUpvotes = req.query.upvotes;
-	delete req.query["upvotes"];
+	const lastPostUpvotes = query.upvotes;
+	delete query["upvotes"];
 
 	//sortBy - e.g. by number of upvotes, latest/oldest posts
-	const sortBy = req.query.sort;
-	delete req.query["sort"];
+	const sortBy = query.sort;
+	delete query["sort"];
 
 	//number of posts to skip if they are sorted by upvotes
-	const loadedPostsNo = Number(req.query.loadedPostsNo) || 0;
-	delete req.query["loadedPostsNo"];
+	const loadedPostsNo = Number(query.loadedPostsNo) || 0;
+	delete query["loadedPostsNo"];
 
 	//date-range when posts were published
-	const datePosted = req.query.date_posted;
-	delete req.query["date_posted"];
+	const datePosted = query.date_posted;
+	delete query["date_posted"];
 
+	const searchText = query.searchText;
+	delete query["searchText"];
+	//find posts whose title or content contain the searchText 
+	if(searchText){
+		query = {...query,$or:[
+				{ title:new RegExp(searchText, "i")},
+				{ content:new RegExp(searchText, "i")}
+		 	]};
+	}
+	
 	const getIdDateRange = (datePosted) => {
 		if(datePosted && Object.values(date_ranges).indexOf(datePosted) > -1){
 			if(datePosted !== "Anytime"){
@@ -41,7 +53,7 @@ router.get('/api/posts',(req,res) => {
 	}
 
 
-	let query = req.query;
+	// let query = req.query;
 	let sortQuery = {_id:-1};
 
 	const idDateRange = getIdDateRange(datePosted);

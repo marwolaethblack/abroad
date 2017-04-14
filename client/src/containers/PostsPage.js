@@ -38,7 +38,6 @@ class PostsPage extends Component {
   }
 
   updateStateFilterOnPageLoad(urlQuery){
-
     Object.keys(urlQuery).forEach(filterKey => {
         if(filterKey === "category"){
           if(urlQuery.category.indexOf("All") > -1 || urlQuery.category === "All"){
@@ -58,7 +57,8 @@ class PostsPage extends Component {
 
     return (
       <section>
-          <SearchFilter 
+          <SearchFilter
+           urlQuery={this.props.location.query} 
            stateQuery={stateQuery}
            filterUpdate={updateFilterValue} />
 
