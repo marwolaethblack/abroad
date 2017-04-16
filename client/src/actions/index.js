@@ -64,12 +64,12 @@ export const filterUpdate = (name,value) => {
     }
 };
 
-export const addComment = (authorId, postId, authorUsername, comment) => (dispatch) =>{
+export const addComment = (postId, comment) => (dispatch) =>{
 
     dispatch({type:ActionTypes.ADDING_COMMENT});
 
     axios.put('/api/addComment',
-              {authorId, postId, authorUsername, comment}, 
+              {postId, comment}, 
               {headers: {authorization: localStorage.getItem('token')}
         })
         .then(resp => {
@@ -86,4 +86,20 @@ export const addComment = (authorId, postId, authorUsername, comment) => (dispat
                 message: err.response.data.error
             });
         });
+}
+
+export const deleteComment = (commentId) => (dispatch) => {
+    console.log("action" + commentId);
+    dispatch({type: ActionTypes.DELETING_COMMENT});
+    axios.delete('/api/deleteComment',   
+                    { params: { commentId },
+                      headers: {authorization: localStorage.getItem('token')}
+                }
+        )
+        .then(resp => {
+            dispatch({type: ActionTypes.COMMENT_DELETED , commentId: resp.data});
+        })
+        .catch(err => {
+            console.log(err);
+        })
 }

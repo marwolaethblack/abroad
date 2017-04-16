@@ -6,16 +6,16 @@ import AddComment from '../parts/AddComment';
 
 class ExtendedPost extends Component {
 
-  renderComments = (comments) => {
+  renderComments = (comments, deleteComment) => {
             if(comments.length !== 0)
             {
-               return comments.map(comment => <Comment {...comment} key={comment._id}/>) 
+               return comments.map(comment => <Comment {...comment} key={comment._id} deleteComment={deleteComment} />) 
             }
         return "No comments to show";
   }
     
   render() {
-    const { upvotes, image, title, content, category, author, comments, _id } = this.props;
+    const { upvotes, image, title, content, category, author, comments, _id, deleteComment } = this.props;
     const { authenticated } = this.props;
     const datePosted = postDateDiff(_id);
 
@@ -32,7 +32,7 @@ class ExtendedPost extends Component {
             </section>
             <section className="post-comments">
               {authenticated ? <AddComment /> : <Link to="/signin">Sign in to add a comment.</Link>}
-              {this.renderComments(comments)}
+              {this.renderComments(comments, deleteComment)}
             </section>
       </article>
     )

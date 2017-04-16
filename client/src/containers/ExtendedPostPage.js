@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchSinglePost } from '../actions';
+import { fetchSinglePost, deleteComment } from '../actions';
 import ExtendedPost from '../components/pages/ExtendedPost';
 import Loader from '../components/parts/Loader';
 
@@ -12,7 +12,7 @@ class ExtendedPostPage extends Component {
   }
   
   render() {
-    const { singlePost, loading, authenticated } = this.props;
+    const { singlePost, loading, authenticated, removeComment } = this.props;
     const isEmpty = Object.keys(singlePost).length === 0;
     if(loading) {
         return (<Loader />);
@@ -20,7 +20,7 @@ class ExtendedPostPage extends Component {
       if(isEmpty) {
         return (<h1>No post found</h1>)
       }
-      return (<ExtendedPost {...singlePost} authenticated={authenticated}/>);
+      return (<ExtendedPost {...singlePost} authenticated={authenticated} deleteComment={removeComment}/>);
     } 
   }
 }
@@ -36,6 +36,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         loadPost(id) {
           dispatch(fetchSinglePost(id));
+        },
+        removeComment(commentId) {
+          dispatch(deleteComment(commentId));
         }
     }
 }
