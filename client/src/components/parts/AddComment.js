@@ -8,10 +8,9 @@ const { DOM: { textarea }} = React;
 const AddComment = (props) => {
 
 		const handleFormSubmit = (formProps) =>{
-			const { authorId, postId, authorUsername } = props;
+			const { postId } = props;
 			const { comment } = formProps;
-			console.log(comment);
-			props.postComment(authorId, postId, authorUsername, comment);
+			props.postComment(postId, comment);
 		}
 
 		const { handleSubmit, submitting, pristine} = props;
@@ -32,8 +31,6 @@ const AddComment = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		authorId: state.auth.id,
-		authorUsername: state.auth.username,
 		postId: state.singlePost._id,
 		errorMessage: state.errors
 	}
@@ -41,8 +38,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		postComment(authorId, postId, authorUsername, comment) {
-			dispatch(addComment(authorId, postId,authorUsername, comment));
+		postComment(postId, comment) {
+			dispatch(addComment(postId, comment));
 		}
 	}
 }

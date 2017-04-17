@@ -13,16 +13,22 @@ class Comment extends Component {
           return "";
         }
 
+    handleDeleteClick = (deleteComment,id) => {
+        deleteComment(id);
+    }
+
     render() {
-        const { upvotes, _id,author,comments, content} = this.props;
+        const { upvotes, _id, author, comments, content, deleteComment } = this.props;
         const datePosted = postDateDiff(_id);
+        const loggedUserId = localStorage.getItem('id');
         return(
-        	<article>
+        	<article id={_id} >
 	        	<span>Upvotes {upvotes}</span>
                 <section>
                 { content }
                 </section>
 	        	<span>Submitted {datePosted} ago by {author !== undefined && author.username }</span>
+                {author.id === loggedUserId&& <a href="" onClick={(e)=>{e.preventDefault(); this.handleDeleteClick(deleteComment, _id);}}>Delete</a> }
 	        	<span>{comments !== undefined&& comments.length}</span>
                  <section className="comment-comments">
                     {this.renderComments(comments)}

@@ -145,7 +145,7 @@ router.get('/api/relatedPosts',(req,res) => {
 
 //Get a single post
 router.get('/api/singlePost',(req,res) => {
-	PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec((err,singlePost) => {
+	PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec((err, singlePost) => {
 		if(err) console.log(err);
 		res.json(singlePost);
 	});

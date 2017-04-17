@@ -8,6 +8,14 @@ export const singlePost = (state={},action) => {
         case ActionTypes.COMMENT_ADDED: {
             return {...state, ...action.updatedPost};
         }
+        case ActionTypes.COMMENT_DELETED: {
+            const { commentId } = action;
+            const index = state.comments.findIndex((element) => {
+                return element._id === commentId
+            });
+            const comments = [...state.comments.slice(0, index), ...state.comments.slice(index + 1)];
+            return {...state, comments }
+        }
         default:
             return state;
     }
