@@ -1,8 +1,8 @@
 import { ActionTypes } from '../constants';
 
-export const posts = (state=[],action) => {
+export const relatedPosts = (state=[],action) => {
     switch (action.type) {
-        case ActionTypes.RECEIVED_POSTS: {
+        case ActionTypes.RECEIVED_RELATED_POSTS: {
             return action.posts;
         }
         default:

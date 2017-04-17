@@ -11,7 +11,7 @@ export const loading = (state=false,action) => {
         case ActionTypes.FETCH_SINGLE_POST: {
             return true;
         }
-        case ActionTypes.RECEIVED_SINGLE_POST: {
+        case ActionTypes.FETCH_SINGLE_POST_DONE: {
             return false;
         }
         case ActionTypes.FETCH_USER: {

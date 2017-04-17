@@ -31,12 +31,13 @@ router.get('/api/posts',(req,res) => {
 
 	const searchText = query.searchText;
 	delete query["searchText"];
+
 	//find posts whose title or content contain the searchText 
 	if(searchText){
 		query = {...query,$or:[
-				{ title:new RegExp(searchText, "i")},
-				{ content:new RegExp(searchText, "i")}
-		 	]};
+					{ title:new RegExp(searchText, "i")},
+					{ content:new RegExp(searchText, "i")}
+				]};
 	}
 	
 	const getIdDateRange = (datePosted) => {
@@ -116,6 +117,30 @@ router.get('/api/posts',(req,res) => {
 	}
 });
 
+//Get related posts
+router.get('/api/relatedPosts',(req,res) => {
+
+	PostModel.findById({_id:req.query.id}).exec((err,singlePost) => {
+		if(err) console.log(err);
+
+		const relatedPostsQuery = {
+			_id: { $ne:singlePost._id },
+			country_from: singlePost.country_from,
+			country_in: singlePost.country_in
+		}
+		console.log("relatedPostsQuery:"+JSON.stringify(relatedPostsQuery));
+
+		if(singlePost){
+			PostModel.find(relatedPostsQuery).sort({ upvotes:-1, _id:-1}).limit(5).lean().exec((err,posts) => {
+				if(err){
+					console.log(err);
+				} else {
+					res.json(posts);
+				}
+			});
+		}
+	});	
+});
 
 
 //Get a single post
@@ -125,7 +150,6 @@ router.get('/api/singlePost',(req,res) => {
 		res.json(singlePost);
 	});
 });
-
 
 
 export default router;

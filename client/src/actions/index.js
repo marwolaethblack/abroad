@@ -31,6 +31,36 @@ export const fetchPosts = filter => dispatch => {
         });
 };
 
+export const fetchRelatedPosts = filter => dispatch => {
+    
+    // dispatch({ type: ActionTypes.FETCH_POSTS });
+
+    let category = [];
+    if(filter.category !== undefined){
+        if(filter.category.indexOf("All") === -1){
+            category = Array.isArray(filter.category) ? [...filter.category] : filter.category;
+        }
+    }
+    
+    axios.get('/api/relatedPosts',{params:{...filter,category}})
+        .then(resp => {
+            dispatch({
+                type: ActionTypes.RECEIVED_RELATED_POSTS,
+                posts: resp.data
+            });
+             // dispatch({     
+             //     type: ActionTypes.FETCH_POSTS_DONE        
+             // });
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.FETCH_POSTS_ERROR,
+                message: err
+            });
+        });
+};
+
 
 //Gets a single post
 export const fetchSinglePost = id => dispatch => {
@@ -43,6 +73,7 @@ export const fetchSinglePost = id => dispatch => {
                 type: ActionTypes.RECEIVED_SINGLE_POST,
                 singlePost: resp.data
             });
+            dispatch({ type: ActionTypes.FETCH_SINGLE_POST_DONE });
         })
         .catch(err => {
             console.log(err);
