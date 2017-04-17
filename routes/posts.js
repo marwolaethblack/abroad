@@ -120,26 +120,22 @@ router.get('/api/posts',(req,res) => {
 //Get related posts
 router.get('/api/relatedPosts',(req,res) => {
 
-	PostModel.findById({_id:req.query.id}).exec((err,singlePost) => {
-		if(err) console.log(err);
-
+	if(req.query._id){
 		const relatedPostsQuery = {
-			_id: { $ne:singlePost._id },
-			country_from: singlePost.country_from,
-			country_in: singlePost.country_in
+			_id: { $ne:req.query._id },
+			country_from: req.query.country_from,
+			country_in: req.query.country_in
 		}
 		console.log("relatedPostsQuery:"+JSON.stringify(relatedPostsQuery));
 
-		if(singlePost){
-			PostModel.find(relatedPostsQuery).sort({ upvotes:-1, _id:-1}).limit(5).lean().exec((err,posts) => {
-				if(err){
-					console.log(err);
-				} else {
-					res.json(posts);
-				}
-			});
-		}
-	});	
+		PostModel.find(relatedPostsQuery).sort({ upvotes:-1, _id:-1}).limit(5).lean().exec((err,posts) => {
+			if(err){
+				console.log(err);
+			} else {
+				res.json(posts);
+			}
+		});
+	}
 });
 
 
