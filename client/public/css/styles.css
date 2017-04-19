@@ -87,6 +87,10 @@ div.redux-infinite-scroll {
 	background: yellow;
 }
 
+.own-comment {
+	background: rgba(0,0,0,0.2);
+}
+
 /*Desktop header styles*/
 
 @media (min-width: 600px) {

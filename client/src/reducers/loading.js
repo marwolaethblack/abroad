@@ -23,15 +23,6 @@ export const loading = (state=false,action) => {
         case ActionTypes.FETCH_USER_ERROR: {
             return false;
         }
-        case ActionTypes.ADDING_COMMENT: {
-            return true;
-        }
-        case ActionTypes.COMMENT_ADDED: {
-            return false;
-        }
-        case ActionTypes.ADD_COMMENT_ERROR: {
-            return false;
-        }
         default:
             return state;
     }
