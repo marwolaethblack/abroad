@@ -6,7 +6,7 @@ import RelatedPosts from '../components/RelatedPosts';
 import ExtendedPost from '../components/pages/ExtendedPost';
 import Loader from '../components/parts/Loader';
 
-
+ 
 class ExtendedPostPage extends Component {
 
   componentDidMount() {   
@@ -27,7 +27,7 @@ class ExtendedPostPage extends Component {
   
   render() {
 
-    const { singlePost, relatedPosts, loading, authenticated, removeComment } = this.props;
+    const { singlePost, relatedPosts, loading, authenticated, removeComment, socketAddComment } = this.props;
 
     const isEmpty = Object.keys(singlePost).length === 0;
     if(loading) {
@@ -39,7 +39,10 @@ class ExtendedPostPage extends Component {
 
       return (
         <div>
-          <ExtendedPost {...singlePost} authenticated={authenticated} deleteComment={removeComment}/>
+          <ExtendedPost {...singlePost} 
+                        authenticated={authenticated}
+                        deleteComment={removeComment} 
+                        socketAddComment={socketAddComment}/>
           <RelatedPosts relatedPosts={relatedPosts} />
         </div>
       )
@@ -63,6 +66,9 @@ const mapDispatchToProps = (dispatch) => {
 
         removeComment(commentId) {
           dispatch(deleteComment(commentId));
+        },
+        socketAddComment(comments) {
+          dispatch({type: 'SOCKET_ADD_COMMENT', payload:comments});
         }
     }
 }

@@ -5,7 +5,6 @@ class RelatedPosts extends Component {
   
   render() {
   	const { relatedPosts } = this.props;
-    console.log(relatedPosts);
 
     return (
      <div className="posts-page container">

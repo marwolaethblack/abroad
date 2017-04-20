@@ -16,6 +16,10 @@ export const singlePost = (state={},action) => {
             const comments = [...state.comments.slice(0, index), ...state.comments.slice(index + 1)];
             return {...state, comments }
         }
+        case 'SOCKET_ADD_COMMENT': {
+            const comments = action.payload
+            return{...state, comments}
+        }
         default:
             return state;
     }

@@ -89,6 +89,7 @@ div.redux-infinite-scroll {
 
 .own-comment {
 	background: rgba(0,0,0,0.2);
+	transition: all 0.2s;
 }
 
 /*Desktop header styles*/
