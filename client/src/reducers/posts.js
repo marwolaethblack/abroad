@@ -5,6 +5,9 @@ export const posts = (state=[],action) => {
         case ActionTypes.RECEIVED_POSTS: {
             return action.posts;
         }
+        case ActionTypes.POST_ADDED: {
+            return [...state, action.newPost];
+        }
         default:
             return state;
     }

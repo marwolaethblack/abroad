@@ -1,6 +1,7 @@
 import PostModel from '../models/Post';
 import CommentModel from '../models/Comment';
 import express from 'express';
+import passport from 'passport';
 import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
 import { POSTS_NO_PER_LOAD } from '../client/src/constants/pagination';
 
@@ -147,5 +148,35 @@ router.get('/api/singlePost',(req,res) => {
 	});
 });
 
+
+//Add a new post
+const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+
+router.post('/api/addPost', requireAuth, (req,res) => {
+
+	let { newPost } = req.body;
+	const { _id, username } = req.user;
+	
+	if(newPost){
+		newPost.author = {
+			id: _id,
+			username,
+			upvotes: 0,
+			comments: [],
+			image:"https://placehold.it/350x150"
+		}
+
+		const post = new PostModel(newPost);
+		
+		post.save((err,newPost) => {
+			if(err) console.log(err);
+			res.json(post);
+		});
+
+	} else {
+		return res.status(422).send({error:"Wuut? No post was sent."});
+	}
+
+});
 
 export default router;

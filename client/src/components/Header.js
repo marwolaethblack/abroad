@@ -39,6 +39,8 @@ class Header extends Component {
         </section>
         <nav className="navigation-links">
           <ul>
+            <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All Posts</Link>
+            <Link to="/add-post" className="navigation-link">Add Post</Link>
             {this.renderLinks()}
           </ul>
         </nav>
@@ -50,7 +52,8 @@ class Header extends Component {
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
-    id: state.auth.id
+    id: state.auth.id,
+    filter: state.filter
   }
 }
 

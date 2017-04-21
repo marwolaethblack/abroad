@@ -9,6 +9,7 @@ import FrontPage from './containers/FrontPage';
 import PostsPage from './containers/PostsPage';
 import ExtendedPostPage from './containers/ExtendedPostPage';
 import UserPage from './containers/UserPage';
+import NewPostPage from './containers/NewPostPage';
 
 import Signin from './containers/auth/signin';
 import Signup from './containers/auth/signup';
@@ -34,6 +35,7 @@ ReactDOM.render(
   		  <IndexRoute component={FrontPage} />
   			<Route path="posts" component={PostsPage} />
   		  <Route path="posts/view/:id/:title" component={ExtendedPostPage} />
+        <Route path="add-post" component={NewPostPage} />
         <Route path="user/:id" component={UserPage} />
         <Route path="signin" component={Signin} />
         <Route path="signup" component={Signup} />

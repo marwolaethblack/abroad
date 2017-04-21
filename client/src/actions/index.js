@@ -75,6 +75,31 @@ export const fetchSinglePost = id => dispatch => {
         });
 };
 
+export const addPost = (newPost) => (dispatch) =>{
+
+    dispatch({type:ActionTypes.ADDING_POST});
+
+    axios.post('/api/addPost',
+              { newPost }, 
+              {headers: {authorization: localStorage.getItem('token')}
+        })
+        .then(resp => {
+            dispatch({
+                type: ActionTypes.POST_ADDED,
+                newPost: resp.data
+            });
+            console.log(resp.data);
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.ADD_POST_ERROR,
+                message: err.response.data.error
+            });
+        });
+        alert("POST ADDED");
+}
+
 export const filterUpdate = (name,value) => {
     if(name === "category" && !Array.isArray(value)){
         value = [value];
