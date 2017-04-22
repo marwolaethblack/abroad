@@ -15,10 +15,11 @@ const postSchema = new mongoose.Schema({
    category: String,
    content: String,
    image: String,
-   upvotes: Number,
+   upvotes: { type: Number, default: 0 },
    comments: [{
          type: mongoose.Schema.Types.ObjectId,
-         ref: "Comment"
+         ref: "Comment",
+         default: []
     }]
 });
 

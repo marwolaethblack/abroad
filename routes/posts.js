@@ -167,12 +167,7 @@ module.exports = (postSocket) => {
 				id: _id,
 				username,
 			}
-
-			newPost = {...newPost,
-						upvotes: 0, 
-						comments: [], 
-						image: "https://placehold.it/350x150"
-			}
+			newPost.image = "https://placehold.it/350x150";
 
 			const post = new PostModel(newPost);
 			
