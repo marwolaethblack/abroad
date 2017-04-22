@@ -56,14 +56,12 @@ export const fetchSinglePost = id => dispatch => {
 
     axios.get('/api/singlePost',{params:id })
         .then(resp => {
-             console.log("singlePost: "+JSON.stringify(resp.data));
             dispatch({
                 type: ActionTypes.RECEIVED_SINGLE_POST,
                 singlePost: resp.data
             });
             dispatch({ type: ActionTypes.FETCH_SINGLE_POST_DONE });
             //singlePost is used as a parameter for fetchRelatedPosts
-            console.log("singlePost before fetchRelatedPosts: "+JSON.stringify(resp.data));
             dispatch(fetchRelatedPosts(resp.data));
         })
         .catch(err => {
@@ -150,3 +148,4 @@ export const deleteComment = (commentId) => (dispatch) => {
             console.log(err);
         })
 }
+

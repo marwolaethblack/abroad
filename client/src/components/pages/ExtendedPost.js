@@ -1,10 +1,18 @@
 import React, { Component, PropTypes } from 'react';
+import io from 'socket.io-client';
 import { Link } from 'react-router';
 import postDateDiff from '../../services/dateDifference';
 import Comment from '../Comment';
 import AddComment from '../parts/AddComment';
 
+
+
 class ExtendedPost extends Component {
+
+  componentWillMount() { 
+    const socket = io('/post');
+    socket.on('add comment', (payload) => this.props.socketAddComment(payload));
+  }
 
   renderComments = (comments, deleteComment) => {
             if(comments.length !== 0)
