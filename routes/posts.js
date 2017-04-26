@@ -1,5 +1,6 @@
 import PostModel from '../models/Post';
 import CommentModel from '../models/Comment';
+import UserModel from '../models/User';
 import express from 'express';
 import passport from 'passport';
 import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
@@ -154,6 +155,18 @@ module.exports = (postSocket) => {
 
 	});
 
+	// //Get a single post
+	// router.get('/api/usersPosts',(req,res) => {
+	// 	var userId = req.query.userId;
+
+	// 	UserModel.findById(userId).populate({path: 'posts', options: {lean: true}}).exec((err, currentUserProfile) => {
+	// 		if(err) console.log(err);
+
+	// 		console.log(currentUserProfile);
+	// 		res.json(currentUserProfile.posts);
+	// 	});
+	// });
+
 	//Add a new post
 	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
@@ -165,7 +178,7 @@ module.exports = (postSocket) => {
 		if(newPost){
 			newPost.author = {
 				id: _id,
-				username,
+				username
 			}
 			newPost.image = "https://placehold.it/350x150";
 
@@ -173,14 +186,21 @@ module.exports = (postSocket) => {
 			
 			post.save((err,newPost) => {
 				if(err) console.log(err);
+
+			UserModel.findById(_id, function(err, foundAuthor) {
+				if(err) {
+					return res.status(422).send({error:err});
+				}
+
+				foundAuthor.posts.push(newPost);	
+				foundAuthor.save();	
+			});
 				res.json(post);
 			});
-
 		} else {
 			return res.status(422).send({error:"Wuut? No post was sent."});
 		}
-
 	});
+
 	return router;
-// export default router;
 }

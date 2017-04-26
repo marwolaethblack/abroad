@@ -30,7 +30,7 @@ class ExtendedPostPage extends Component {
     const { singlePost, relatedPosts, loading, authenticated, removeComment, socketAddComment, socket } = this.props;
 
     const isEmpty = Object.keys(singlePost).length === 0;
-    if(loading) {
+    if(loading.posts) {
         return (<Loader />);
     } else {
       if(isEmpty) {

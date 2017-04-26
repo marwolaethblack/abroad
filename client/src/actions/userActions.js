@@ -13,6 +13,18 @@ export function fetchUser(id) {
 				dispatch({type: ActionTypes.FETCH_USER_ERROR, error: err.message});
 			});
 	}
-
-	
 }
+
+// export function fetchPostsByIds(postsIds) {
+// 	return function(dispatch) {
+// 		 dispatch({ type: ActionTypes.FETCH_POSTS });
+
+// 		return axios.get('/api/user', {params: { id } })
+// 			.then(response => {
+// 				dispatch({type: ActionTypes.RECEIVED_USER, payload: response.data});
+// 			})
+// 			.catch(err => {
+// 				dispatch({type: ActionTypes.FETCH_USER_ERROR, error: err.message});
+// 			});
+// 	}
+// }

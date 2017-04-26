@@ -54,14 +54,14 @@ class AllPosts extends Component {
   render() {
   	const { posts,isFetching } = this.props;
 
-    if(this.state.loadedPosts.length === 0 && !isFetching) 
+    if(this.state.loadedPosts.length === 0 && !isFetching.posts) 
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
 
     return (
      <div className="posts-page container" style={{height:"100%"}}>
 
         <InfiniteScroll
-          loadingMore={isFetching}
+          loadingMore={isFetching.posts}
           elementIsScrollable={false}
           loadMore={this.handlePostsLoadOnScroll}
           threshold={100} >

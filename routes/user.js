@@ -8,7 +8,7 @@ module.exports = function(io) {
 
 	router.get('/api/user',(req,res) => {
 		UserModel.findById(req.query.id, {password: 0})
-			.populate('posts comments')
+			// .populate('posts comments')
 				.lean()
 				.exec((err, user) => {
 			if(err) {

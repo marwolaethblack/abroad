@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import Post from '../Post';
+import UsersPosts from '../UsersPosts';
 
 export default function UserPage(props) {
 	const { username, email, comments, posts, _id } = props.userData;
-	const { id } = props; //ID from the URL 
+	const { id, authenticated, loadUsersPosts, isFetching} = props; //ID from the URL 
+	console.log("USER's posts: ");
+	console.log(posts);
 	return(
 		<section className="container">
 			<figure>
@@ -13,6 +17,15 @@ export default function UserPage(props) {
 					{id === _id ? <Link to={`user/${id}/settings`}>Settings</Link> : ""}
 				</figcaption>
 			</figure>
+
+			<section>
+
+
+
+				{/* posts.map(post => {
+					return <Post {...post} />
+				})*/}
+			</section>
 		</section>
 	);
 }
