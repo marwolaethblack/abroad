@@ -16,6 +16,11 @@ class ExtendedPost extends Component {
 
   }
 
+  constructor(){
+    super();
+    this.handleDeletePost = this.handleDeletePost.bind(this);
+  }
+
   renderComments = (comments, deleteComment) => {
             if(comments.length !== 0)
             {
@@ -23,15 +28,21 @@ class ExtendedPost extends Component {
             }
         return "No comments to show";
   }
+
+  handleDeletePost = () => {
+        this.props.deletePost(this.props._id);
+  }
     
   render() {
     const { upvotes, image, title, content, category, author, comments, _id, deleteComment } = this.props;
     const { authenticated } = this.props;
     const datePosted = postDateDiff(_id);
+    const loggedUserId = localStorage.getItem('id');
 
   
     return (
       <article>
+        {loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button>}
         <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>
             <h3>{title}</h3>

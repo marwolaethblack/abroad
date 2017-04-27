@@ -158,33 +158,17 @@ module.exports = (postSocket) => {
 	// //Get posts by IDs
 	router.get('/api/postsByIds',(req,res) => {
 		
-
-		console.log("req.query: ");
-		console.log(req.query);
-
 		if(req.query){
 			const postsIds = Object.values(req.query);
-			
+
 			PostModel.find({
 		    	_id: { $in: postsIds }
 		  	})
 		    .exec((err, foundPosts) => {
 			  	if(err) console.log(err);
-			  	console.log("foundPosts: ");
-			  	console.log(foundPosts);
 			  	res.json(foundPosts);
 			});
 		}
-
-		// console.log("postsIds: ");
-		// console.log(postsIds);
-
-		// UserModel.findById(userId).populate({path: 'posts', options: {lean: true}}).exec((err, currentUserProfile) => {
-		// 	if(err) console.log(err);
-
-			
-		// 	res.json(currentUserProfile.posts);
-		// });
 	});
 
 	//Add a new post
@@ -220,6 +204,39 @@ module.exports = (postSocket) => {
 		} else {
 			return res.status(422).send({error:"Wuut? No post was sent."});
 		}
+	});
+
+	router.delete("/api/deletePost", requireAuth, (req, res) => {
+		const { postId } = req.query;
+		const { _id } = req.user;
+		
+		PostModel.findById(postId).lean().exec((err, foundPost) => {
+			if(err) {
+				console.log(err);
+			}
+			if(JSON.stringify(foundPost.author.id) === JSON.stringify(_id)) {
+				PostModel.findByIdAndRemove(postId, (err) => {
+					if(err) {
+						console.log(err);
+						res.json(err);
+					}
+
+				UserModel.findById(_id, function(err, foundAuthor) {
+					if(err) {
+						return res.status(422).send({error:err});
+					}
+
+					const postIndex = foundAuthor.posts.indexOf(postId);
+					foundAuthor.posts.splice(postIndex,1);	
+					foundAuthor.save();	
+				});
+
+					res.json(postId);
+				});
+			} else {
+				res.json({err: "error"});
+			}
+		})
 	});
 
 	return router;

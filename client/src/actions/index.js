@@ -115,6 +115,22 @@ export const addPost = (newPost) => (dispatch) =>{
         });
 }
 
+export const deletePost = (postId) => (dispatch) => {
+    dispatch({type: ActionTypes.DELETING_POST});
+    axios.delete('/api/deletePost',   
+                    { params: { postId },
+                      headers: {authorization: localStorage.getItem('token')}
+                }
+        )
+        .then(resp => {
+            dispatch({type: ActionTypes.POST_DELETED , postId: resp.data});
+            browserHistory.goBack();
+        })
+        .catch(err => {
+            console.log(err);
+        })
+}
+
 export const filterUpdate = (name,value) => {
     if(name === "category" && !Array.isArray(value)){
         value = [value];
