@@ -30,7 +30,12 @@ var connections = [];
 postSocket.on('connection', function(socket) {
 	connections.push(socket.id);
 	console.log(connections.length);
-})
+	socket.on('disconnect', function(s) {
+		connections.splice(connections.indexOf(s.id), 1);
+		console.log(connections.length);
+	});
+});
+
 
 
 

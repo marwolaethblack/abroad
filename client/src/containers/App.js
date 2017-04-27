@@ -16,6 +16,10 @@ class App extends Component {
     this.state = {show:false};
   }
 
+  componentWillUnmount() {
+    postSocket.close();
+  }
+
 
   toggleMobileMenu = () => {
     this.setState( { show : !this.state.show } );
