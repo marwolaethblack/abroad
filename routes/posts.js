@@ -159,9 +159,6 @@ module.exports = (postSocket) => {
 	router.get('/api/postsByIds',(req,res) => {
 		
 
-		console.log("req.query: ");
-		console.log(req.query);
-
 		if(req.query){
 			const postsIds = Object.values(req.query);
 			
@@ -170,8 +167,6 @@ module.exports = (postSocket) => {
 		  	})
 		    .exec((err, foundPosts) => {
 			  	if(err) console.log(err);
-			  	console.log("foundPosts: ");
-			  	console.log(foundPosts);
 			  	res.json(foundPosts);
 			});
 		}
