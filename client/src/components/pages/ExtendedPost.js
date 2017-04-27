@@ -10,8 +10,10 @@ import AddComment from '../parts/AddComment';
 class ExtendedPost extends Component {
 
   componentWillMount() { 
-    const socket = io('/post');
+    const { socket }  = this.props;
+    console.log(this.props);
     socket.on('add comment', (payload) => this.props.socketAddComment(payload));
+
   }
 
   renderComments = (comments, deleteComment) => {

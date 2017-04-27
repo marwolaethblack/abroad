@@ -26,6 +26,12 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", er
 
 //Socket namespaces
 var postSocket = io.of('/post');
+var connections = [];
+postSocket.on('connection', function(socket) {
+	connections.push(socket.id);
+	console.log(connections.length);
+})
+
 
 //Routes
 var UserRoutes = require('./routes/user')(io);
