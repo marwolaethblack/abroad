@@ -1,6 +1,7 @@
 const User = require("../../models/User");
 const jwt = require("jwt-simple");
 const config = require('../../config');
+const bcrypt = require("bcrypt-nodejs");
 import isEmail from 'validator/lib/isEmail';
 
 function tokenForUser(user) {
@@ -42,16 +43,28 @@ exports.signup = function(req,res,next){
             password: password,
             username: username
         });
+
+        //generate salt
+        bcrypt.genSalt(10, function(err, salt) {
+        if(err) {return next(err); }
         
-        user.save(function(err){
-            if(err) {return next(err);}
-            res.json({
-                token: tokenForUser(user),
-                id: user.id,
-                username: user.username });
-        });
+            //hash our password using salt
+            bcrypt.hash(user.password, salt, null, function(err, hash) {
+                if(err) {return next(err);}
+                
+                //overwrite plaintext password with encrypted password
+                user.password = hash;
+
+                 user.save(function(err){
+                    if(err) {return next(err);}
+                    res.json({
+                        token: tokenForUser(user),
+                        id: user.id,
+                        username: user.username });
+                    });
+                    
+                });
+        });   
+    
     });
-   
-    
-    
 }

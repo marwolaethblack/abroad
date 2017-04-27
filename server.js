@@ -33,6 +33,7 @@ postSocket.on('connection', function(socket) {
 })
 
 
+
 //Routes
 var UserRoutes = require('./routes/user')(io);
 var PostRoutes = require('./routes/posts')(postSocket);
