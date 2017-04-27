@@ -5,12 +5,14 @@ export const loading = (state=false, action) => {
     switch (action.type) {
         case AT.FETCH_POSTS:
         case AT.FETCH_SINGLE_POST:
-        case AT.ADDING_POST: {
+        case AT.ADDING_POST:
+        case AT.DELETING_POST: {
             return {...state, posts: true};
         }
         case AT.FETCH_SINGLE_POST_DONE:
         case AT.FETCH_POSTS_DONE:
         case AT.POST_ADDED:
+        case AT.POST_DELETED:
         case AT.RECEIVED_POSTS_BY_IDS:
         case AT.ADD_POST_ERROR: {
             return {...state, posts: false};

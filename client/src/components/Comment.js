@@ -22,7 +22,7 @@ class Comment extends Component {
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
-        	<article className={author.id === loggedUserId&& "own-comment"}>
+        	<article className={author.id === loggedUserId && "own-comment"}>
 	        	<span>Upvotes {upvotes}</span>
                 <section>
                 { content }
