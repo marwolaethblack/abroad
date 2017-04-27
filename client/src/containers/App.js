@@ -6,7 +6,7 @@ import Footer from '../components/Footer';
 
 import ExtendedPostPage from './ExtendedPostPage';
 
-let socket = io('/post');
+let postSocket = io('/post');
 
 class App extends Component {
   
@@ -14,6 +14,10 @@ class App extends Component {
     super();
     //prop to show mobile menu
     this.state = {show:false};
+  }
+
+  componentWillUnmount() {
+    postSocket.close();
   }
 
 
@@ -24,7 +28,7 @@ class App extends Component {
   renderChildren(props) {
       return React.Children.map(props.children, child => {
       if (child.type === ExtendedPostPage) {
-        return React.cloneElement(child, {socket: socket})
+        return React.cloneElement(child, {socket: postSocket})
       } else {
         return child
       }

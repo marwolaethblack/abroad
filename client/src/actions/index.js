@@ -1,5 +1,6 @@
 import { ActionTypes } from '../constants';
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 
 export const fetchPosts = filter => dispatch => {
     
@@ -103,7 +104,7 @@ export const addPost = (newPost) => (dispatch) =>{
                 type: ActionTypes.POST_ADDED,
                 newPost: resp.data
             });
-            console.log(resp.data);
+            browserHistory.push(`/posts/view/${resp.data._id}/${resp.data.title}`);
         })
         .catch(err => {
             console.log(err);
@@ -112,7 +113,6 @@ export const addPost = (newPost) => (dispatch) =>{
                 message: err.response.data.error
             });
         });
-        alert("POST ADDED");
 }
 
 export const filterUpdate = (name,value) => {
