@@ -5,8 +5,8 @@ import UsersPosts from '../UsersPosts';
 
 export default function UserPage(props) {
 	const { username, email, comments, posts, _id } = props.userData;
-	const { id, authenticated, loadUsersPosts, isFetching} = props; //ID from the URL 
-	console.log("USER's posts: ");
+	const { id, authenticated, loadUsersPosts, usersPosts, isFetching} = props; //ID from the URL 
+	console.log("USER's posts Ids: ");
 	console.log(posts);
 	return(
 		<section className="container">
@@ -19,7 +19,11 @@ export default function UserPage(props) {
 			</figure>
 
 			<section>
-				<UsersPosts />
+				<UsersPosts loadUsersPosts={loadUsersPosts} 
+				 postsIds={posts} 
+				 usersPosts={usersPosts}
+				 isFetching={isFetching} 
+				 usersPosts={usersPosts} />
 
 			</section>
 		</section>

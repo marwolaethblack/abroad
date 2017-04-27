@@ -155,17 +155,37 @@ module.exports = (postSocket) => {
 
 	});
 
-	// //Get a single post
-	// router.get('/api/usersPosts',(req,res) => {
-	// 	var userId = req.query.userId;
+	// //Get posts by IDs
+	router.get('/api/postsByIds',(req,res) => {
+		
 
-	// 	UserModel.findById(userId).populate({path: 'posts', options: {lean: true}}).exec((err, currentUserProfile) => {
-	// 		if(err) console.log(err);
+		console.log("req.query: ");
+		console.log(req.query);
 
-	// 		console.log(currentUserProfile);
-	// 		res.json(currentUserProfile.posts);
-	// 	});
-	// });
+		if(req.query){
+			const postsIds = Object.values(req.query);
+			
+			PostModel.find({
+		    	_id: { $in: postsIds }
+		  	})
+		    .exec((err, foundPosts) => {
+			  	if(err) console.log(err);
+			  	console.log("foundPosts: ");
+			  	console.log(foundPosts);
+			  	res.json(foundPosts);
+			});
+		}
+
+		// console.log("postsIds: ");
+		// console.log(postsIds);
+
+		// UserModel.findById(userId).populate({path: 'posts', options: {lean: true}}).exec((err, currentUserProfile) => {
+		// 	if(err) console.log(err);
+
+			
+		// 	res.json(currentUserProfile.posts);
+		// });
+	});
 
 	//Add a new post
 	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication

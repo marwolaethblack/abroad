@@ -73,7 +73,22 @@ export const fetchSinglePost = id => dispatch => {
         });
 };
 
-//Get posts by array of post IDs
+//Get posts by array of post Ids
+export const fetchPostsByIds = Ids => dispatch => {
+
+    dispatch({ type: ActionTypes.FETCH_POSTS });
+
+    axios.get('/api/postsByIds',{params: Ids})
+        .then(resp => {
+            dispatch({
+                type: ActionTypes.RECEIVED_POSTS,
+                posts: resp.data
+            });
+            dispatch({
+                type: ActionTypes.FETCH_POSTS_DONE
+            });
+        })
+}
 
 export const addPost = (newPost) => (dispatch) =>{
 

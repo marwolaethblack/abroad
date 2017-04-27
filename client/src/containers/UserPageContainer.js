@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchUser } from '../actions/userActions';
-import { fetchPostsByIds } from '../actions/userActions';
+import { fetchPostsByIds } from '../actions';
 
 import UserPage from '../components/pages/UserPage';
 import Loader from '../components/parts/Loader';
@@ -13,15 +13,20 @@ class UserPageContainer extends Component {
 	}
 
 	render() {
-		const { loading, user, authenticated } = this.props;
+		const { user, usersPosts, authenticated, isFetching } = this.props;
 		const { id } = this.props.params; //The ID from the URL used as a prop for <UserPage/>
-		if(loading.users) {
+		if(isFetching.users) {
 			return (<Loader />);
 		} else {
 			if(!user.userData) {
 				return(<h1>No user found</h1>)
 			}
-			return (<UserPage {...user} id ={ id } authenticated={authenticated} loadUsersPosts={this.props.getUsersPosts} />);
+			return (<UserPage {...user} 
+							  id ={ id }
+							  usersPosts={usersPosts} 
+							  authenticated={authenticated} 
+							  loadUsersPosts={this.props.getPostsByIds} 
+							  isFetching={isFetching} />);
 		}
 	}
 }
@@ -30,7 +35,8 @@ class UserPageContainer extends Component {
 const mapStateToProps = (state) => {
 	return {
 		user: state.user,
-		loading: state.isFetching,
+		usersPosts: state.posts,
+		isFetching: state.isFetching,
 		authenticated: state.auth.authenticated
 	}
 };
