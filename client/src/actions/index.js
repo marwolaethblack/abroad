@@ -73,6 +73,8 @@ export const fetchSinglePost = id => dispatch => {
         });
 };
 
+//Get posts by array of post IDs
+
 export const addPost = (newPost) => (dispatch) =>{
 
     dispatch({type:ActionTypes.ADDING_POST});

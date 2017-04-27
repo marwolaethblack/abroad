@@ -5,7 +5,7 @@ export const posts = (state=[],action) => {
         case ActionTypes.RECEIVED_POSTS: {
             return action.posts;
         }
-        case ActionTypes.RECEIVED_USERS_POSTS: {
+        case ActionTypes.RECEIVED_POSTS_BY_IDS: {
             return action.posts;
         }
         case ActionTypes.POST_ADDED: {

@@ -11,6 +11,7 @@ export const loading = (state=false, action) => {
         case AT.FETCH_SINGLE_POST_DONE:
         case AT.FETCH_POSTS_DONE:
         case AT.POST_ADDED:
+        case AT.RECEIVED_POSTS_BY_IDS:
         case AT.ADD_POST_ERROR: {
             return {...state, posts: false};
         }

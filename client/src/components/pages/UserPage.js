@@ -19,12 +19,8 @@ export default function UserPage(props) {
 			</figure>
 
 			<section>
+				<UsersPosts />
 
-
-
-				{/* posts.map(post => {
-					return <Post {...post} />
-				})*/}
 			</section>
 		</section>
 	);
