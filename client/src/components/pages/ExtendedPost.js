@@ -31,7 +31,12 @@ class ExtendedPost extends Component {
   renderComments = (comments, deleteComment) => {
             if(comments.length !== 0)
             {
-               return comments.map(comment => <Comment {...comment} key={comment._id} deleteComment={deleteComment} />) 
+               return comments.map(comment => 
+                <Comment {...comment} 
+                         key={comment._id}
+                         postId={this.props._id}
+                         deleteComment={deleteComment} 
+                         editComment={this.props.editComment} />) 
             }
         return "No comments to show";
   }

@@ -64,6 +64,35 @@ module.exports = function(postSocket) {
 		});
 	});
 
+	//EDIT A COMMENT
+	router.put('/api/editComment', requireAuth, (req,res) => {
+
+		//commentInfo = { editedComment, commentId, authorId }
+		let { commentInfo } = req.body;
+		const { _id, username } = req.user;
+
+		if(commentInfo){
+			if(JSON.stringify(commentInfo.authorId) === JSON.stringify(_id)) {		
+				
+				//update a comment and return the edited comment
+				CommentModel.findOneAndUpdate(
+					{ _id: commentInfo.commentId },
+					{...commentInfo.editedComment}, 
+					{new: true}
+				)
+				// .populate("comments")
+				.exec((err,editedComment) => {
+						if(err) console.log(err);
+						res.json(editedComment);
+				});
+			} else {
+				return res.status(401).send({error:"Unauthorized"});
+			}
+		} else {
+			return res.status(422).send({error:"Wuut? Your comment is WRONG!!!."});
+		}
+	});
+
 
 	router.delete("/api/deleteComment", requireAuth, (req, res) => {
 		const { commentId } = req.query;
