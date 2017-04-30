@@ -115,6 +115,7 @@ export const addPost = (newPost) => (dispatch) =>{
         });
 }
 
+//postInfo = { editedPost, postId, posttAuthorId }
 export const editPost = (postInfo) => (dispatch) =>{
 
     dispatch({type:ActionTypes.EDITING_POST});
@@ -189,6 +190,32 @@ export const addComment = (postId, comment) => (dispatch) =>{
             console.log(err);
             dispatch({
                 type: ActionTypes.ADD_COMMENT_ERROR,
+                message: err.response.data.error
+            });
+        });
+}
+
+//commentInfo = { editedComment, commentId, authorId }
+export const editComment = (commentInfo) => (dispatch) =>{
+
+    dispatch({type:ActionTypes.EDITING_COMMENT});
+
+    axios.put('/api/editComment', { commentInfo }, 
+                {headers: {authorization: localStorage.getItem('token')} })
+        .then(resp => {
+
+            dispatch({
+                type: ActionTypes.COMMENT_EDITED,
+                editedComment: resp.data
+            });
+
+            //load the post with the edited comment
+            dispatch(fetchSinglePost({id:commentInfo.postId}));
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.EDIT_COMMENT_ERROR,
                 message: err.response.data.error
             });
         });

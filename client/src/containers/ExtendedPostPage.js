@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchSinglePost, editPost, deletePost, deleteComment } from '../actions';
+import { fetchSinglePost, editPost, deletePost, editComment, deleteComment } from '../actions';
 import RelatedPosts from '../components/RelatedPosts';
 import ExtendedPost from '../components/pages/ExtendedPost';
 import Loader from '../components/parts/Loader';
@@ -27,7 +27,7 @@ class ExtendedPostPage extends Component {
   
   render() {
 
-    const { singlePost, relatedPosts, loading, authenticated, removeComment, removePost, updatePost, socketAddComment, socket } = this.props;
+    const { singlePost, relatedPosts, loading, authenticated, removeComment, removePost, updatePost, updateComment, socketAddComment, socket } = this.props;
 
     const isEmpty = Object.keys(singlePost).length === 0;
     if(loading.posts) {
@@ -42,6 +42,7 @@ class ExtendedPostPage extends Component {
           <ExtendedPost {...singlePost} 
                         authenticated={authenticated}
                         deleteComment={removeComment}
+                        editComment = {updateComment}
                         deletePost={removePost} 
                         editPost={updatePost}
                         socketAddComment={socketAddComment}
@@ -74,6 +75,10 @@ const mapDispatchToProps = (dispatch) => {
 
         updatePost(newPost){
           dispatch(editPost(newPost));
+        },
+
+        updateComment(newComment){
+          dispatch(editComment(newComment));
         },
 
         removeComment(commentId) {
