@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import postDateDiff from '../services/dateDifference';
 import EditCommentForm from './EditCommentForm';
+import ReplyCommentForm from './ReplyCommentForm';
 import Modal from './parts/Modal';
+import { Link } from 'react-router';
 
 
 class Comment extends Component {
@@ -25,7 +27,7 @@ class Comment extends Component {
             }
           } 
           return "";
-        }
+    }
 
     handleDeleteClick = (deleteComment,id) => {
         deleteComment(id);
@@ -48,7 +50,7 @@ class Comment extends Component {
   }
 
     render() {
-        const { authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment } = this.props;
+        const { authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment, level } = this.props;
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
@@ -57,12 +59,12 @@ class Comment extends Component {
                 <section>
                 { content }
                 </section>
-	        	<span>Submitted {datePosted} ago by {author !== undefined && author.username }</span>
+	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username}</Link></span>
                 {author.id === loggedUserId && <span style={{color:"blue", cursor:"pointer"}} onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</span> }
                 {author.id === loggedUserId && <button onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
                 {authenticated && <button onClick={this.openReplyModal}>REPLY</button> }
 	        	<span>{comments !== undefined && comments.length} comments</span>
-                 <section className="comment-comments">
+                 <section className={`replies-${level}`}>
                     {this.renderComments(comments)}
                 </section>
 
@@ -84,7 +86,10 @@ class Comment extends Component {
                    onClose={this.closeReplyModal} 
                    title="REPLY">
 
-            <h1>REPLY TUTAJ</h1>
+            <ReplyCommentForm 
+                 commentId={_id} 
+                 postId={postId} 
+             />
 
             </Modal>
 

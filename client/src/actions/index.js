@@ -237,3 +237,24 @@ export const deleteComment = (commentId) => (dispatch) => {
         })
 }
 
+export const replyComment = (reply, commentId, postId) => (dispatch) =>{
+
+
+    axios.put('/api/replyComment', { reply, commentId, postId }, 
+                {headers: {authorization: localStorage.getItem('token')} })
+        .then(resp => {
+
+            dispatch({
+                type: ActionTypes.COMMENT_ADDED,
+                repliedPost: resp.data
+            });
+
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.REPLY_COMMENT_ERROR,
+                message: err.response.data.error
+            });
+        });
+}

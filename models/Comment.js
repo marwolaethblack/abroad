@@ -8,12 +8,10 @@ const commentSchema = new mongoose.Schema({
         },
         username: String
   },
+  level: Number,
   content: String,
   upvotes: Number,
-  comments: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Comment"
-    }],
+  comments: { type : Array , "default" : [] },
   
 });
 
