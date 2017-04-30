@@ -13,6 +13,9 @@ class AllPosts extends Component {
     }
   }
 
+  arraysAreEqual = (arr1, arr2) => 
+    arr1.length === arr2.length && arr1.every((element, index) => element === arr2[index] );
+
 
   componentDidUpdate(prevProps){
     //JSON.stringify() can be used for comparism because urlQuery is always a simple object
@@ -21,7 +24,8 @@ class AllPosts extends Component {
       this.setState({loadedPosts:[],allPostsAreLoaded:false});
     }
 
-    if(prevProps.posts !== this.props.posts){
+    // if(prevProps.posts !== this.props.posts){
+    if(!this.arraysAreEqual(prevProps.posts,this.props.posts)){
       this.setState((prevState)=>({loadedPosts:[...prevState.loadedPosts,...this.props.posts]}));
       if(this.props.posts.length === 0){
         this.setState({allPostsAreLoaded: true});
