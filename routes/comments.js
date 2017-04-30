@@ -28,6 +28,7 @@ module.exports = function(postSocket) {
 			const newComment = new CommentModel ({
 				content: comment,
 				upvotes: 0,
+				level: 1,
 				author: {
 					id: _id,
 					username: username
@@ -114,6 +115,66 @@ module.exports = function(postSocket) {
 				res.json({err: "error"});
 			}
 		})
+	});
+
+
+	router.put('/api/replyComment', requireAuth, (req,res) => {
+		const { commentId, reply, postId } = req.body;
+		const { user } = req;
+		const { _id, username } = req.user;
+		if(reply.length > 1000 || reply.length === 0) {
+			return res.status(422).send({error:"Comment must be between 0 and 1000 characters long"});
+		}
+
+		CommentModel.findById(commentId, function(err, foundComment) {
+			if(err) {
+				return res.status(422).send({error:err});
+			}
+			if(foundComment.level === 4) {
+				return res.status(422);
+			}
+
+			const newComment = new CommentModel ({
+				content: reply,
+				upvotes: 0,
+				level: foundComment.level + 1,
+				author: {
+					id: _id,
+					username: username
+				}
+			});
+
+			foundComment.comments.push(newComment);
+			user.comments.push(newComment);
+
+			newComment.save((err) => {
+
+				if(err) {
+					console.log(err);
+				}
+
+				user.save();
+
+				foundComment.save((err)=> {
+
+					if(err) {
+						console.log(err);
+					}
+					console.log(postId);
+					PostModel.findById(postId)
+						.populate("comments")
+						.exec(function(err, populatedPost) {
+						if(err) {
+							console.log(err);
+						}
+
+						res.json(populatedPost);
+						postSocket.to(postId).emit('add comment', populatedPost.comments);
+					});
+				});
+			});
+			
+		});
 	});
 
 	return router;

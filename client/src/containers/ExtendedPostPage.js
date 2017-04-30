@@ -27,7 +27,9 @@ class ExtendedPostPage extends Component {
   
   render() {
 
-    const { singlePost, relatedPosts, loading, authenticated, removeComment, removePost, updatePost, updateComment, socketAddComment, socket } = this.props;
+    const { singlePost, relatedPosts, loading,
+            authenticated, removeComment, removePost, 
+            updatePost, updateComment, socketAddComment, socket } = this.props;
 
     const isEmpty = Object.keys(singlePost).length === 0;
     if(loading.posts) {

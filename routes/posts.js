@@ -158,10 +158,7 @@ module.exports = (postSocket) => {
 	// //Get posts by IDs
 	router.get('/api/postsByIds',(req,res) => {
 		
-<<<<<<< HEAD
 
-=======
->>>>>>> 0653126a9b9031f85393a8a646571b9afef0a94d
 		if(req.query){
 			const postsIds = Object.values(req.query);
 
