@@ -15,7 +15,7 @@ const validate = (values) => {
     const errors = {};
 
       if(isInputEmpty(content)){
-        errors.content = "required field";
+        errors.content = "The comment has not been changed.";
       }
 
       return errors;

@@ -14,7 +14,7 @@ export default function UserPage(props) {
 				<img src="http://placehold.it/350x150"/>
 				<figcaption>
 					<h1>{username}</h1>
-					{id === _id ? <Link to={`user/${id}/settings`}>Settings</Link> : ""}
+					{id === _id ? <Link to={`/user/${id}/edit-profile`}>Edit profile</Link> : ""}
 				</figcaption>
 			</figure>
 
