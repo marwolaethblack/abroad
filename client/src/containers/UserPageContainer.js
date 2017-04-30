@@ -26,7 +26,8 @@ class UserPageContainer extends Component {
 							  usersPosts={usersPosts} 
 							  authenticated={authenticated} 
 							  loadUsersPosts={this.props.getPostsByIds} 
-							  isFetching={isFetching} />);
+							  isFetching={isFetching} />
+			);
 		}
 	}
 }

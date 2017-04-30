@@ -213,7 +213,7 @@ module.exports = (postSocket) => {
 		let { postInfo } = req.body;
 		const { _id, username } = req.user;
 
-		if(postInfo){
+		if(Object.keys(postInfo).length){
 			if(JSON.stringify(postInfo.authorId) === JSON.stringify(_id)) {		
 				
 				//update a post and return the edited post

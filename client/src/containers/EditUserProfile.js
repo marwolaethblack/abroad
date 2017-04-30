@@ -1,80 +1,48 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
+import EditUserForm from '../components/EditUserForm';
 
-import countries from '../constants/countries';
-import categories from '../constants/categories'
-import { date_ranges } from '../constants/post_created_ranges';
-import FilterDropdown from '../components/parts/FilterDropdown';
-import CheckboxGroupCategories from '../components/parts/CheckboxGroupCategories';
-
+import { fetchUser, editUser } from '../actions/userActions';
 
 class EditUserProfile extends Component {
 
-    constructor(props){
-        super(props);
-        this.handleInputChange = this.handleInputChange.bind(this);
-    }
-
-    handleInputChange(e){
-        const input = e.target;
-        this.props.filterUpdate(input.name,input.value);
-    }
+  componentDidMount(){
+    this.props.getUser(this.props.params.id);
+  }
 
     render() {
 
-        const query = this.props.stateQuery;
-        const { country_from, country_in, category, date_posted, searchText } = query;
-        const { filterUpdate } = this.props;
         return(
             <div className="container">
-                <div className="six columns">
-                    <label htmlFor="country_from">From</label>
-                     <FilterDropdown
-                      options={countries}
-                      name="country_from" 
-                      defaultValue={country_from} 
-                      optionChanged={filterUpdate} />
-                </div>
-     
-                <div className="six columns">
-                    <label htmlFor="country_in">In</label>
-                    <FilterDropdown
-                      options={countries}
-                      name="country_in" 
-                      defaultValue={country_in} 
-                      optionChanged={filterUpdate} />
-                 </div>
+              
+              <EditUserForm 
+                userInfo={this.props.user}
+                editUser={this.props.updateUser}
+              />
 
-                 <div>
-                     <label htmlFor="searchText">Search</label>
-                     <input type="text"
-                      name="searchText"
-                      value={this.state.searchText}
-                      placeholder="I need info about..." 
-                      onChange={this.handleInputChange} />
-                  </div>
-
-                 <div style={{paddingTop:"5em"}}>
-                  <CheckboxGroupCategories
-                   checkedOptions={category}
-                   onCategoryChange={filterUpdate} />
-                 </div>
-
-                 <div className="six columns">
-                    <label htmlFor="date_posted">Posts created:</label>
-                    <FilterDropdown
-                      options={date_ranges}
-                      name="date_posted" 
-                      defaultValue={date_posted}
-                      optionChanged={filterUpdate} />
-                 </div>
-
-                  <Link to={{pathname:"/posts", query}}>
-                    <button>FILTER!</button>
-                  </Link>
-              </div>
+            </div>
         );
     }
 }
 
-export default EditUserProfile;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.userData,
+    isFetching: state.isFetching,
+    authenticated: state.auth.authenticated
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getUser(id) {
+      dispatch(fetchUser(id));
+    },
+    updateUser(id, editedFields) {
+      dispatch(editUser(id, editedFields));
+    }
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(EditUserProfile);

@@ -72,7 +72,7 @@ module.exports = function(postSocket) {
 		let { commentInfo } = req.body;
 		const { _id, username } = req.user;
 
-		if(commentInfo){
+		if(Object.keys(commentInfo).length){
 			if(JSON.stringify(commentInfo.authorId) === JSON.stringify(_id)) {		
 				
 				//update a comment and return the edited comment

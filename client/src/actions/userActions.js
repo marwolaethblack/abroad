@@ -1,5 +1,6 @@
 import { ActionTypes } from '../constants';
 import axios from 'axios';
+import { browserHistory } from 'react-router';
 
 export function fetchUser(id) {
 	return function(dispatch) {
@@ -14,3 +15,20 @@ export function fetchUser(id) {
 			});
 	}
 }
+
+//userInfo = { editedFields, userId }
+export function editUser(userInfo) {
+	return function(dispatch) {
+		 dispatch({ type: ActionTypes.EDITING_USER });
+
+		return axios.put('/api/editUser', {userInfo}, 
+					{headers: {authorization: localStorage.getItem('token')} })
+			.then(resp => {
+				browserHistory.push(`/user/${resp.data._id}`);
+			})
+			.catch(err => {
+				dispatch({type: ActionTypes.EDIT_USER_ERROR, message: err.message});
+			});
+	}
+}
+

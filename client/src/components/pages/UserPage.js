@@ -4,16 +4,17 @@ import Post from '../Post';
 import UsersPosts from '../UsersPosts';
 
 export default function UserPage(props) {
-	const { username, email, comments, posts, _id } = props.userData;
+	const { username, country_in, country_from, email, comments, posts, _id } = props.userData;
 	const { id, authenticated, loadUsersPosts, usersPosts, isFetching} = props; //ID from the URL 
-	console.log("USER's posts Ids: ");
-	console.log(posts);
+
 	return(
 		<section className="container">
 			<figure>
 				<img src="http://placehold.it/350x150"/>
 				<figcaption>
 					<h1>{username}</h1>
+					{ country_from && <p>I'm from {country_from}</p> }
+					{ country_in && <p>I currently live in {country_in} </p> }
 					{id === _id ? <Link to={`/user/${id}/edit-profile`}>Edit profile</Link> : ""}
 				</figcaption>
 			</figure>

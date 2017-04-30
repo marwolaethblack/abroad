@@ -20,12 +20,14 @@ export const loading = (state=false, action) => {
         case AT.ADD_POST_ERROR: {
             return {...state, posts: false};
         }
-        case AT.FETCH_USER:{
+        case AT.FETCH_USER:
+        case AT.EDITING_USER: {
             return {...state, users: true}
         }
         case AT.RECEIVED_USER:
-        case AT.FETCH_USER_ERROR: {
-            return {...state,users: false}
+        case AT.FETCH_USER_ERROR:
+        case AT.EDIT_USER_ERROR: {
+            return {...state, users: false}
         }
         default:
             return state;

@@ -104,7 +104,7 @@ export const addPost = (newPost) => (dispatch) =>{
                 type: ActionTypes.POST_ADDED,
                 newPost: resp.data
             });
-            browserHistory.push(`/posts/view/${resp.data._id}/${resp.data.title}`);
+           browserHistory.push(`/posts/view/${resp.data._id}/${resp.data.title}`);
         })
         .catch(err => {
             console.log(err);

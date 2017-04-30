@@ -86,10 +86,10 @@ class Comment extends Component {
                    onClose={this.closeReplyModal} 
                    title="REPLY">
 
-            <ReplyCommentForm 
-                 commentId={_id} 
-                 postId={postId} 
-             />
+                <ReplyCommentForm 
+                     commentId={_id} 
+                     postId={postId} 
+                 />
 
             </Modal>
 
