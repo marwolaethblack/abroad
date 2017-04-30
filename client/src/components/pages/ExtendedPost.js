@@ -36,7 +36,8 @@ class ExtendedPost extends Component {
                          key={comment._id}
                          postId={this.props._id}
                          deleteComment={deleteComment} 
-                         editComment={this.props.editComment} />) 
+                         editComment={this.props.editComment}
+                         authenticated={this.props.authenticated} />) 
             }
         return "No comments to show";
   }

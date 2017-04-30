@@ -8,10 +8,13 @@ class Comment extends Component {
     constructor(){
         super();
         this.state = {
-            isEditCommentModalOpen: false
+            isEditCommentModalOpen: false,
+            isReplyModalOpen: false
         }
         this.openEditCommentModal = this.openEditCommentModal.bind(this);
         this.closeEditCommentModal = this.closeEditCommentModal.bind(this);
+        this.openReplyModal = this.openReplyModal.bind(this);
+        this.closeReplyModal = this.closeReplyModal.bind(this);
     }
 
     renderComments = (comments) => {
@@ -36,8 +39,16 @@ class Comment extends Component {
         this.setState({ isEditCommentModalOpen: false });
   }
 
+  openReplyModal = () => {
+        this.setState({ isReplyModalOpen: true });
+  }
+
+  closeReplyModal = () => {
+        this.setState({ isReplyModalOpen: false });
+  }
+
     render() {
-        const { upvotes, _id, author, postId, comments, content, deleteComment, editComment } = this.props;
+        const { authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment } = this.props;
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
@@ -49,6 +60,7 @@ class Comment extends Component {
 	        	<span>Submitted {datePosted} ago by {author !== undefined && author.username }</span>
                 {author.id === loggedUserId && <span style={{color:"blue", cursor:"pointer"}} onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</span> }
                 {author.id === loggedUserId && <button onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
+                {authenticated && <button onClick={this.openReplyModal}>REPLY</button> }
 	        	<span>{comments !== undefined && comments.length} comments</span>
                  <section className="comment-comments">
                     {this.renderComments(comments)}
@@ -65,6 +77,14 @@ class Comment extends Component {
                  postId={postId}
                  editComment={editComment} 
                  commentContent={content} />
+
+            </Modal>
+
+            <Modal isOpen={this.state.isReplyModalOpen} 
+                   onClose={this.closeReplyModal} 
+                   title="REPLY">
+
+            <h1>REPLY TUTAJ</h1>
 
             </Modal>
 

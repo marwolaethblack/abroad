@@ -208,9 +208,8 @@ export const editComment = (commentInfo) => (dispatch) =>{
                 type: ActionTypes.COMMENT_EDITED,
                 editedComment: resp.data
             });
-            console.log("POST ID FUCK: ");
-            console.log(commentInfo.postId);
-            // resp is the edited comment from the server
+
+            //load the post with the edited comment
             dispatch(fetchSinglePost({id:commentInfo.postId}));
         })
         .catch(err => {
