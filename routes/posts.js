@@ -206,6 +206,34 @@ module.exports = (postSocket) => {
 		}
 	});
 
+	//EDIT A POST
+	router.put('/api/editPost', requireAuth, (req,res) => {
+
+		let { postInfo } = req.body;
+		const { _id, username } = req.user;
+
+		if(postInfo){
+			if(JSON.stringify(postInfo.authorId) === JSON.stringify(_id)) {		
+				
+				//update a post and return the edited post
+				PostModel.findOneAndUpdate(
+					{ _id: postInfo.postId },
+					{...postInfo.editedFields}, 
+					{new: true}
+				)
+				.populate("comments")
+				.exec((err,editedPost) => {
+						if(err) console.log(err);
+						res.json(editedPost);
+				});
+			} else {
+				return res.status(401).send({error:"Unauthorized"});
+			}
+		} else {
+			return res.status(422).send({error:"Wuut? Your post is WRONG!."});
+		}
+	});
+
 	router.delete("/api/deletePost", requireAuth, (req, res) => {
 		const { postId } = req.query;
 		const { _id } = req.user;

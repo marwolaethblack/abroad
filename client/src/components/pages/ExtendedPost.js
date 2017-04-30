@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import postDateDiff from '../../services/dateDifference';
 import Comment from '../Comment';
 import AddComment from '../parts/AddComment';
+import Modal from '../parts/Modal';
+import EditPostForm from '../EditPostForm';
 
 
 
@@ -11,7 +13,6 @@ class ExtendedPost extends Component {
 
   componentWillMount() { 
     const { socket }  = this.props;
-    console.log(this.props);
     socket.on('add comment', (payload) => this.props.socketAddComment(payload));
 
   }
@@ -19,6 +20,12 @@ class ExtendedPost extends Component {
   constructor(){
     super();
     this.handleDeletePost = this.handleDeletePost.bind(this);
+    this.openEditPostModal = this.openEditPostModal.bind(this);
+    this.closeEditPostModal = this.closeEditPostModal.bind(this);
+    
+    this.state = {
+      isEditPostModalOpen: false
+    }
   }
 
   renderComments = (comments, deleteComment) => {
@@ -32,9 +39,17 @@ class ExtendedPost extends Component {
   handleDeletePost = () => {
         this.props.deletePost(this.props._id);
   }
+
+  openEditPostModal = () => {
+        this.setState({ isEditPostModalOpen: true });
+  }
+
+  closeEditPostModal = () => {
+        this.setState({ isEditPostModalOpen: false });
+  }
     
   render() {
-    const { upvotes, image, title, content, category, author, comments, _id, deleteComment } = this.props;
+    const { upvotes, image, title, content, category, author, comments, _id, deleteComment, editPost } = this.props;
     const { authenticated } = this.props;
     const datePosted = postDateDiff(_id);
     const loggedUserId = localStorage.getItem('id');
@@ -42,7 +57,21 @@ class ExtendedPost extends Component {
   
     return (
       <article>
-        {loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button>}
+ 
+        { loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
+        { loggedUserId === author.id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
+
+        <Modal isOpen={this.state.isEditPostModalOpen} 
+               onClose={this.closeEditPostModal} 
+               title="EDIT POST">
+
+          <EditPostForm postId={_id} 
+            authorId={author.id} 
+            editPost={editPost} 
+            postContent={content} />
+
+        </Modal>
+
         <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>
             <h3>{title}</h3>

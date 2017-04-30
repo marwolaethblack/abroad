@@ -115,6 +115,34 @@ export const addPost = (newPost) => (dispatch) =>{
         });
 }
 
+export const editPost = (postInfo) => (dispatch) =>{
+
+    dispatch({type:ActionTypes.EDITING_POST});
+
+    axios.put('/api/editPost', { postInfo }, 
+                {headers: {authorization: localStorage.getItem('token')} })
+        .then(resp => {
+
+            //resp is the edited post from the server
+            dispatch({
+                type: ActionTypes.RECEIVED_SINGLE_POST,
+                singlePost: resp.data
+            });
+
+            dispatch({
+                type: ActionTypes.POST_EDITED,
+                editedPost: resp.data
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.EDIT_POST_ERROR,
+                message: err.response.data.error
+            });
+        });
+}
+
 export const deletePost = (postId) => (dispatch) => {
     dispatch({type: ActionTypes.DELETING_POST});
     axios.delete('/api/deletePost',   
@@ -167,7 +195,7 @@ export const addComment = (postId, comment) => (dispatch) =>{
 }
 
 export const deleteComment = (commentId) => (dispatch) => {
-    console.log("action" + commentId);
+
     dispatch({type: ActionTypes.DELETING_COMMENT});
     axios.delete('/api/deleteComment',   
                     { params: { commentId },
