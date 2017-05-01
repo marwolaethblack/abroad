@@ -57,6 +57,7 @@ export const fetchSinglePost = id => dispatch => {
 
     axios.get('/api/singlePost',{params:id })
         .then(resp => {
+            console.log(resp.data);
             dispatch({
                 type: ActionTypes.RECEIVED_SINGLE_POST,
                 singlePost: resp.data
@@ -171,20 +172,19 @@ export const filterUpdate = (name,value) => {
     }
 };
 
-export const addComment = (postId, comment) => (dispatch) =>{
+export const addComment = (postId, comment, parentId) => (dispatch) =>{
 
     dispatch({type:ActionTypes.ADDING_COMMENT});
-
     axios.put('/api/addComment',
-              {postId, comment}, 
+              {postId, comment, parentId}, 
               {headers: {authorization: localStorage.getItem('token')}
         })
         .then(resp => {
-            dispatch({
-                type: ActionTypes.COMMENT_ADDED,
-                updatedPost: resp.data
-            });
             console.log(resp.data);
+            dispatch({
+                 type: ActionTypes.COMMENT_ADDED,
+                 updatedComments: resp.data
+            });
         })
         .catch(err => {
             console.log(err);
@@ -237,24 +237,4 @@ export const deleteComment = (commentId) => (dispatch) => {
         })
 }
 
-export const replyComment = (reply, commentId, postId) => (dispatch) =>{
 
-
-    axios.put('/api/replyComment', { reply, commentId, postId }, 
-                {headers: {authorization: localStorage.getItem('token')} })
-        .then(resp => {
-
-            dispatch({
-                type: ActionTypes.COMMENT_ADDED,
-                repliedPost: resp.data
-            });
-
-        })
-        .catch(err => {
-            console.log(err);
-            dispatch({
-                type: ActionTypes.REPLY_COMMENT_ERROR,
-                message: err.response.data.error
-            });
-        });
-}

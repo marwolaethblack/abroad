@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import { replyComment } from '../actions';
+import { addComment } from '../actions';
 import { connect } from 'react-redux';
 
 const { DOM: { textarea }} = React;
@@ -8,10 +8,9 @@ const { DOM: { textarea }} = React;
 const ReplyCommentForm = (props) => {
  
     const handleFormSubmit = (formProps) =>{
-      const { reply } = formProps;
+      const { comment } = formProps;
       const { commentId, postId } = props;
-      console.log(postId);
-      props.reply(reply, commentId, postId);
+      props.reply(postId, comment, commentId);
     }
 
     const { handleSubmit, submitting, pristine} = props;
@@ -20,7 +19,7 @@ const ReplyCommentForm = (props) => {
         <div>
           <label>Reply</label>
           <div>
-            <Field name="reply" placeholder="Reply must be between 1-1000 characters long" component="textarea" />
+            <Field name="comment" placeholder="Reply must be between 1-1000 characters long" component="textarea" />
           </div>
         </div>
           {props.errorMessage}
@@ -38,8 +37,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    reply(reply, commentId, postId) {
-      dispatch(replyComment(reply, commentId, postId));
+    reply(postId, comment, parentId) {
+      dispatch(addComment(postId, comment, parentId));
     }
   }
 }
