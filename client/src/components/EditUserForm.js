@@ -65,7 +65,16 @@ class EditUserForm extends Component {
 };
 
 
-export default reduxForm({
+EditUserForm = reduxForm({
   form: 'editUser', // a unique identifier for this form
   validate
 })(EditUserForm);
+
+EditUserForm = connect(
+  state => ({
+    initialValues: state.user.userData // pull initial values from account reducer
+  }),
+  // { load: loadAccount }               // bind account loading action creator
+)(EditUserForm)
+
+export default EditUserForm;
