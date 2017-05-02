@@ -1,21 +1,56 @@
 import CommentModel from '../models/Comment';
 import PostModel from '../models/Post';
-const Authentication = require("../auth/controllers/authentication");
-const passportService = require("../auth/services/passport");
-const passport = require("passport");
-import express from 'express';
+var mongoose = require('mongoose');
+var Authentication = require("../auth/controllers/authentication");
+var passportService = require("../auth/services/passport");
+var passport = require("passport");
+var express = require('express');
+
+  const layerComments = (comments) => {
+    const sort = function (a, b) {
+      if (a.parents.length < b.parents.length) {
+        return 1;
+      }
+      if (a.parents.length > b.parents.length) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    };
+
+    comments.sort(sort);
+
+    comments.slice(0).forEach(comment => {
+
+        //ignore root comment with no parents
+        if(comment.parents.length > 1) {
+            const parentId = comment.parents[comment.parents.length - 2];
+
+            // Get the parent comment based on the next-to-last
+            // comment ID in this comment's parents
+            const parentCommentIndex = comments.findIndex(x => (x._id+"") === (parentId+""));
+
+            if(parentCommentIndex > -1) {
+                comments[parentCommentIndex].comments.push(comment);
+                comments.splice(comments.indexOf(comment), 1); 
+           }
+        }    
+    });
+    return comments;
+  }
+
 
 
 module.exports = function(postSocket) {
 
-	const router = express.Router();
+	var router = express.Router();
 
-	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
 	router.put('/api/addComment', requireAuth, (req,res) => {
-		const { postId, comment } = req.body;
-		const { user } = req;
-		const { _id, username } = req.user;
+		var { postId, comment, parentId } = req.body;
+		var { user } = req;
+		var { _id, username } = req.user;
 		if(comment.length > 1000 || comment.length === 0) {
 			return res.status(422).send({error:"Comment must be between 0 and 1000 characters long"});
 		}
@@ -25,43 +60,98 @@ module.exports = function(postSocket) {
 				return res.status(422).send({error:err});
 			}
 
-			const newComment = new CommentModel ({
-				content: comment,
-				upvotes: 0,
-				level: 1,
-				author: {
-					id: _id,
-					username: username
-				}
-			});
+			if(parentId) {
+				CommentModel.findById(parentId).lean().exec(function(err, fComment) {
+					var parents = fComment.parents;
+					var newComment = new CommentModel ({
+						content: comment,
+						upvotes: 0,
+						postId: foundPost._id,
+						author: {
+							id: _id,
+							username: username
+						},
+						comments: []
+					});
 
-			foundPost.comments.push(newComment);
-			user.comments.push(newComment);
+					parents.push(newComment._id);
+					newComment.parents = parents;
+					console.log(parents);
 
-			newComment.save((err) => {
+					foundPost.comments.push(newComment);
+					user.comments.push(newComment);
 
-				if(err) {
-					console.log(err);
-				}
+					newComment.save((err) => {
 
-				user.save();
+						if(err) {
+							console.log(err);
+						}
 
-				foundPost.save((err)=> {
+						user.save();
+
+						foundPost.save((err)=> {
+
+							if(err) {
+								console.log(err);
+							}
+							
+							PostModel.populate(foundPost, { path: 'comments'}, function(err, populatedPost) {
+								if(err) {
+									console.log(err);
+								}
+
+								const layeredComments = layerComments(populatedPost.comments);
+
+								res.json(layeredComments);
+								//postSocket.to(postId).emit('add comment', populatedPost.comments);
+							});
+						});
+					});
+				});
+			} else {
+				var newComment = new CommentModel ({
+						content: comment,
+						upvotes: 0,
+						postId: foundPost._id,
+						author: {
+							id: _id,
+							username: username
+						},
+						parents: [],
+						comments: []
+					});
+
+				newComment.parents.push(newComment._id);
+
+				foundPost.comments.push(newComment);
+				user.comments.push(newComment);
+
+				newComment.save((err) => {
 
 					if(err) {
 						console.log(err);
 					}
-					
-					PostModel.populate(foundPost, { path: 'comments'}, function(err, populatedPost) {
+
+					user.save();
+
+					foundPost.save((err)=> {
+
 						if(err) {
 							console.log(err);
 						}
-						res.json(populatedPost);
-						postSocket.to(postId).emit('add comment', populatedPost.comments);
+						
+						PostModel.populate(foundPost, { path: 'comments'}, function(err, populatedPost) {
+							if(err) {
+								console.log(err);
+							}
+
+							const layeredComments = layerComments(populatedPost.comments);
+							res.json(layeredComments);
+							//postSocket.to(postId).emit('add comment', populatedPost.comments);
+						});
 					});
 				});
-			});
-			
+			}
 		});
 	});
 
@@ -70,9 +160,9 @@ module.exports = function(postSocket) {
 
 		//commentInfo = { editedComment, commentId, authorId }
 		let { commentInfo } = req.body;
-		const { _id, username } = req.user;
+		var { _id, username } = req.user;
 
-		if(Object.keys(commentInfo).length){
+		if(commentInfo){
 			if(JSON.stringify(commentInfo.authorId) === JSON.stringify(_id)) {		
 				
 				//update a comment and return the edited comment
@@ -96,8 +186,8 @@ module.exports = function(postSocket) {
 
 
 	router.delete("/api/deleteComment", requireAuth, (req, res) => {
-		const { commentId } = req.query;
-		const { _id } = req.user;
+		var { commentId } = req.query;
+		var { _id } = req.user;
 		
 		CommentModel.findById(commentId).lean().exec((err, foundComment) => {
 			if(err) {
@@ -118,67 +208,6 @@ module.exports = function(postSocket) {
 	});
 
 
-	router.put('/api/replyComment', requireAuth, (req,res) => {
-		const { commentId, reply, postId } = req.body;
-		const { user } = req;
-		const { _id, username } = req.user;
-		if(reply.length > 1000 || reply.length === 0) {
-			return res.status(422).send({error:"Comment must be between 0 and 1000 characters long"});
-		}
-
-		CommentModel.findById(commentId, function(err, foundComment) {
-			if(err) {
-				return res.status(422).send({error:err});
-			}
-			if(foundComment.level === 4) {
-				return res.status(422);
-			}
-
-			const newComment = new CommentModel ({
-				content: reply,
-				upvotes: 0,
-				level: foundComment.level + 1,
-				author: {
-					id: _id,
-					username: username
-				}
-			});
-
-			foundComment.comments.push(newComment);
-			user.comments.push(newComment);
-
-			newComment.save((err) => {
-
-				if(err) {
-					console.log(err);
-				}
-
-				user.save();
-
-				foundComment.save((err)=> {
-
-					if(err) {
-						console.log(err);
-					}
-					console.log(postId);
-					PostModel.findById(postId)
-						.populate("comments")
-						.exec(function(err, populatedPost) {
-						if(err) {
-							console.log(err);
-						}
-
-						res.json(populatedPost);
-						postSocket.to(postId).emit('add comment', populatedPost.comments);
-					});
-				});
-			});
-			
-		});
-	});
-
 	return router;
 
 }
-
-

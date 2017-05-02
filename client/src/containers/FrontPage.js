@@ -17,13 +17,17 @@ class FrontPage extends Component {
   }
   
   componentDidMount(){
-    getUserCountryCode().then(countryCode => {
-      const countryIn = countries[countryCode];
-      this.props.updateFilterValue("country_in",countryIn);
-      // posts must be loaded in getUserCountryCode()
-      // because it is asynchronous
-      this.props.loadPosts({...defaultPostsFilter,country_in:countryIn});
-    });
+    if(!this.props.filterQuery.country_in){
+      getUserCountryCode().then(countryCode => {
+        const countryIn = countries[countryCode];
+        this.props.updateFilterValue("country_in",countryIn);
+        // posts must be loaded in getUserCountryCode()
+        // because it is asynchronous
+        this.props.loadPosts({...defaultPostsFilter,country_in:countryIn});
+      });
+    }
+
+      this.props.loadPosts(this.props.filterQuery);
   }
   
   render() {

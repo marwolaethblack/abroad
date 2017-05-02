@@ -171,18 +171,18 @@ export const filterUpdate = (name,value) => {
     }
 };
 
-export const addComment = (postId, comment) => (dispatch) =>{
+export const addComment = (postId, comment, parentId) => (dispatch) => {
 
     dispatch({type:ActionTypes.ADDING_COMMENT});
 
     axios.put('/api/addComment',
-              {postId, comment}, 
+              {postId, comment, parentId},
               {headers: {authorization: localStorage.getItem('token')}
         })
         .then(resp => {
             dispatch({
                 type: ActionTypes.COMMENT_ADDED,
-                updatedPost: resp.data
+                updatedComments: resp.data
             });
             console.log(resp.data);
         })

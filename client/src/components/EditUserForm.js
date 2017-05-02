@@ -43,13 +43,15 @@ class EditUserForm extends Component {
 		return(
 			<form onSubmit={handleSubmit(this.handleFormSubmit)}>
 				<div>
-					<label>Change your profile</label>
+					<h2>Edit your profile</h2>
 					<div>
+						<label htmlFor="country_from">I'm from: </label>
 						<Field name="country_from" component="select">
 						<option key="-1" value="">Choose a country you're from</option>
 							{ Object.values(countries).map((country,i) => <option key={i} value={country}>{country}</option> ) }
 						</Field>
 
+						<label htmlFor="country_in">I currently live in: </label>
 						<Field name="country_in" component="select">
 						<option key="-1" value="">Choose a country you live in</option>
 							{ Object.values(countries).map((country,i) => <option key={i} value={country}>{country}</option> ) }

@@ -23,7 +23,9 @@ class Comment extends Component {
         if(comments !== undefined) {
             if(comments.length !== 0)
             {
-               return comments.map(comment => <Comment {...comment} key={comment._id}/>) 
+               // return comments.map(comment => <Comment {...comment} key={comment._id}/>) 
+               const { deleteComment, editComment } = this.props;
+               return comments.map(comment => <Comment {...comment} deleteComment={deleteComment} editComment={editComment} key={comment._id}/>) 
             }
           } 
           return "";
@@ -50,7 +52,7 @@ class Comment extends Component {
   }
 
     render() {
-        const { authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment, level } = this.props;
+        const { authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment, parents } = this.props;
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
@@ -64,7 +66,7 @@ class Comment extends Component {
                 {author.id === loggedUserId && <button onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
                 {authenticated && <button onClick={this.openReplyModal}>REPLY</button> }
 	        	<span>{comments !== undefined && comments.length} comments</span>
-                 <section className={`replies-${level}`}>
+                 <section className={`replies-${parents.length}`}>
                     {this.renderComments(comments)}
                 </section>
 
