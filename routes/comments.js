@@ -42,7 +42,6 @@ module.exports = function(postSocket) {
 
 					parents.push(newComment._id);
 					newComment.parents = parents;
-					console.log(parents);
 
 					foundPost.comments.push(newComment);
 					user.comments.push(newComment);
@@ -136,7 +135,10 @@ module.exports = function(postSocket) {
 				)
 				// .populate("comments")
 				.exec((err,editedComment) => {
-						if(err) console.log(err);
+						if(err){
+							console.log(err);
+							res.json(err);
+						} 
 						res.json(editedComment);
 				});
 			} else {
@@ -162,7 +164,40 @@ module.exports = function(postSocket) {
 						console.log(err);
 						res.json(err);
 					}
-					res.json(commentId);
+
+					//delete all children commens of the deleted comment
+					CommentModel.find({ _id:{$gt:commentId}, postId:foundComment.postId}).lean().exec((err,postComments) => {
+						var commentChildren = [];
+
+						postComments.forEach(comment => {
+							
+							var commentStringParents = comment.parents.map(parent => {
+								return parent.toString();
+							});
+
+							if(commentStringParents.indexOf(commentId.toString()) > -1){
+								commentChildren.push(comment._id);
+							}
+						});
+
+						CommentModel.remove({ _id: {$in:commentChildren }},(err) => {
+							if(err){
+								console.log(err);
+								res.json(err);
+							}
+
+							//get a post with updated comments
+							PostModel.findById(foundComment.postId).populate({path: 'comments', options: {lean: true}}).exec((err, singlePost) => {
+								if(err){
+									console.log(err);
+									res.json(err);
+								} 
+								res.json(singlePost.comments);
+							});
+						});
+					});
+
+					// res.json(commentId);
 				});
 			} else {
 				res.json({err: "error"});

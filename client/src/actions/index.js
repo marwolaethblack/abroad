@@ -229,7 +229,7 @@ export const deleteComment = (commentId) => (dispatch) => {
                 }
         )
         .then(resp => {
-            dispatch({type: ActionTypes.COMMENT_DELETED , commentId: resp.data});
+            dispatch({type: ActionTypes.COMMENT_DELETED, updatedComments: resp.data});
         })
         .catch(err => {
             console.log(err);
