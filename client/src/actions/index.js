@@ -182,9 +182,8 @@ export const addComment = (postId, comment, parentId) => (dispatch) => {
         .then(resp => {
             dispatch({
                 type: ActionTypes.COMMENT_ADDED,
-                updatedComments: resp.data
+                updatedComments: resp.data.comments
             });
-            console.log(resp.data);
         })
         .catch(err => {
             console.log(err);

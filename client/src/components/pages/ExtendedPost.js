@@ -11,42 +11,6 @@ import EditPostForm from '../EditPostForm';
 
 class ExtendedPost extends Component {
 
-  layerComments = (comments) => {
-    console.log(comments);
-    const sort = function (a, b) {
-      if (a.parents.length < b.parents.length) {
-        return 1;
-      }
-      if (a.parents.length > b.parents.length) {
-        return -1;
-      }
-      // a must be equal to b
-      return 0;
-    };
-
-    comments.sort(sort);
-
-    comments.forEach(comment => {
-        //ignore root comment with no parents
-        if(comment.parents.length > 1) {
-            const parentId = comment.parents[comment.parents.length - 2];
-            // Get the parent comment based on the next-to-last
-            // comment ID in this comment's parents
-            const parentCommentIndex = comments.findIndex(x => x._id === parentId);
-            console.log("before");
-            console.log(comments);
-            if(parentCommentIndex > -1) {
-                comments[parentCommentIndex].comments.push(comment);
-                comments.splice(comments.indexOf(comment), 1); 
-                console.log("after");
-                console.log(comments);
-           }
-
-        }
-        
-    });
-    return comments;
-  }
 
   componentWillMount() { 
     const { socket }  = this.props;
@@ -63,27 +27,6 @@ class ExtendedPost extends Component {
       isEditPostModalOpen: false
     }
   }
-
-  componentDidMount(){
-
-    // this.setState({comments: this.layerComments(this.props.comments)});
-    this.setState({comments: this.props.comments});
-  }
-
-  arraysAreEqual = (arr1, arr2) => 
-    arr1.length == arr2.length && arr1.every((element, index) => element === arr2[index] );
-
-  componentDidUpdate(prevProps){
-    if( !this.arraysAreEqual(prevProps.comments,this.props.comments) ){
-      // this.setState({comments: this.layerComments(this.props.comments)});
-      this.setState({comments: this.props.comments});
-
-    }
-    console.log("prevProps");
-    console.log(prevProps);
-  }
-
-
 
 
   renderComments = (comments, deleteComment) => {
@@ -114,7 +57,7 @@ class ExtendedPost extends Component {
     
   render() {
     const { upvotes, image, title, content, category, author, _id, deleteComment, editPost } = this.props;
-    let comments = this.state.comments || [];
+    const comments = this.props.comments || [];
     const { authenticated } = this.props;
     const datePosted = postDateDiff(_id);
     const loggedUserId = localStorage.getItem('id');
