@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
+
 import store from './store/store';
 import App from './containers/App';
 import FrontPage from './containers/FrontPage';
@@ -28,6 +29,7 @@ const username = localStorage.getItem('username');
 if(token) {
   store.dispatch({type: ActionTypes.AUTH_USER, id, username});
 }
+
 
 ReactDOM.render(
   <Provider store={store}>

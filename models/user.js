@@ -20,7 +20,11 @@ const userSchema = new Schema({
     comments: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "Comment"
-    }] 
+    }],
+    notifications: [{
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Notification"
+    }]
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, callback) {

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const commentSchema = new mongoose.Schema({
+var commentSchema = new mongoose.Schema({
   author: {
         id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -21,4 +21,4 @@ const commentSchema = new mongoose.Schema({
 
 commentSchema.index({upvotes: -1});
 
-export default mongoose.model("Comment", commentSchema);
+module.exports = mongoose.model("Comment", commentSchema);

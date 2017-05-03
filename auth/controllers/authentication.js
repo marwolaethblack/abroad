@@ -1,11 +1,12 @@
-const User = require("../../models/User");
-const jwt = require("jwt-simple");
-const config = require('../../config');
-const bcrypt = require("bcrypt-nodejs");
+var User = require("../../models/User");
+var NotificationModel = require("../../models/Notification");
+var jwt = require("jwt-simple");
+var config = require('../../config');
+var bcrypt = require("bcrypt-nodejs");
 import isEmail from 'validator/lib/isEmail';
 
 function tokenForUser(user) {
-    const timestamp = new Date().getTime();
+    var timestamp = new Date().getTime();
     return jwt.encode({ sub: user.id, iat: timestamp}, config.secret);
 }
 
@@ -15,9 +16,9 @@ exports.signin = function(req, res, next) {
 }
 
 exports.signup = function(req,res,next){
-    const email = req.body.email;
-    const password = req.body.password;
-    const username = req.body.username;
+    var email = req.body.email;
+    var password = req.body.password;
+    var username = req.body.username;
     if(!email || !password || !username) {
         return res.status(422).send({error: "You must provide an email ,password and username"});
     }
@@ -38,11 +39,18 @@ exports.signup = function(req,res,next){
         }
         
         //if not create and save user record
-        const user = new User({
+        var user = new User({
             email: email,
             password: password,
-            username: username
+            username: username,
+            notifications: []
         });
+
+        var newNotif = new NotificationModel({
+            text: "Welcome to abroad"
+        });
+        newNotif.save();
+        user.notifications.push(newNotif);
 
         //generate salt
         bcrypt.genSalt(10, function(err, salt) {

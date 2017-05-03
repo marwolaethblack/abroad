@@ -1,5 +1,7 @@
 import CommentModel from '../models/Comment';
 import PostModel from '../models/Post';
+import UserModel from '../models/User';
+import NotificationModel from '../models/Notification';
 var mongoose = require('mongoose');
 var Authentication = require("../auth/controllers/authentication");
 var passportService = require("../auth/services/passport");
@@ -7,7 +9,7 @@ var passport = require("passport");
 var express = require('express');
 
 
-module.exports = function(postSocket) {
+module.exports = function(postSocket, notificationSocket) {
 
 	var router = express.Router();
 
@@ -67,6 +69,41 @@ module.exports = function(postSocket) {
 
 								res.json(populatedPost);
 								postSocket.to(postId).emit('add comment', populatedPost.comments);
+
+								if(fComment.author.username !== user.username) {
+
+										UserModel.findById(fComment.author.id, function(err, fUser) {
+										var notifText = user.username + " has replied to your comment in post: " + foundPost.title;
+										var newNotif = new NotificationModel({
+											postId: foundPost._id,
+											text: notifText
+										});
+
+										newNotif.save(function(err) {
+											fUser.notifications.push(newNotif);
+											fUser.save();
+											notificationSocket.to(fUser._id.toString()).emit('new notification', newNotif);
+										})
+									});
+								}
+
+								if(user.username !== foundPost.author.username) {
+
+									UserModel.findById(foundPost.author.id, function(err, fUser) {
+										var notifText = user.username + " has commented on your post: " + foundPost.title;
+										var newNotif = new NotificationModel({
+											postId: foundPost._id,
+											text: notifText
+										});
+
+
+										newNotif.save(function(err) {
+											fUser.notifications.push(newNotif);
+											fUser.save();
+											notificationSocket.to(fUser._id.toString()).emit('new notification', newNotif);
+										})
+									 });
+							   	 }
 							});
 						});
 					});
@@ -109,7 +146,25 @@ module.exports = function(postSocket) {
 							}
 
 							res.json(populatedPost);
-							postSocket.to(postId).emit('add comment', populatedPost.comments);
+							postSocket.to(postId).emit('add comment', populatedPost.comments);							
+
+							if(user.username !== foundPost.author.username) {
+
+								UserModel.findById(foundPost.author.id, function(err, fUser) {
+									var notifText = user.username + " has commented on your post: " + foundPost.title;
+									var newNotif = new NotificationModel({
+										postId: foundPost._id,
+										text: notifText
+									});
+
+
+									newNotif.save(function(err) {
+										fUser.notifications.push(newNotif);
+										fUser.save();
+										notificationSocket.to(fUser._id.toString()).emit('new notification', newNotif);
+									})
+								});
+							}
 						});
 					});
 				});
