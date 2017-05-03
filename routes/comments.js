@@ -1,12 +1,12 @@
-const CommentModel = require('../models/Comment');
-const PostModel = require('../models/Post');
-const UserModel = require('../models/User');
-const NotificationModel = require('../models/Notification');
-const mongoose = require('mongoose');
-const Authentication = require("../auth/controllers/authentication");
-const passportService = require("../auth/services/passport");
-const passport = require("passport");
-const express = require('express');
+import CommentModel from '../models/Comment';
+import PostModel from '../models/Post';
+import UserModel from '../models/User';
+import NotificationModel from '../models/Notification';
+var mongoose = require('mongoose');
+var Authentication = require("../auth/controllers/authentication");
+var passportService = require("../auth/services/passport");
+var passport = require("passport");
+var express = require('express');
 
 
 module.exports = function(postSocket, notificationSocket) {
@@ -194,14 +194,9 @@ module.exports = function(postSocket, notificationSocket) {
 							console.log(err);
 							res.json(err);
 						} 
-
-						CommentModel.find({postId: editedComment.postId},(err,comments) => {
-							if(err){
-								console.log(err);
-								res.json(err);
-							}
-							res.json(comments);
-						});
+					CommentModel.find({postId: editedComment.postId}).lean().exec(function(err, comments) {
+						res.json(comments);
+					});
 						
 				});
 			} else {
@@ -266,5 +261,8 @@ module.exports = function(postSocket, notificationSocket) {
 			}
 		})
 	});
+
+
 	return router;
+
 }

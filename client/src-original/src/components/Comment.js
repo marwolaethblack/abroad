@@ -24,8 +24,8 @@ class Comment extends Component {
             if(comments.length !== 0)
             {
                // return comments.map(comment => <Comment {...comment} key={comment._id}/>) 
-               const { deleteComment, editComment } = this.props;
-               return comments.map(comment => <Comment {...comment} deleteComment={deleteComment} editComment={editComment} key={comment._id}/>) 
+               const { deleteComment, editComment, postId, authenticated } = this.props;
+               return comments.map(comment => <Comment {...comment} deleteComment={deleteComment} editComment={editComment} postId={postId} key={comment._id} authenticated={authenticated}/>) 
             }
           } 
           return "";
