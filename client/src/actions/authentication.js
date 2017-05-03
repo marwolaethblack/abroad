@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { ActionTypes } from '../constants';
+import { getNotifications } from './userActions';
 
 
 
@@ -17,7 +18,7 @@ export function signinUser({ email, password }) {
 			localStorage.setItem('id', response.data.id);
 			// redirect to route /feature
 			browserHistory.goBack();
-
+			dispatch(getNotifications(response.data.id));
 		})
 		.catch((err) => {
 			//If request is bad...
@@ -58,6 +59,7 @@ export function signUpUser({ email, password, username }) {
 				localStorage.setItem('username', response.data.username);
 				//Redirect back
 				browserHistory.push('/posts');
+				dispatch(getNotifications(response.data.id));
 			})
 			.catch(error => {
 				dispatch(authError(error.response.data.error));

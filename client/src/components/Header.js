@@ -51,17 +51,6 @@ class Header extends Component {
   }
 
 
-  componentWillReceiveProps(nextProps) {
-
-    if(notifSocket && !notifSocket.connected && nextProps.authenticated) {
-        this.props.fetchNotif(nextProps.id);
-        notifSocket.emit('room', this.props.id);
-        notifSocket.on('new notification', (payload) => {
-          this.props.updateNotifications(payload)
-        });
-    }
-  }
-
   componentWillUnmount() {
     notifSocket.close();
   }
