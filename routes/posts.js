@@ -132,6 +132,7 @@ module.exports = (postSocket) => {
 			PostModel.find(relatedPostsQuery).sort({ upvotes:-1, _id:-1}).limit(5).lean().exec((err,posts) => {
 				if(err){
 					console.log(err);
+					res.json(err);
 				} else {
 					res.json(posts);
 				}

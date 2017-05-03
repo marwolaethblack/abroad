@@ -165,7 +165,7 @@ module.exports = function(postSocket) {
 						res.json(err);
 					}
 
-					//delete all children commens of the deleted comment
+					//delete all children comments of the deleted comment
 					CommentModel.find({ _id:{$gt:commentId}, postId:foundComment.postId}).lean().exec((err,postComments) => {
 						var commentChildren = [];
 
@@ -187,17 +187,16 @@ module.exports = function(postSocket) {
 							}
 
 							//get a post with updated comments
-							PostModel.findById(foundComment.postId).populate({path: 'comments', options: {lean: true}}).exec((err, singlePost) => {
-								if(err){
-									console.log(err);
-									res.json(err);
-								} 
-								res.json(singlePost.comments);
+							PostModel.findByIdAndUpdate(foundComment.postId,{ $pull: {comments: {$in: [...commentChildren,commentId] }}}, {multi:true,new:true})
+								.populate({path: 'comments', options: {lean: true}}).exec((err, singlePost) => {
+									if(err){
+										console.log(err);
+										res.json(err);
+									} 
+									res.json(singlePost.comments);
 							});
 						});
 					});
-
-					// res.json(commentId);
 				});
 			} else {
 				res.json({err: "error"});
