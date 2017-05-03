@@ -15,8 +15,8 @@ export const singlePost = (state={},action) => {
             return {...state, comments: layeredComments};
         }
         case 'SOCKET_ADD_COMMENT': {
-            const comments = action.payload
-            return{...state, comments}
+            const comments = layerComments(action.payload);
+            return{...state, comments};
         }
         default:
             return state;

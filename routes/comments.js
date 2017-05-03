@@ -66,7 +66,7 @@ module.exports = function(postSocket) {
 								}
 
 								res.json(populatedPost);
-								//postSocket.to(postId).emit('add comment', populatedPost.comments);
+								postSocket.to(postId).emit('add comment', populatedPost.comments);
 							});
 						});
 					});
@@ -109,7 +109,7 @@ module.exports = function(postSocket) {
 							}
 
 							res.json(populatedPost);
-							//postSocket.to(postId).emit('add comment', populatedPost.comments);
+							postSocket.to(postId).emit('add comment', populatedPost.comments);
 						});
 					});
 				});

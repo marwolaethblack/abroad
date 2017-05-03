@@ -6,6 +6,7 @@ import Comment from '../Comment';
 import AddComment from '../parts/AddComment';
 import Modal from '../parts/Modal';
 import EditPostForm from '../EditPostForm';
+import ReplyCommentForm from '../ReplyCommentForm';
 
 
 
@@ -80,7 +81,7 @@ class ExtendedPost extends Component {
 
         </Modal>
 
-        <span>Upvotes {upvotes}</span>
+     <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>
             <h3>{title}</h3>
             <span>Submitted {datePosted} ago by {author.username } to {category}</span>
