@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import io from 'socket.io-client';
 import { Link } from 'react-router';
 import postDateDiff from '../../services/dateDifference';
 import Comment from '../Comment';
@@ -15,7 +14,8 @@ class ExtendedPost extends Component {
 
   componentWillMount() { 
     const { socket }  = this.props;
-    socket.on('add comment', (payload) => this.props.socketAddComment(payload));
+      socket.emit('roomPost', this.props._id);
+      socket.on('add comment', (payload) => this.props.socketAddComment(payload));
   }
 
   constructor(){

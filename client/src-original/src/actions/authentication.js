@@ -36,10 +36,11 @@ export function authError(error) {
 	}
 }
 
-export function signoutUser() {
+export function signoutUser(notifSocket) {
 	localStorage.removeItem("token");
 	localStorage.removeItem("id");
 	localStorage.removeItem('username');
+	notifSocket.close();
 
 	return {
 		type: ActionTypes.UNAUTH_USER,

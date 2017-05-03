@@ -21,7 +21,7 @@ const userSchema = new Schema({
          type: mongoose.Schema.Types.ObjectId,
          ref: "Comment"
     }],
-     notifications: [{
+    notifications: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "Notification"
     }]

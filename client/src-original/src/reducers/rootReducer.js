@@ -7,6 +7,7 @@ import { filter } from './filter';
 import { errors } from './errors';
 import { loading } from './loading';
 import user from './user';
+import notifications from './notifications';
 import auth from './auth';
 
 import { reducer as form } from 'redux-form';
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
     errors,
     auth,
     user,
+    notifications,
     form,
     isFetching: loading,
     router: routerReducer

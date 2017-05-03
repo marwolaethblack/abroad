@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { signoutUser } from '../actions/authentication';
+import { getNotifications, socketNotificationsUpdate } from '../actions/userActions';
+import io from 'socket.io-client';
+
+let notifSocket = io('/notif');
+
 
 
 class Header extends Component {
@@ -13,7 +18,10 @@ class Header extends Component {
       <Link to={"/user/" + this.props.id} >Profile</Link>
     </li>,
     <li className="navigation-link" key={1}>
-      <Link to="/"  onClick={() => this.props.signout()}>Sign Out</Link>
+      <Link to="/"  onClick={() => this.props.signout(notifSocket)}>Sign Out</Link>
+    </li>,
+    <li className="navigation-link" key={3}>
+      <Link to="/add-post" className="navigation-link">Add Post</Link>
     </li>
      ];
     } else {
@@ -28,7 +36,34 @@ class Header extends Component {
       ];
     
     }
+  }
 
+  
+
+  componentWillMount() {
+    if(this.props.authenticated) {
+      this.props.fetchNotif(this.props.id);
+      notifSocket.emit('room', this.props.id);
+      notifSocket.on('new notification', (payload) => {
+        this.props.updateNotifications(payload)
+      });
+    }
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+
+    if(notifSocket && !notifSocket.connected && nextProps.authenticated) {
+        this.props.fetchNotif(nextProps.id);
+        notifSocket.emit('room', this.props.id);
+        notifSocket.on('new notification', (payload) => {
+          this.props.updateNotifications(payload)
+        });
+    }
+  }
+
+  componentWillUnmount() {
+    notifSocket.close();
   }
 
   render() {
@@ -40,7 +75,6 @@ class Header extends Component {
         <nav className="navigation-links">
           <ul>
             <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All Posts</Link>
-            <Link to="/add-post" className="navigation-link">Add Post</Link>
             {this.renderLinks()}
           </ul>
         </nav>
@@ -53,14 +87,25 @@ function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
     id: state.auth.id,
-    filter: state.filter
+    filter: state.filter,
+    notifications: state.notifications
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    signout() {
-      dispatch(signoutUser())
+    signout(notifSocket) {
+      dispatch(signoutUser(notifSocket));
+      console.log("fuck")
+      console.log(notifSocket)
+    },
+
+    fetchNotif(id) {
+      dispatch(getNotifications(id));
+    },
+
+    updateNotifications(notification) {
+      dispatch(socketNotificationsUpdate(notification));
     }
   }
 }

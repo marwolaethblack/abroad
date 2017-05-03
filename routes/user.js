@@ -1,8 +1,8 @@
-const CommentModel = require('../models/Comment');
-const PostModel = require('../models/Post');
-const UserModel = require('../models/User');
-const passport = require("passport");
-const express = require('express');
+import UserModel from '../models/User';
+import CommentModel from '../models/Comment';
+import PostModel from '../models/Post';
+import express from 'express';
+import passport from 'passport';
 
 module.exports = function(notificationSocket) {
 	const router = express.Router();
@@ -48,6 +48,7 @@ module.exports = function(notificationSocket) {
 	});
 
 
+
 	router.get('/api/user/notifications', (req,res) => {
 		UserModel.findById(req.query.id)
 			    .populate({path: 'notifications', options: {limit: 20, lean: true, sort:{'createdAt': -1}}})
@@ -63,7 +64,3 @@ module.exports = function(notificationSocket) {
 
 	return router;
 }
-
-
-
-

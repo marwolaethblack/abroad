@@ -8,6 +8,8 @@ import ExtendedPostPage from './ExtendedPostPage';
 
 let postSocket = io('/post');
 
+
+
 class App extends Component {
   
   constructor() {
@@ -16,8 +18,10 @@ class App extends Component {
     this.state = {show:false};
   }
 
+
   componentWillUnmount() {
     postSocket.close();
+    
   }
 
 
