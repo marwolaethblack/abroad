@@ -32,7 +32,7 @@ class SearchFilter extends Component {
     	const { country_from, country_in, category, date_posted, searchText } = query;
     	const { filterUpdate } = this.props;
         return(
-        	<div className="container">
+        	<div className="container extended-filter">
         		<div className="six columns">
 	            	<label htmlFor="country_from">From</label>
 		        	 <FilterDropdown
@@ -51,7 +51,7 @@ class SearchFilter extends Component {
 			          optionChanged={filterUpdate} />
 		         </div>
 
-		         <div>
+		         <div className="six columns filter-search">
 		         	 <label htmlFor="searchText">Search</label>
 			         <input type="text"
 			          name="searchText"
@@ -60,13 +60,13 @@ class SearchFilter extends Component {
 			          onChange={this.handleInputChange} />
 		          </div>
 
-		         <div style={{paddingTop:"5em"}}>
+		         <div className="five columns checkbox-group-categories">
 		          <CheckboxGroupCategories
 		           checkedOptions={category}
 		           onCategoryChange={filterUpdate} />
 		         </div>
 
-		         <div className="six columns">
+		         <div className="twelve columns">
 	           		<label htmlFor="date_posted">Posts created:</label>
 			        <FilterDropdown
 			          options={date_ranges}
@@ -75,7 +75,7 @@ class SearchFilter extends Component {
 			          optionChanged={filterUpdate} />
 		         </div>
 
-		          <Link to={{pathname:"/posts", query}}>
+		          <Link to={{pathname:"/posts", query}} className="offset-by-five three columns">
 		          	<button>FILTER!</button>
 		          </Link>
 	          </div>

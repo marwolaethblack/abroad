@@ -133,6 +133,92 @@ div.redux-infinite-scroll {
 
 }
 
+
+/*ALL POSTS PAGE*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+
+
+.allposts-categories {
+	position: relative;
+}
+
+
+.category-select {
+	display: none;
+	position: absolute;
+	top:4rem;
+	left:0;
+	background: white;
+	z-index: 1;
+	border: 1px solid rgba(0,0,0,0.2);
+	max-height: 300px;
+	overflow-y: scroll;
+	width: 55%;
+}
+
+.visible-select {
+	display: block;
+}
+
+.category-checkbox {
+	display: block;
+	border-bottom: 2px solid rgba(0,0,0,0.2);
+}
+
+	.category-checkbox:hover {
+		background: rgba(0,0,0,0.1);
+	}
+
+.checkbox-group-categories {
+	margin-top: 3rem;
+}
+
+.filter-search {
+	margin-left: 0;
+}
+
+.allposts-post {
+	margin-top: 2rem;
+	width: 45%;
+}
+
+.allposts-post img {
+	max-width: 100%;
+}
+
+.redux-infinite-scroll {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.allposts-post:nth-child(even) {
+	margin-left: 5%;
+}
+
+@media(max-width: 600px) {
+	.allposts-post {
+		width: 100%;
+		margin-left: 0!important;
+	}
+
+}
+
+/*ALL POSTS PAGE*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+
+
+
+
+
 /*================================*/
 /*Loader animation*/
 /*================================*/
