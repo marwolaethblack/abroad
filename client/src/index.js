@@ -3,25 +3,24 @@ import ReactDOM from 'react-dom';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
-
 import store from './store/store';
-import App from './containers/App';
-import FrontPage from './containers/FrontPage';
-import PostsPage from './containers/PostsPage';
-import ExtendedPostPage from './containers/ExtendedPostPage';
-import UserPageContainer from './containers/UserPageContainer';
-import EditUserProfile from './containers/EditUserProfile';
-import NewPostPage from './containers/NewPostPage';
+import App from './app/App';
+import FrontPage from './app/FrontPage';
+import PostsPage from './post/containers/PostsPage';
+import ExtendedPostPage from './post/containers/ExtendedPostPage';
+import UserPageContainer from './user/containers/UserPageContainer';
+import EditUserProfile from './user/containers/EditUserProfile';
+import NewPostPage from './post/containers/NewPostPage';
 
-import Signin from './containers/auth/signin';
-import Signup from './containers/auth/signup';
+import Signin from './authentication/signin';
+import Signup from './authentication/signup';
 
 //Higher order component used to wrap components
 //of protected routes
-import RequireAuth from './containers/auth/requireAuth'; 
+import RequireAuth from './authentication/requireAuth'; 
         
 
-import { ActionTypes } from './constants';
+import { ActionTypes } from './constants/actionTypes';
 
 const token = localStorage.getItem("token");
 const id = localStorage.getItem('id');
@@ -29,7 +28,6 @@ const username = localStorage.getItem('username');
 if(token) {
   store.dispatch({type: ActionTypes.AUTH_USER, id, username});
 }
-
 
 ReactDOM.render(
   <Provider store={store}>
