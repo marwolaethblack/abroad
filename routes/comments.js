@@ -194,7 +194,10 @@ module.exports = function(postSocket, notificationSocket) {
 							console.log(err);
 							res.json(err);
 						} 
-						res.json(editedComment);
+					CommentModel.find({postId: editedComment.postId}).lean().exec(function(err, comments) {
+						res.json(comments);
+					});
+						
 				});
 			} else {
 				return res.status(401).send({error:"Unauthorized"});
