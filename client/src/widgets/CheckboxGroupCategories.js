@@ -34,12 +34,20 @@ class CheckboxGroupCategories extends Component {
 		this.props.onCategoryChange("category",newCategories);
 	}
 
+	toggleSelectVisibility() {
+		this.categorySelect.classList.toggle('visible-select'); 
+	}
+
+
     render() {
     	const { checkedOptions } = this.props;
         return(
-        	<div className="container">
+        	<div className="allposts-categories">
+        		<button onClick={() => this.toggleSelectVisibility()}>Select Categories <i className="fa fa-angle-down" aria-hidden="true"></i>
+</button>
+        		<div className="category-select" ref={div => this.categorySelect = div}>
 				{categories.map((category, index) =>
-			       <div key={index} className="one column" style={{marginLeft:"7em"}} >
+			       <div key={index} className="category-checkbox">
 			       	 <label htmlFor={category}>{category}</label>
 			         <input
 			          name={category}
@@ -49,6 +57,7 @@ class CheckboxGroupCategories extends Component {
 			          onChange={this.handleCategoryChange} />
 			      </div>
 				)}
+				</div>
 			</div>
 
         );

@@ -9,7 +9,7 @@ class Post extends Component {
         const datePosted = postDateDiff(_id);
 
         return(
-        	<article>
+        	<article className="allposts-post">
 	        	<span>Upvotes {upvotes}</span>
 	        	<img src={image} alt={title} />
 	        	<Link to={`/posts/view/${_id}/${title}`}><h3>{title}</h3></Link>
