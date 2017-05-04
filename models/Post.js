@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import CommentModel from './Comment';
+const mongoose = require('mongoose');
+const CommentModel = require('./Comment');
 
 const postSchema = new mongoose.Schema({
    country_from: String,
@@ -35,4 +35,6 @@ postSchema.post('findOneAndRemove', (deletedPost) => {
    }  
 });
 
-export default mongoose.model("Post", postSchema);
+const ModelClass = mongoose.model("Post", postSchema);
+
+module.exports = ModelClass;

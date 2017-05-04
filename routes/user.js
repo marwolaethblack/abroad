@@ -1,10 +1,10 @@
-import UserModel from '../models/User';
-import CommentModel from '../models/Comment';
-import PostModel from '../models/Post';
-import express from 'express';
-import passport from 'passport';
+const CommentModel = require('../models/Comment');
+const PostModel = require('../models/Post');
+const UserModel = require('../models/User');
+const passport = require("passport");
+const express = require('express');
 
-module.exports = function(io) {
+module.exports = function(notificationSocket) {
 	const router = express.Router();
 	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
@@ -45,6 +45,20 @@ module.exports = function(io) {
 		} else {
 			return res.status(422).send({error:"Wuut? User profile is WRONG!."});
 		}
+	});
+
+
+	router.get('/api/user/notifications', (req,res) => {
+		UserModel.findById(req.query.id)
+			    .populate({path: 'notifications', options: {limit: 20, lean: true, sort:{'createdAt': -1}}})
+				.exec((err, user) => {
+			if(err) {
+				console.log(err);
+				return res.status(422).send({error:err});
+			}
+			res.json(user.notifications);
+
+		});
 	});
 
 	return router;

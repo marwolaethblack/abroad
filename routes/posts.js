@@ -1,10 +1,10 @@
-import PostModel from '../models/Post';
-import CommentModel from '../models/Comment';
-import UserModel from '../models/User';
-import express from 'express';
-import passport from 'passport';
-import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
-import { POSTS_NO_PER_LOAD } from '../client/src/constants/pagination';
+const CommentModel = require('../models/Comment');
+const PostModel = require('../models/Post');
+const UserModel = require('../models/User');
+const passport = require("passport");
+const express = require('express');
+const date_ranges = require('../client/src/constants/post_created_ranges');
+const getDateTimestamp = require('../client/src/constants/post_created_ranges');
 
 
 module.exports = (postSocket) => {
@@ -58,7 +58,6 @@ module.exports = (postSocket) => {
 			return {$gte: "000000000000000000000000"};
 		}
 
-
 		// let query = req.query;
 		let sortQuery = {_id:-1};
 
@@ -83,7 +82,6 @@ module.exports = (postSocket) => {
 			}
 		}
 
-
 	//posts sorting
 		switch(sortBy){
 			case "top":{
@@ -101,7 +99,7 @@ module.exports = (postSocket) => {
 			}
 		}
 
-		const loadPosts = (findQuery, sortQuery={ _id:-1 }, skip=0, limit=POSTS_NO_PER_LOAD) => {
+		const loadPosts = (findQuery, sortQuery={ _id:-1 }, skip=0, limit=5) => {
 			PostModel.find(findQuery).sort(sortQuery).limit(limit).skip(skip).lean().exec((err,posts) => {
 					if(err){
 						console.log(err);

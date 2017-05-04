@@ -1,12 +1,12 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-import path from 'path';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import cors from 'cors';
-import morgan from 'morgan';
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const path = require('path');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const morgan = require('morgan');
 
 
 app.set('port', (process.env.PORT || 3001));
