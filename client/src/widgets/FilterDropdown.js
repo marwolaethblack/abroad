@@ -12,10 +12,10 @@ class FilterDropdown extends Component {
   }
     
   render() {
-  	const { defaultValue, name, options } = this.props;
+  	const { defaultValue, name, options, selectBoxClass } = this.props;
 
     return (
-      <select value={defaultValue} name={name} onChange={this.optionChanged}>
+      <select value={defaultValue} name={name} onChange={this.optionChanged} className={selectBoxClass}>
 
         {Object.keys(options).map(k => 
           <option key={k} value={options[k]}>{options[k]}</option>

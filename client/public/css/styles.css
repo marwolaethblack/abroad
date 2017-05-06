@@ -14,6 +14,10 @@ a {
 	display: none;
 }
 
+.full-width {
+	width: 100%;
+}
+
 #react-container>div {
 	display: flex;
 	flex-direction: column;
@@ -167,7 +171,21 @@ header #notifications ul li {
 /*+++++++++++++++++++++++++++++*/
 
 #front-page-title {
-	background: url('../images/front-page-pic.jpg') no-repeat center center fixed;
+	color: #fff;
+	background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('../images/front-page-pic.jpg') no-repeat center center;
+	background-size: cover;
+	min-height: 60%;
+
+}
+
+#front-page-filter {
+	margin: 2em 0;
+}
+
+#front-page-filter .wrap {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
 }
 
 
@@ -257,8 +275,8 @@ div.redux-infinite-scroll {
 
 	header #notifications {
 		position: fixed;
-		top: 10%;
-		left: 5%;
+		top: 9%;
+		right: 10em;
 	}
 
 
@@ -363,9 +381,9 @@ div.redux-infinite-scroll {
 	max-width: 100%;
 }
 
-.main-page-content {
+/*.main-page-content {
 	padding: 2.5%;
-}
+}*/
 
 .extended-post-comment {
 	background: rgba(0,0,0,0.08);

@@ -59,7 +59,10 @@ class Header extends Component {
       notifications = this.props.notifications.map((notification,i) => {
         return (
           <li key={i}> { notification.text } 
-            { notification.postId && <Link to={`/posts/view/${notification.postId}`}> >>> </Link> }
+            { notification.postId && <Link to={`/posts/view/${notification.postId}`} onClick={this.toggleNotifications}> 
+                >>> 
+              </Link> 
+            }
           </li>
         )
       });

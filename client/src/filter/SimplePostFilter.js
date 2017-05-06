@@ -19,25 +19,28 @@ class SimplePostFilter extends Component {
                   options={countries}
                   name="country_from"
                   defaultValue={query.country_from}
-                  optionChanged={this.props.filterUpdate} />        
+                  optionChanged={this.props.filterUpdate} 
+                  selectBoxClass="full-width"/>        
              </div>     
         
              <div>      
                  <label htmlFor="country_in">In</label>     
                  <FilterDropdown        
-                  options={countries}       
+                  options={countries}
                   name="country_in"         
                   defaultValue={query.country_in}       
-                  optionChanged={this.props.filterUpdate} />        
-             </div>     
+                  optionChanged={this.props.filterUpdate} 
+                  selectBoxClass="full-width"/>        
+             </div>
         
              <div>      
                  <label htmlFor="category">Category</label>             
                   <FilterDropdown       
                   options={categories}      
                   name="category"       
-                  defaultValue="All"        
-                  optionChanged={this.props.filterUpdate} />        
+                  defaultValue={Array.isArray(query.category) ? query.category[0] : query.category}        
+                  optionChanged={this.props.filterUpdate} 
+                  selectBoxClass="full-width"/>        
              </div>     
           </div>
          <Link to={{ pathname:'/posts', query }}><button className="full-width">Find it!</button></Link>
@@ -50,7 +53,6 @@ SimplePostFilter.propTypes = {
     query: PropTypes.shape({
         country_in: PropTypes.string,
         country_from: PropTypes.string.isRequired,
-        category: PropTypes.array.isRequired
     }).isRequired
 }
 
