@@ -5,7 +5,7 @@ class FrontPagePosts extends Component {
     
     render() {
     return (
-      <div>
+      <div id="front-page-posts" className="container">
         {this.props.posts.map(post => 
             <FrontPagePost
              key={post._id} 
