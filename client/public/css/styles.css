@@ -66,7 +66,10 @@ a {
 }
 
 .brand-logo {
-	height: 10%;
+	display: flex;
+	flex-direction: column;
+	width: auto;
+	height: auto;
 	margin-top: 8rem;
 }
 
@@ -81,7 +84,7 @@ a {
 }
 
 .navigation-link {
-	width: 100%;
+	width: auto;
 	color: white;
 	display: block;
 	text-decoration: none;
@@ -97,6 +100,24 @@ a {
 	background: rgba(0,0,0,0.75);
 	color: white;
 } 
+
+.main-header #notifications-icon {
+	position: relative;
+	left: .35em;
+	top: .35em;
+}
+
+.main-header #notifications-number{
+	position: relative;
+	bottom: 1em;
+	right: 0.7em;
+	z-index: 2;
+	border-radius: 50%;
+	padding: 0 0.3em;
+	font-size: 0.6em;
+	background: #fa3e3e;
+	color:white;
+}
 
 
 .show {
@@ -136,7 +157,7 @@ div.redux-infinite-scroll {
 		width: 100%;
 		opacity: 1;
 		height: 7%;
-		flex-direction: row;
+		flex-direction: column;
 	}
 	.brand-logo {
 		height: auto;
@@ -146,11 +167,13 @@ div.redux-infinite-scroll {
 	.navigation-links {
 		height: auto;
 		align-items: center;
+		align-self: flex-end;
 	}
 
 	.navigation-links ul {
 		display: flex;
 		flex-direction: row;
+		align-items:center;
 		margin: 0;
 	}
 

@@ -12,15 +12,21 @@ class Header extends Component {
   renderLinks() {
     if(this.props.authenticated) {
       //show a link to sign out
-    return [
+    return [ 
+    <li className="navigation-link" key={3}>
+      <Link to="/add-post" className="navigation-link">Add Post</Link>
+    </li>,
+    <li className="navigation-link" key={4}>
+      <div id="notifications-icon">
+        <i className="fa fa-bell" aria-hidden="true"></i>
+        <span id="notifications-number">{ this.props.notifications.length }</span>
+      </div>
+    </li>,
     <li className="navigation-link" key={2}>
       <Link to={"/user/" + this.props.id} >Profile</Link>
     </li>,
     <li className="navigation-link" key={1}>
       <Link to="/"  onClick={() => this.props.signout(notifSocket)}>Sign Out</Link>
-    </li>,
-    <li className="navigation-link" key={3}>
-      <Link to="/add-post" className="navigation-link">Add Post</Link>
     </li>
      ];
     } else {
@@ -54,13 +60,13 @@ class Header extends Component {
 
   render() {
     return (
-      <header className={this.props.show ? "main-header show" : "main-header"}>
+      <header className={`main-header ${this.props.show && "show"}`}>
         <section className="brand-logo">
           <Link to="/" className="navigation-link">Abroad</Link>
+          <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All Posts</Link>
         </section>
         <nav className="navigation-links">
           <ul>
-            <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All Posts</Link>
             {this.renderLinks()}
           </ul>
         </nav>
