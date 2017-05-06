@@ -196,11 +196,28 @@ header #notifications ul li {
 	opacity: 1;
 }
 
+#front-page-posts {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
+.front-page-post {
+	background: yellow;
+	width: 80%;
+	margin: 1%;
+	margin-top: 2em;
+}
+
 @media (min-width: 600px) {
 
 	#front-page-filter .wrap {
 		flex-direction: row;
 		justify-content: space-between;
+	}
+
+	.front-page-post {
+		width: 48%;
 	}
 }
 
