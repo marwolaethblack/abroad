@@ -121,8 +121,8 @@ const AddPostForm = props => {
   postCategories.splice(index,1);
 
   return (
-    <form onSubmit={handleSubmit(addPost)} className="main-page-content">
-
+    <form onSubmit={handleSubmit(addPost)} className="main-page-content sign-form offset-by-three five columns">
+    <h1>Add a post</h1>
       <Field
         name="title"
         component={renderField}

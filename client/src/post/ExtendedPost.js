@@ -87,7 +87,7 @@ class ExtendedPost extends Component {
         { loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
         { loggedUserId === author.id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
             <section className="post-comments">
-              <span>{comments.length + " comments"}</span>
+              <p>{comments.length + " comments"}</p>
               {authenticated ? <AddComment /> : <Link to="/signin">Sign in to add a comment.</Link>}
               {this.renderComments(comments, deleteComment)}
             </section>
