@@ -62,7 +62,7 @@ class AllPosts extends Component {
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
 
     return (
-     <div className="posts-page container" style={{height:"100%"}}>
+     <div className="posts-page container" style={{height:"auto"}}>
 
         <InfiniteScroll
           loadingMore={isFetching.posts}

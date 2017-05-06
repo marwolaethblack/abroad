@@ -17,7 +17,7 @@ const LoaderStyles = {
 
 function Loader (props) {
 	return( 
-		<div style={LoaderStyles}></div>
+		<div style={LoaderStyles} className="main-page-content"></div>
 	);
 }
 

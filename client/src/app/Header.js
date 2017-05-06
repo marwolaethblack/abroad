@@ -54,14 +54,17 @@ class Header extends Component {
 
   renderNotifications(){
     let notifications = <li> No new notifications </li>;
-    
+
     if(this.props.notifications.length > 0){
       notifications = this.props.notifications.map((notification,i) => {
-        return <li key={i}> { notification.text } </li>
+        return (
+          <li key={i}> { notification.text } 
+            { notification.postId && <Link to={`/posts/view/${notification.postId}`}> >>> </Link> }
+          </li>
+        )
       });
     }
-    
-
+  
     return <ul> { notifications } </ul>;
   }
   
@@ -122,6 +125,7 @@ class Header extends Component {
           </nav>
         </div>
         <div id="notifications" className={this.state.showNotifications ? "show" : "hide"}>
+          <button className="btn-close" onClick={this.toggleNotifications} >X</button>
           { this.renderNotifications() }
         </div>
       </header>

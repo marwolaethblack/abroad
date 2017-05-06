@@ -149,7 +149,13 @@ header #notifications {
 
 header #notifications ul li {
 	margin: 1em;
+	margin-top: 3em;
 	list-style-type: none;
+}
+
+#notifications .btn-close {
+	position: absolute;
+	right: 1em;
 }
 
 
@@ -161,7 +167,7 @@ header #notifications ul li {
 /*+++++++++++++++++++++++++++++*/
 
 #front-page-title {
-	/*background: url('')*/
+	background: url('../images/front-page-pic.jpg') no-repeat center center fixed;
 }
 
 
@@ -224,14 +230,15 @@ div.redux-infinite-scroll {
 		height: auto;
 		width: 100%;
 		align-items: center;
-		margin-right: 2em;
 	}
 
 	.navigation-links ul {
 		display: flex;
 		flex-direction: row;
 		align-items:center;
+		justify-content: flex-end;
 		margin: 0;
+		margin-right: 2em;
 	}
 
 	.main-header .navigation-link {
@@ -249,9 +256,9 @@ div.redux-infinite-scroll {
 	}
 
 	header #notifications {
-		position: absolute;
-		top: 8%;
-		left:55%;
+		position: fixed;
+		top: 10%;
+		left: 5%;
 	}
 
 

@@ -26,7 +26,7 @@ const Signup = (props) => {
 
 		const { handleSubmit, submitting, invalid } = props;
 		return(
-			<form onSubmit={handleSubmit(handleFormSubmit)}>
+			<form onSubmit={handleSubmit(handleFormSubmit)} className="main-page-content">
 				<Field 
 					name="username" 
 					component={renderField} 

@@ -22,7 +22,7 @@ class Signin extends Component {
 	render() {
 		const { handleSubmit } = this.props;
 		return(
-			<form onSubmit={handleSubmit(this.handleFormSubmit)}>
+			<form onSubmit={handleSubmit(this.handleFormSubmit)} className="main-page-content">
 				<fieldset className='form-group'>
 					<label>Email:</label>
 					<Field name="email" component="input" type="email" className="form-control" />
