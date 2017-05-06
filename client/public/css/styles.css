@@ -80,6 +80,11 @@ a {
 	margin-top: 8rem;
 }
 
+.brand-logo a {
+	padding: 0.4em;
+	margin: 0;
+}
+
 .navigation-links {
 	height: 20%;
 	white-space: nowrap;
@@ -91,7 +96,8 @@ a {
 }
 
 .navigation-links ul li {
-	margin-top: .2em;
+	margin-top: 0;
+	padding: 0.5em;
 }
 
 .navigation-link {
@@ -99,6 +105,7 @@ a {
 	color: white;
 	display: block;
 	text-decoration: none;
+	margin: 0;
 }
 
 .navigation-link>a {
@@ -113,9 +120,7 @@ a {
 } 
 
 .main-header #notifications-icon {
-	position: relative;
-	left: .35em;
-	top: .35em;
+	padding-left: .4em;
 }
 
 .main-header #notifications-number{
@@ -128,6 +133,35 @@ a {
 	font-size: 0.6em;
 	background: #fa3e3e;
 	color:white;
+}
+
+header #notifications {
+	position: fixed;
+	top: 40%;
+	left:5%;
+	width: auto;
+	padding: 1em;
+	z-index: 5;
+	background: #fff;
+	border: 1px solid #fa3e3e;
+	border-radius: 5%;
+}
+
+header #notifications ul li {
+	margin: 1em;
+	list-style-type: none;
+}
+
+
+/*FRONT PAGE*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+
+#front-page-title {
+	/*background: url('')*/
 }
 
 
@@ -199,17 +233,25 @@ div.redux-infinite-scroll {
 		flex-direction: row;
 		align-items:center;
 		margin: 0;
-		justify-content: space-between;
 	}
 
 	.main-header .navigation-link {
-		margin: 0 .5em;
 		font-size: 0.7em;
 	}
 
 	.main-header i.fa.fa-bell {
 		position: relative;
 		bottom: .2em;
+	}
+
+	.main-header #notifications-icon {
+		padding-top: .4em;
+	}
+
+	header #notifications {
+		position: absolute;
+		top: 8%;
+		left:55%;
 	}
 
 

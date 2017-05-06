@@ -12,7 +12,10 @@ class Header extends Component {
    constructor() {
     super();
     //prop to show mobile menu
-    this.state = { showMenu:true };
+    this.state = { 
+      showMenu: false,
+      showNotifications: false
+    };
   }
 
   renderLinks() {
@@ -22,7 +25,7 @@ class Header extends Component {
     <li className="navigation-link" key={3}>
       <Link to="/add-post">Add Post</Link>
     </li>,
-    <li className="navigation-link" key={4}>
+    <li className="navigation-link" key={4} onClick={this.toggleNotifications}>
       <div id="notifications-icon">
         <i className="fa fa-bell" aria-hidden="true"></i>
         <span id="notifications-number">{ this.props.notifications.length }</span>
@@ -49,6 +52,18 @@ class Header extends Component {
     }
   }
 
+  renderNotifications(){
+    let notifications = <li> No new notifications </li>;
+    
+    if(this.props.notifications.length > 0){
+      notifications = this.props.notifications.map((notification,i) => {
+        return <li key={i}> { notification.text } </li>
+      });
+    }
+    
+
+    return <ul> { notifications } </ul>;
+  }
   
   componentWillMount() {
     if(this.props.authenticated) {
@@ -66,9 +81,19 @@ class Header extends Component {
 
   toggleMobileMenu = () => {
     this.setState( prevState => {
+    if(prevState.showMenu){
+      return { showMenu : !prevState.showMenu, showNotifications: false }
+    }
      return { showMenu : !prevState.showMenu }
     });
   }
+
+  toggleNotifications = () => {
+    this.setState(prevState => {
+        return { showNotifications: !prevState.showNotifications }
+    });
+  }
+
 
   hamburger = (
     <div id="hamburger">
@@ -95,6 +120,9 @@ class Header extends Component {
               {this.renderLinks()}
             </ul>
           </nav>
+        </div>
+        <div id="notifications" className={this.state.showNotifications ? "show" : "hide"}>
+          { this.renderNotifications() }
         </div>
       </header>
     )
