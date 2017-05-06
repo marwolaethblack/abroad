@@ -15,11 +15,11 @@ const AddComment = (props) => {
 
 		const { handleSubmit, submitting, pristine} = props;
 		return(
-			<form onSubmit={handleSubmit(handleFormSubmit)}>
+			<form className="add-comment-form" onSubmit={handleSubmit(handleFormSubmit)}>
 				<div>
 					<label>Add a comment</label>
 					<div>
-						<Field name="comment" component="textarea" />
+						<Field name="comment" component="textarea" placeholder="Comment must be between 0-1000 characters long" />
 					</div>
 				</div>
 					{props.errorMessage}
