@@ -36,7 +36,7 @@ ReactDOM.render(
   		  <IndexRoute component={FrontPage} />
   			<Route path="posts" component={PostsPage} />
   		  <Route path="posts/view/:id/:title" component={ExtendedPostPage} />
-        <Route path="add-post" component={NewPostPage} />
+        <Route path="add-post" component={RequireAuth(NewPostPage)} />
         <Route path="user/:id" component={UserPageContainer} />
         <Route path="user/:id/edit-profile" component={EditUserProfile} />
         <Route path="signin" component={Signin} />

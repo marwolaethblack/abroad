@@ -63,9 +63,6 @@ class ExtendedPost extends Component {
   
     return (
       <article>
- 
-        { loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
-        { loggedUserId === author.id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
 
         <Modal isOpen={this.state.isEditPostModalOpen} 
                onClose={this.closeEditPostModal}
@@ -81,13 +78,15 @@ class ExtendedPost extends Component {
 
         <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>
-            <h3>{title}</h3>
-            <span>Submitted {datePosted} ago by {author.username } to {category}</span>
-            <span>{comments.length}</span>
+            <h1>{title}</h1>
+            <span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
               { content }
             </section>
+        { loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
+        { loggedUserId === author.id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
             <section className="post-comments">
+              <span>{comments.length + " comments"}</span>
               {authenticated ? <AddComment /> : <Link to="/signin">Sign in to add a comment.</Link>}
               {this.renderComments(comments, deleteComment)}
             </section>

@@ -29,7 +29,8 @@ class Comment extends Component {
                                             editComment={editComment} 
                                             postId={postId} 
                                             key={comment._id} 
-                                            authenticated={authenticated}/>) 
+                                            authenticated={authenticated}
+                                            />) 
             }
           } 
           return "";
@@ -60,16 +61,20 @@ class Comment extends Component {
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
-        	<article className={author.id === loggedUserId && "own-comment"}>
-	        	<span>Upvotes {upvotes}</span>
-                <section>
-                { content }
-                </section>
-	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username}</Link></span>
-                {author.id === loggedUserId && <span style={{color:"blue", cursor:"pointer"}} onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</span> }
-                {author.id === loggedUserId && <button onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
-                {authenticated && <button onClick={this.openReplyModal}>REPLY</button> }
-	        	<span>{comments !== undefined && comments.length} comments</span>
+        	<article className="extended-post-comment">
+            <div className={author.id === loggedUserId ? "own-comment" : ""}>
+  	        	<span>Upvotes {upvotes}</span>
+                  <section className="comment-content">
+                  { content }
+                  </section>
+  	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username}</Link></span>
+                <div>
+                  {authenticated && <button style={{color:"blue"}} onClick={this.openReplyModal}>REPLY</button> }
+                  {author.id === loggedUserId && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
+                  {author.id === loggedUserId && <button style={{color:"red"}}  onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</button> }
+                </div>
+  	        	<span>{comments !== undefined && comments.length} comments</span>
+            </div>
                  <section className={`replies-${parents.length}`}>
                     {this.renderComments(comments)}
                 </section>

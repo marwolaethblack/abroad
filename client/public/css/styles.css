@@ -137,8 +137,7 @@ div.redux-infinite-scroll {
 }
 
 .own-comment {
-	background: rgba(0,0,0,0.2);
-	transition: all 0.2s;
+	border-left: 6px solid rgb(98, 128, 175);
 }
 
 /*Desktop header styles*/
@@ -181,6 +180,7 @@ div.redux-infinite-scroll {
 		margin: 0;
 	}
 
+}
 
 footer.main-footer {
 	width: 100%;
@@ -266,12 +266,49 @@ footer.main-footer {
 
 }
 
+/*EXGENDED POST PAGE*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+
+.main-page-content {
+	padding: 2.5%;
+}
+
+.extended-post-comment {
+	background: rgba(0,0,0,0.08);
+	border-radius: 7px;
+}
+
+.replies-1,.replies-2 ,.replies-3,.replies-4,.replies-5, .replies-6, .replies-7 {
+	margin-left: 4%;
+}
+
+.comment-content{
+	padding-bottom: 2%;
+}
+
+
+.add-comment-form textarea {
+	width: 22em;
+	height: 10em;
+}
+
+/*EXGENDED POST PAGE*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+/*-+-+-+-+-+-+-+-+-+-+-*/
+
+
 /*USER PAGE*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
+
 
 #user-info .profile-pic {
 	max-width: 100%;
