@@ -41,7 +41,7 @@ class ExtendedPostPage extends Component {
       }
 
       return (
-        <div>
+        <div className="main-page-content">
           <ExtendedPost {...singlePost} 
                         authenticated={authenticated}
                         deleteComment={removeComment}

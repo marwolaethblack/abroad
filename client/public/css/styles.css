@@ -1,12 +1,40 @@
+body{
+	min-height: 100vh;
+}
+
+a {
+	text-decoration: none;
+}
+
+.show{
+	display: block;
+}
+
+.hide{
+	display: none;
+}
+
 #react-container>div {
 	display: flex;
 	flex-direction: column;
+	min-height: 100vh;
 }
 
 /*Mobile header styles*/
 .main {
 	margin-top: 20%;
 }
+.main-page-content { 
+	flex: 1;
+	margin-bottom: 3em;
+}
+
+/*HEADER*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
 
 #mobile-menu-button {
 	display: block;
@@ -131,6 +159,12 @@ div.redux-infinite-scroll {
 	}
 
 
+footer.main-footer {
+	width: 100%;
+	background: #656565;
+	color: white;
+	text-align: center;
+	padding: 15px 0;
 }
 
 
@@ -208,13 +242,15 @@ div.redux-infinite-scroll {
 
 }
 
-/*ALL POSTS PAGE*/
+/*USER PAGE*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
-
+#user-info .profile-pic {
+	max-width: 100%;
+}
 
 
 
