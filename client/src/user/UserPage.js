@@ -8,9 +8,9 @@ export default function UserPage(props) {
 	const { id, authenticated, loadUsersPosts, usersPosts, isFetching} = props; //ID from the URL 
 
 	return(
-		<section className="container">
-			<figure>
-				<img src="http://placehold.it/350x150"/>
+		<section className="container main-page-content">
+			<figure id="user-info">
+				<img src="http://placehold.it/350x150" className="profile-pic"/>
 				<figcaption>
 					<h1>{username}</h1>
 					{ country_from && <p>I'm from {country_from}</p> }

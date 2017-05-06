@@ -8,7 +8,7 @@ class FrontPagePost extends Component {
     const { title,content,category,_id } = this.props;
     const datePosted = postDateDiff(_id);
     return (
-      <div>
+      <div className="front-page-post">
         <Link to={`posts/view/${_id}/${title}`}><h2>{ title }</h2></Link>
         <h4>{ category }</h4>
         <p>{ content }</p>

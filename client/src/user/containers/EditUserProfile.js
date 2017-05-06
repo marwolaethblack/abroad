@@ -14,7 +14,7 @@ class EditUserProfile extends Component {
     render() {
 
         return(
-            <div className="container">
+            <div className="container main-page-content">
               
               <EditUserForm 
                 userInfo={this.props.user}

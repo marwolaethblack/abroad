@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+var mongoose = require('mongoose');
 
 var commentSchema = new mongoose.Schema({
   author: {
@@ -20,5 +20,6 @@ var commentSchema = new mongoose.Schema({
 });
 
 commentSchema.index({upvotes: -1});
+commentSchema.index({postId: -1});
 
 module.exports = mongoose.model("Comment", commentSchema);

@@ -1,1 +1,0 @@
-export const POSTS_NO_PER_LOAD = 3;

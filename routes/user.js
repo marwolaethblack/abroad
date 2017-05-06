@@ -64,7 +64,3 @@ module.exports = function(notificationSocket) {
 
 	return router;
 }
-
-
-
-
