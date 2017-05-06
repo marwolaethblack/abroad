@@ -448,6 +448,12 @@ div.redux-infinite-scroll {
 	width: 90%;
 }
 
+.sign-form textarea {
+	box-sizing: border-box;
+	width: 90%;
+	height: 25rem;
+}
+
 @media (min-width: 550px) {
 	.sign-form {
 		padding: 0;
