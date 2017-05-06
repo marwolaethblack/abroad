@@ -10,19 +10,8 @@ let postSocket = io('/post');
 
 class App extends Component {
   
-  constructor() {
-    super();
-    //prop to show mobile menu
-    this.state = {show:false};
-  }
-
   componentWillUnmount() {
     postSocket.close();
-  }
-
-
-  toggleMobileMenu = () => {
-    this.setState( { show : !this.state.show } );
   }
 
   renderChildren(props) {
@@ -38,8 +27,7 @@ class App extends Component {
   render() {
         return (
       <div className="main">
-        <button id="mobile-menu-button" onClick={this.toggleMobileMenu} >X</button>
-        <Header show={this.state.show}/>
+        <Header />
         {this.renderChildren(this.props)}
         <Footer />
       </div>

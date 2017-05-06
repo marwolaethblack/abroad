@@ -9,12 +9,18 @@ let notifSocket = io('/notif');
 
 
 class Header extends Component {
+   constructor() {
+    super();
+    //prop to show mobile menu
+    this.state = { showMenu:true };
+  }
+
   renderLinks() {
     if(this.props.authenticated) {
       //show a link to sign out
     return [ 
     <li className="navigation-link" key={3}>
-      <Link to="/add-post" className="navigation-link">Add Post</Link>
+      <Link to="/add-post">Add Post</Link>
     </li>,
     <li className="navigation-link" key={4}>
       <div id="notifications-icon">
@@ -58,18 +64,38 @@ class Header extends Component {
     notifSocket.close();
   }
 
+  toggleMobileMenu = () => {
+    this.setState( prevState => {
+     return { showMenu : !prevState.showMenu }
+    });
+  }
+
+  hamburger = (
+    <div id="hamburger">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  )
+
   render() {
     return (
-      <header className={`main-header ${this.props.show && "show"}`}>
-        <section className="brand-logo">
-          <Link to="/" className="navigation-link">Abroad</Link>
-          <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All Posts</Link>
-        </section>
-        <nav className="navigation-links">
-          <ul>
-            {this.renderLinks()}
-          </ul>
-        </nav>
+
+      <header>
+        <button id="mobile-menu-button" onClick={this.toggleMobileMenu} >
+          {this.state.showMenu ? "X" : this.hamburger}
+        </button>
+        <div className={`main-header ${this.state.showMenu && "show"}`}>
+          <section className="brand-logo">
+            <Link to="/" className="navigation-link">Abroad</Link>
+            <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All&nbsp;Posts</Link>
+          </section>
+          <nav className="navigation-links">
+            <ul>
+              {this.renderLinks()}
+            </ul>
+          </nav>
+        </div>
       </header>
     )
   }
