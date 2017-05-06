@@ -31,6 +31,7 @@ a {
 .main-page-content { 
 	flex: 1;
 	margin-bottom: 3em;
+	padding: 5%;
 }
 
 /*HEADER*/
@@ -444,7 +445,7 @@ header #notifications ul li {
 
 @media (max-width: 600px) {
 	.related-posts > div {
-		width: 43%;
+		width: 93%;
 	}
 }
 
