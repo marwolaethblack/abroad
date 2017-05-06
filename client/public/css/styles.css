@@ -65,6 +65,13 @@ a {
 	opacity: 0;
 }
 
+#hamburger div {
+	background: black;
+	height: 5px;
+	width: 20px;
+	margin: 3px;
+}
+
 .brand-logo {
 	display: flex;
 	flex-direction: column;
@@ -81,6 +88,10 @@ a {
 .navigation-links ul {
 	display: flex;
 	flex-direction: column;
+}
+
+.navigation-links ul li {
+	margin-top: .2em;
 }
 
 .navigation-link {
@@ -148,25 +159,38 @@ div.redux-infinite-scroll {
 	}
 
 	.main {
-		margin: 0;	}
+		margin: 0;	
+	}
 
 	.main-header {
 		visibility: visible;
 		position: relative;
 		width: 100%;
 		opacity: 1;
-		height: 7%;
-		flex-direction: column;
-	}
-	.brand-logo {
 		height: auto;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.brand-logo {
+		flex-direction: row;
+		height: auto;
+		width: 100%;
 		margin: 0;
+		margin-left: 2em;
+	}
+
+	.brand-logo a {
+		flex-direction: row;
+		height: auto;
+		width: auto;
 	}
 
 	.navigation-links {
 		height: auto;
+		width: 100%;
 		align-items: center;
-		align-self: flex-end;
+		margin-right: 2em;
 	}
 
 	.navigation-links ul {
@@ -174,20 +198,34 @@ div.redux-infinite-scroll {
 		flex-direction: row;
 		align-items:center;
 		margin: 0;
+		justify-content: space-between;
 	}
 
-	.navigation-link {
-		margin: 0;
+	.main-header .navigation-link {
+		margin: 0 .5em;
+		font-size: 0.7em;
 	}
 
 }
+	.main-header i.fa.fa-bell {
+		position: relative;
+		bottom: .2em;
+	}
 
-footer.main-footer {
-	width: 100%;
-	background: #656565;
-	color: white;
-	text-align: center;
-	padding: 15px 0;
+
+	footer.main-footer {
+		width: 100%;
+		background: #656565;
+		color: white;
+		text-align: center;
+		padding: 15px 0;
+	}
+}
+
+@media (min-width: 770px) {
+	.main-header .navigation-link {
+		font-size: 0.9em;
+	}
 }
 
 
