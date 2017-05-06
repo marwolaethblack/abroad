@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import Post from './Post';
+import RelatedPost from './RelatedPost';
 import InfiniteScroll from 'redux-infinite-scroll';
 
 class UsersPosts extends Component {
@@ -53,7 +53,7 @@ class UsersPosts extends Component {
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
 
     return (
-     <div className="users-posts container" style={{height:"100%"}}>
+     <div className="users-posts" style={{height:"auto"}}>
         <h3>MY POSTS</h3>
         <InfiniteScroll
           loadingMore={isFetching.posts}
@@ -61,7 +61,7 @@ class UsersPosts extends Component {
           loadMore={this.handlePostsLoadOnScroll}
           threshold={100} >
           
-           {this.state.loadedPosts.map((post,index) => <Post key={post._id} {...post} />)}
+           {this.state.loadedPosts.map((post,index) => <RelatedPost key={post._id} {...post} />)}
           
         </InfiniteScroll>
 

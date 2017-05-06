@@ -9,14 +9,14 @@ export default function UserPage(props) {
 
 	return(
 		<section className="container main-page-content">
-			<figure id="user-info">
-				<img src="http://placehold.it/350x150" className="profile-pic"/>
+			<figure id="user-info">	
 				<figcaption>
 					<h1>{username}</h1>
 					{ country_from && <p>I'm from {country_from}</p> }
 					{ country_in && <p>I currently live in {country_in} </p> }
 					{id === _id ? <Link to={`/user/${id}/edit-profile`}>Edit profile</Link> : ""}
 				</figcaption>
+				<img src="http://placehold.it/350x150" className="profile-pic"/>
 			</figure>
 
 			<section>

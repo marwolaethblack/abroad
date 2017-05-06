@@ -119,7 +119,7 @@ class Header extends Component {
         <div className={`main-header ${this.state.showMenu && "show"}`}>
           <section className="brand-logo">
             <Link to="/" className="navigation-link">Abroad</Link>
-            <Link to={{pathname:"posts",query:this.props.filter}} activeClassName="active" className="navigation-link">All&nbsp;Posts</Link>
+            <Link to={{pathname:"/posts",query:this.props.filter}} activeClassName="active" className="navigation-link">All&nbsp;Posts</Link>
           </section>
           <nav className="navigation-links">
             <ul>
