@@ -439,6 +439,23 @@ div.redux-infinite-scroll {
 /*-+-+-+-+-+-+-+-+-+-+-*/
 
 
+/*SIGN IN PAGE*/
+.sign-form {
+	padding: 10%;
+}
+
+.sign-form input{
+	width: 90%;
+}
+
+@media (min-width: 550px) {
+	.sign-form {
+		padding: 0;
+	}
+}
+/*SIGN IN PAGE*/
+
+
 /*USER PAGE*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/

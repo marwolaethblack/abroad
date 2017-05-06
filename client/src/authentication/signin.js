@@ -22,7 +22,8 @@ class Signin extends Component {
 	render() {
 		const { handleSubmit } = this.props;
 		return(
-			<form onSubmit={handleSubmit(this.handleFormSubmit)} className="main-page-content">
+			<form onSubmit={handleSubmit(this.handleFormSubmit)} className="main-page-content offset-by-four four columns sign-form">
+				<h1>Sign in</h1>
 				<fieldset className='form-group'>
 					<label>Email:</label>
 					<Field name="email" component="input" type="email" className="form-control" />
