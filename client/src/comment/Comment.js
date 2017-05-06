@@ -62,7 +62,7 @@ class Comment extends Component {
         const loggedUserId = localStorage.getItem('id');
         return(
         	<article className="extended-post-comment">
-            <div className={author.id === loggedUserId ? "own-comment" : ""}>
+            <div className={author.id === loggedUserId ? "own-comment whole-comment" : "whole-comment"}>
   	        	<span>Upvotes {upvotes}</span>
                   <section className="comment-content">
                   { content }

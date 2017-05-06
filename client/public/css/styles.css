@@ -310,6 +310,10 @@ div.redux-infinite-scroll {
 /*-+-+-+-+-+-+-+-+-+-+-*/
 /*-+-+-+-+-+-+-+-+-+-+-*/
 
+.extended-post img{
+	max-width: 100%;
+}
+
 .main-page-content {
 	padding: 2.5%;
 }
@@ -327,11 +331,39 @@ div.redux-infinite-scroll {
 	padding-bottom: 2%;
 }
 
+.whole-comment {
+	padding: 1.5%;
+}
 
 .add-comment-form textarea {
-	width: 22em;
+	width: 20em;
 	height: 10em;
 }
+
+.post-content {
+	padding: 1%;
+	background: rgba(0,0,255,0.1);
+}
+
+.related-posts {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.related-posts > div {
+	width: 22%;
+	overflow: hidden;
+	border: 1px solid rgba(0,0,0,0.2);
+	padding: 2%;
+	margin: 1%;
+}
+
+@media (max-width: 600px) {
+	.related-posts > div {
+		width: 43%;
+	}
+}
+
 
 /*EXGENDED POST PAGE*/
 /*-+-+-+-+-+-+-+-+-+-+-*/

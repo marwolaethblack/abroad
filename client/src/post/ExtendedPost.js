@@ -54,7 +54,7 @@ class ExtendedPost extends Component {
   }
     
   render() {
-    const { upvotes, image, title, content, category, author, _id, deleteComment, editPost } = this.props;
+    const { upvotes, image, title, content, category, author, _id, deleteComment, editPost, country_from, country_in } = this.props;
     const comments = this.props.comments || [];
     const { authenticated } = this.props;
     const datePosted = postDateDiff(_id);
@@ -62,7 +62,7 @@ class ExtendedPost extends Component {
 
   
     return (
-      <article>
+      <article className="extended-post">
 
         <Modal isOpen={this.state.isEditPostModalOpen} 
                onClose={this.closeEditPostModal}
@@ -79,6 +79,7 @@ class ExtendedPost extends Component {
         <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>
             <h1>{title}</h1>
+            <p>{country_from + " > " + country_in}</p>
             <span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
               { content }
