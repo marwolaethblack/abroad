@@ -118,6 +118,14 @@ a {
 	text-decoration: none;
 }
 
+.navigation-link>a.active,
+.navigation-link.active  {
+	color: #0f71ce;
+	font-weight: bold;
+	letter-spacing: .2em;
+}
+
+
 .navigation-link:hover {
 	background: rgba(0,0,0,0.75);
 	color: white;
@@ -174,7 +182,7 @@ header #notifications ul li {
 	color: #fff;
 	background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('../images/front-page-pic.jpg') no-repeat center center;
 	background-size: cover;
-	min-height: 50%;
+	min-height: 70%;
 
 }
 
@@ -241,6 +249,7 @@ header #notifications ul li {
 		width: 100%;
 		opacity: 1;
 		height: auto;
+		margin-bottom: 0;
 		flex-direction: row;
 		align-items: center;
 	}
@@ -397,10 +406,6 @@ header #notifications ul li {
 .extended-post img{
 	max-width: 100%;
 }
-
-/*.main-page-content {
-	padding: 2.5%;
-}*/
 
 .extended-post-comment {
 	background: rgba(0,0,0,0.08);

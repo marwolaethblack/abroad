@@ -23,7 +23,7 @@ class Header extends Component {
       //show a link to sign out
     return [ 
     <li className="navigation-link" key={3}>
-      <Link to="/add-post">Add Post</Link>
+      <Link to="/add-post" activeClassName="active">Add Post</Link>
     </li>,
     <li className="navigation-link" key={4} onClick={this.toggleNotifications}>
       <div id="notifications-icon">
@@ -32,20 +32,20 @@ class Header extends Component {
       </div>
     </li>,
     <li className="navigation-link" key={2}>
-      <Link to={"/user/" + this.props.id} >Profile</Link>
+      <Link to={"/user/" + this.props.id} activeClassName="active">Profile</Link>
     </li>,
     <li className="navigation-link" key={1}>
-      <Link to="/"  onClick={() => this.props.signout(notifSocket)}>Sign Out</Link>
+      <Link to="/" onClick={() => this.props.signout(notifSocket)}>Sign Out</Link>
     </li>
      ];
     } else {
       //show link to sign in or sign up
       return [
-      <li key={1} className="navigation-link">
-        <Link to="/signin">Sign In</Link>
+      <li key={1} className="navigation-link" >
+        <Link to="/signin" activeClassName="active">Sign In</Link>
       </li>,
       <li key={2} className="navigation-link">
-        <Link to="/signup">Sign Up</Link>
+        <Link to="/signup" activeClassName="active">Sign Up</Link>
       </li>
       ];
     
@@ -119,7 +119,7 @@ class Header extends Component {
         <div className={`main-header ${this.state.showMenu && "show"}`}>
           <section className="brand-logo">
             <Link to="/" className="navigation-link">Abroad</Link>
-            <Link to={{pathname:"posts",query:this.props.filter}} className="navigation-link">All&nbsp;Posts</Link>
+            <Link to={{pathname:"posts",query:this.props.filter}} activeClassName="active" className="navigation-link">All&nbsp;Posts</Link>
           </section>
           <nav className="navigation-links">
             <ul>
