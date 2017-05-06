@@ -20,7 +20,7 @@ class UserPageContainer extends Component {
 			return (<Loader />);
 		} else {
 			if(!user.userData) {
-				return(<h1>No user found</h1>)
+				return(<h1 className="main-page-content">No user found</h1>)
 			}
 			return (<UserPage {...user} 
 							  id ={ id }

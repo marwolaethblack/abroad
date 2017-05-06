@@ -4,7 +4,6 @@ import UserModel from '../models/User';
 import express from 'express';
 import passport from 'passport';
 import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
-import { POSTS_NO_PER_LOAD } from '../client/src/constants/pagination';
 
 
 module.exports = (postSocket) => {
@@ -101,7 +100,7 @@ module.exports = (postSocket) => {
 			}
 		}
 
-		const loadPosts = (findQuery, sortQuery={ _id:-1 }, skip=0, limit=POSTS_NO_PER_LOAD) => {
+		const loadPosts = (findQuery, sortQuery={ _id:-1 }, skip=0, limit=4) => {
 			PostModel.find(findQuery).sort(sortQuery).limit(limit).skip(skip).lean().exec((err,posts) => {
 					if(err){
 						console.log(err);

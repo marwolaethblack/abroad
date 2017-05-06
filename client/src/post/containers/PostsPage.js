@@ -57,7 +57,7 @@ class PostsPage extends Component {
     const { posts, isFetching,stateQuery,updateFilterValue,loadPosts, location } = this.props;
 
     return (
-      <section>
+      <section className="main-page-content">
           <SearchFilter
            urlQuery={this.props.location.query} 
            stateQuery={stateQuery}

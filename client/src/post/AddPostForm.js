@@ -121,7 +121,7 @@ const AddPostForm = props => {
   postCategories.splice(index,1);
 
   return (
-    <form onSubmit={handleSubmit(addPost)}>
+    <form onSubmit={handleSubmit(addPost)} className="main-page-content">
 
       <Field
         name="title"

@@ -48,7 +48,6 @@ module.exports = function(notificationSocket) {
 	});
 
 
-
 	router.get('/api/user/notifications', (req,res) => {
 		UserModel.findById(req.query.id)
 			    .populate({path: 'notifications', options: {limit: 20, lean: true, sort:{'createdAt': -1}}})
