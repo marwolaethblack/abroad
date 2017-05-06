@@ -174,12 +174,13 @@ header #notifications ul li {
 	color: #fff;
 	background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('../images/front-page-pic.jpg') no-repeat center center;
 	background-size: cover;
-	min-height: 60%;
+	min-height: 50%;
 
 }
 
 #front-page-filter {
-	margin: 2em 0;
+	margin-top: 1em;
+	width: 80%;
 }
 
 #front-page-filter .wrap {
@@ -195,19 +196,16 @@ header #notifications ul li {
 	opacity: 1;
 }
 
-/*infinite scroll - AllPosts page*/
-div.redux-infinite-scroll {
-  height:auto !important;
+@media (min-width: 600px) {
+
+	#front-page-filter .wrap {
+		flex-direction: row;
+		justify-content: space-between;
+	}
 }
 
-/*sortFilter component*/
-.selected-sort{
-	background: yellow;
-}
+/* FRONT PAGE END */
 
-.own-comment {
-	border-left: 6px solid rgb(98, 128, 175);
-}
 
 /*Desktop header styles*/
 
@@ -294,6 +292,8 @@ div.redux-infinite-scroll {
 		font-size: 0.9em;
 	}
 }
+
+
 
 
 /*ALL POSTS PAGE*/
@@ -449,6 +449,28 @@ div.redux-infinite-scroll {
 
 #user-info .profile-pic {
 	max-width: 100%;
+}
+
+
+/*UNKNOWN*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+
+/*infinite scroll - AllPosts page*/
+div.redux-infinite-scroll {
+  height:auto !important;
+}
+
+/*sortFilter component*/
+.selected-sort {
+	background: yellow;
+}
+
+.own-comment {
+	border-left: 6px solid rgb(98, 128, 175);
 }
 
 /*================================*/
