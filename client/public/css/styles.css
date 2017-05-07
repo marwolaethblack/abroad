@@ -153,22 +153,37 @@ header #notifications {
 	top: 40%;
 	left:5%;
 	width: auto;
-	padding: 1em;
 	z-index: 5;
 	background: #fff;
-	border: 1px solid #fa3e3e;
+	border: 1px solid #c5c5c5;
 	border-radius: 5%;
 }
 
+header #notifications ul {
+	margin-top: 4em;
+}
+
 header #notifications ul li {
-	margin: 1em;
-	margin-top: 3em;
+	padding-top: 2em;
+	padding-left: 2em;
+	margin-bottom: 0;
 	list-style-type: none;
+	border-bottom: 1px solid #c5c5c5;
+	border-top: 1px solid #c5c5c5;
+}
+
+header #notifications ul li:nth-child(odd) {
+	background: rgb(191, 240, 210);
+}
+
+header #notifications ul li:nth-child(even) {
+	background: rgb(177, 255, 204);
 }
 
 #notifications .btn-close {
 	position: absolute;
 	right: 1em;
+	top: 1em;
 }
 
 
