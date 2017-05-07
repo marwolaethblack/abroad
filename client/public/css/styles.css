@@ -212,10 +212,39 @@ header #notifications ul li {
 }
 
 .front-page-post {
-	background: yellow;
 	width: 80%;
 	margin: 1%;
 	margin-top: 2em;
+	border: 1px solid #d1d1d1;
+	border-radius: 5%;
+}
+
+.front-page-post .card-top {
+	border-radius: 5% 5% 0 0 ;
+	padding: 5%;
+	color: #fff;
+background: #CB356B;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #BD3F32, #CB356B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+
+
+
+
+
+
+
+
+}
+
+.front-page-post .card-top h2 {
+	color: #fff;
+}
+
+.front-page-post .card-bottom {
+	padding: 5%;
 }
 
 @media (min-width: 600px) {
@@ -226,7 +255,7 @@ header #notifications ul li {
 	}
 
 	.front-page-post {
-		width: 48%;
+		width: 44%;
 	}
 }
 

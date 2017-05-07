@@ -9,10 +9,14 @@ class FrontPagePost extends Component {
     const datePosted = postDateDiff(_id);
     return (
       <div className="front-page-post">
-        <Link to={`/posts/view/${_id}/${title}`}><h2>{ title }</h2></Link>
-        <h4>{ category }</h4>
-        <p>{ content }</p>
-        <span>Posted {datePosted} ago</span>
+        <div className="card-top">
+          <Link to={`/posts/view/${_id}/${title}`}><h2>{ title }</h2></Link>
+          <h4>{ category }</h4>
+        </div>
+        <div className="card-bottom">
+          <p>{ content }</p>
+          <span>Posted {datePosted} ago</span>
+        </div>
       </div>
     )
   }
