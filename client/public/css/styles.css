@@ -247,6 +247,10 @@ header #notifications ul li {
 
 @media (min-width: 600px) {
 
+	#front-page-filter {
+	margin-top: -2%;
+	}
+
 	#front-page-filter .wrap {
 		flex-direction: row;
 		justify-content: space-between;
