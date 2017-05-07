@@ -121,7 +121,7 @@ a {
 
 .navigation-link>a.active,
 .navigation-link.active  {
-	color: #0f71ce;
+	color: rgb(213, 67, 255);
 	font-weight: bold;
 	letter-spacing: .2em;
 }
@@ -169,11 +169,11 @@ header #notifications ul li {
 	margin-bottom: 0;
 	list-style-type: none;
 	border-bottom: 1px solid #c5c5c5;
-	border-top: 1px solid #c5c5c5;
 }
 
 header #notifications ul li:nth-child(odd) {
 	background: rgb(191, 240, 210);
+	border-top: 1px solid #c5c5c5;
 }
 
 header #notifications ul li:nth-child(even) {

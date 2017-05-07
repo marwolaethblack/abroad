@@ -5,8 +5,8 @@ import { signoutUser } from '../authentication/actions/authentication';
 import { getNotifications, socketNotificationsUpdate } from '../user/actions/userActions';
 import io from 'socket.io-client';
 
-let notifSocket = io('/notif');
 
+let notifSocket = io('/notif');
 
 class Header extends Component {
    constructor() {
@@ -17,6 +17,10 @@ class Header extends Component {
       showNotifications: false
     };
   }
+
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  };
 
   renderLinks() {
     if(this.props.authenticated) {
@@ -110,8 +114,9 @@ class Header extends Component {
   )
 
   render() {
+    console.log("test");
+      console.log(this.context.router.getCurrentLocation());
     return (
-
       <header>
         <button id="mobile-menu-button" onClick={this.toggleMobileMenu} >
           {this.state.showMenu ? "X" : this.hamburger}
@@ -119,7 +124,7 @@ class Header extends Component {
         <div className={`main-header ${this.state.showMenu && "show"}`}>
           <section className="brand-logo">
             <Link to="/" className="navigation-link">Abroad</Link>
-            <Link to={{pathname:"/posts",query:this.props.filter}} activeClassName="active" className="navigation-link">All&nbsp;Posts</Link>
+              <Link to={{pathname:"/posts"}} activeClassName="active" className="navigation-link">All&nbsp;Posts</Link>
           </section>
           <nav className="navigation-links">
             <ul>
@@ -164,3 +169,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
+
+//  for later use
+// <Link to={{pathname:"/posts",query:this.props.filter}} className={`navigation-link ${this.context.router.location.pathname === "/posts" ? "active" : ""}`}>All&nbsp;Posts</Link>
