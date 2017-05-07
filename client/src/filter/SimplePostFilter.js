@@ -14,7 +14,7 @@ class SimplePostFilter extends Component {
        <div id="front-page-filter" className="container">
          <div className="wrap">
              <div>
-                 <label htmlFor="country_from">From</label>
+                 <label htmlFor="country_from">I am from:</label>
                  <FilterDropdown
                   options={countries}
                   name="country_from"
@@ -24,7 +24,7 @@ class SimplePostFilter extends Component {
              </div>     
         
              <div>      
-                 <label htmlFor="country_in">In</label>     
+                 <label htmlFor="country_in">I currently live in: </label>     
                  <FilterDropdown        
                   options={countries}
                   name="country_in"         

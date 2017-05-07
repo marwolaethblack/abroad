@@ -180,15 +180,24 @@ header #notifications ul li {
 /*+++++++++++++++++++++++++++++*/
 
 #front-page-title {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
 	color: #fff;
-	background: linear-gradient(rgba(0,0,0,0.2),rgba(0,0,0,0.2)), url('../images/front-page-pic.jpg') no-repeat center center;
+	background: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../images/front-page-pic.jpg') no-repeat center center;
 	background-size: cover;
 	min-height: 70%;
+}
 
+#front-page-title h1{
+	font-size: 4em;
+	font-weight: bold;
 }
 
 #front-page-filter {
-	margin-top: -5%;
+	margin-top: 5%;
 	width: 80%;
 }
 
@@ -223,20 +232,9 @@ header #notifications ul li {
 	border-radius: 5% 5% 0 0 ;
 	padding: 5%;
 	color: #fff;
-background: #CB356B;  /* fallback for old browsers */
-background: -webkit-linear-gradient(to right, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
-background: linear-gradient(to right, #BD3F32, #CB356B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-
-
-
-
-
-
-
-
-
-
+	background: #CB356B;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #BD3F32, #CB356B);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #BD3F32, #CB356B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 .front-page-post .card-top h2 {
