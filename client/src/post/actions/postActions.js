@@ -1,6 +1,7 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import { beautifyUrlSegment } from '../../services/textFormatting';
 
 export const fetchPosts = filter => dispatch => {
     
@@ -104,7 +105,7 @@ export const addPost = (newPost) => (dispatch) =>{
                 type: ActionTypes.POST_ADDED,
                 newPost: resp.data
             });
-           browserHistory.push(`/posts/view/${resp.data._id}/${resp.data.title}`);
+           browserHistory.push(`/posts/${resp.data._id}/${beautifyUrlSegment(resp.data.title)}`);
         })
         .catch(err => {
             console.log(err);

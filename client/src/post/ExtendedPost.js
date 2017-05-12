@@ -6,6 +6,7 @@ import AddComment from '../comment/AddComment';
 import Modal from '../widgets/Modal';
 import EditPostForm from './EditPostForm';
 import ReplyCommentForm from '../comment/ReplyCommentForm';
+import { newLineToBreak } from '../services/textFormatting';
 
 
 class ExtendedPost extends Component {
@@ -82,7 +83,7 @@ class ExtendedPost extends Component {
             <p>{country_from + " > " + country_in}</p>
             <span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
-              { content }
+              { newLineToBreak(content) }
             </section>
         { loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
         { loggedUserId === author.id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
