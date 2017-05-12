@@ -1,5 +1,5 @@
 export const date_ranges = {default: "Anytime",
-					 today: "Today",
+					 lastday: "Last 24 hours",
 					 thisWeek: "This week",
 					 thisMonth: "This month",
 					 thisYear: "This year" };
@@ -13,7 +13,7 @@ const getTimestampWithShift = (yearShift, monthShift, dayShift) => {
 
 export const getDateTimestamp = (date_range) => {
 	switch(date_range){
-		case date_ranges["today"]:{
+		case date_ranges["lastday"]:{
 			return getTimestampWithShift(0,0,-1);
 		}
 		case date_ranges["thisWeek"]:{

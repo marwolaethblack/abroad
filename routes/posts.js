@@ -1,82 +1,89 @@
-import PostModel from '../models/Post';
-import CommentModel from '../models/Comment';
-import UserModel from '../models/User';
-import express from 'express';
-import passport from 'passport';
+var PostModel = require('../models/Post');
+var CommentModel = require('../models/Comment');
+var UserModel = require('../models/User');
+var express = require('express');
+var passport = require('passport');
 import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
 
 
 module.exports = (postSocket) => {
 
-	const router = express.Router();
+	var router = express.Router();
 		
-	router.get('/api/posts',(req,res) => {
+	router.get('/api/posts', function(req,res){
 
-		let query = req.query;
+		var originalQuery = req.query;
 		
 		// req.query._id/upvotes are false if no posts are loaded yet
-		const lastPostId = query._id;
-		delete query["_id"];
+		var lastPostId = originalQuery._id;
 
-		const lastPostUpvotes = query.upvotes;
-		delete query["upvotes"];
+		//last loaded post's number of upvotes, used for faster searching
+		var lastPostUpvotes = originalQuery.upvotes;
 
 		//sortBy - e.g. by number of upvotes, latest/oldest posts
-		const sortBy = query.sort;
-		delete query["sort"];
+		var sortBy = originalQuery.sort;
 
 		//number of posts to skip if they are sorted by upvotes
-		const loadedPostsNo = Number(query.loadedPostsNo) || 0;
-		delete query["loadedPostsNo"];
+		var loadedPostsNo = Number(originalQuery.loadedPostsNo) || 0;
 
 		//date-range when posts were published
-		const datePosted = query.date_posted;
-		delete query["date_posted"];
+		var datePosted = originalQuery.date_posted;
 
-		const searchText = query.searchText;
-		delete query["searchText"];
+		//words entered into text search
+		var searchText = originalQuery.searchText;
+
+		//the original query's fields are used to compose a desired db query 
+		var query = {
+			country_from: originalQuery.country_from, 
+			country_in: originalQuery.country_in, 
+		};
+		if(originalQuery.category){
+			query.category = originalQuery.category;
+		}
+
 
 		//find posts whose title or content contain the searchText 
 		if(searchText){
-			query = {...query,$or:[
-						{ title:new RegExp(searchText, "i")},
-						{ content:new RegExp(searchText, "i")}
-					]};
+			query = Object.assign({}, query, {
+		       $or:[
+								{ title:new RegExp(searchText, "i")},
+								{ content:new RegExp(searchText, "i")}]
+			});
 		}
 		
-		const getIdDateRange = (datePosted) => {
-			if(datePosted && Object.values(date_ranges).indexOf(datePosted) > -1){
-				if(datePosted !== "Anytime"){
-					const dateTimestamp = getDateTimestamp(datePosted);
-					const objectIdFromTimestamp = 
+		//all returned posts' ids will have id $gte than 
+		// the lowest possible objectID from the selected date-range
+		var getIdDateRange = function(datePosted) {
+
+			if(datePosted && datePosted !== "Anytime" && Object.values(date_ranges).indexOf(datePosted) > -1){
+					var dateTimestamp = getDateTimestamp(datePosted);
+					var objectIdFromTimestamp = 
 								Math.floor(dateTimestamp/1000).toString(16) + "0000000000000000";
-					const idDateRange = {$gte: objectIdFromTimestamp};
+					var idDateRange = {$gte: objectIdFromTimestamp};
 					return idDateRange;
-				}
 			}
 			return {$gte: "000000000000000000000000"};
 		}
 
+		//return the latest posts by default
+		var sortQuery = {_id:-1};
 
-		// let query = req.query;
-		let sortQuery = {_id:-1};
-
-		const idDateRange = getIdDateRange(datePosted);
-		query = {...query, $and:[{ _id:idDateRange }] }
+		var idDateRange = getIdDateRange(datePosted);
+	
+		query = Object.assign({}, query, { $and:[{ _id:idDateRange }]});
 		//adds lastPostId to dbQuery to optimize searching
 		if(lastPostId){
 			switch(sortBy){
-				case "top":{
-					//sortBy "top" uses skip() to load posts
+				case "top": {
 					break;
 				}
 				case "oldest":{
-					query = {...query, $and:[{ _id:{$gt: lastPostId}}, {_id:idDateRange}] }
+					query = Object.assign({}, query, {$and:[{ _id:{$gt: lastPostId}}, {_id:idDateRange}]});
 					break; 
 				}
 				case "latest":
 				default:{
-					query = {...query, $and:[ {_id:{$lt: lastPostId}}, {_id:idDateRange} ]}
+					query = Object.assign({}, query, {$and:[ {_id:{$lt: lastPostId}}, {_id:idDateRange} ]});
 					break;
 				}
 			}
@@ -85,23 +92,24 @@ module.exports = (postSocket) => {
 
 	//posts sorting
 		switch(sortBy){
+			//sortBy "top" uses skip() to load posts
 			case "top":{
-				sortQuery = { upvotes:-1, _id:-1}
+				sortQuery = [['upvotes', -1], ['_id', -1]];
 				break;
 			}
 			case "oldest":{
-				sortQuery = { _id:1 }
+				sortQuery = { _id:1 };
 				break;
 			}
 			case "latest":
 			default:{
-				sortQuery = { _id:-1 }
+				sortQuery = { _id:-1 };
 				break;
 			}
 		}
 
-		const loadPosts = (findQuery, sortQuery={ _id:-1 }, skip=0, limit=4) => {
-			PostModel.find(findQuery).sort(sortQuery).limit(limit).skip(skip).lean().exec((err,posts) => {
+		var loadPosts = function(filterQuery, sortQuery={ _id:-1 }, skip=0, limit=4){
+			PostModel.find(filterQuery).sort(sortQuery).limit(limit).skip(skip).lean().exec(function(err,posts) {
 					if(err){
 						console.log(err);
 					} else {
@@ -119,16 +127,16 @@ module.exports = (postSocket) => {
 	});
 
 	//Get related posts
-	router.get('/api/relatedPosts',(req,res) => {
+	router.get('/api/relatedPosts', function(req,res) {
 
 		if(req.query._id){
-			const relatedPostsQuery = {
+			var relatedPostsQuery = {
 				_id: { $ne:req.query._id },
 				country_from: req.query.country_from,
 				country_in: req.query.country_in
 			}
 
-			PostModel.find(relatedPostsQuery).sort({ upvotes:-1, _id:-1}).limit(5).lean().exec((err,posts) => {
+			PostModel.find(relatedPostsQuery).sort({ upvotes:-1, _id:-1}).limit(5).lean().exec(function(err,posts) {
 				if(err){
 					console.log(err);
 					res.json(err);
@@ -141,14 +149,17 @@ module.exports = (postSocket) => {
 
 
 	//Get a single post
-	router.get('/api/singlePost',(req,res) => {
+	router.get('/api/singlePost',function(req,res) {
 		var roomId = req.query.id;
 		postSocket.once('connection', function(socket) {
 			socket.join(roomId);
 		});
 
-		PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec((err, singlePost) => {
-			if(err) console.log(err);
+		PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec(function(err, singlePost){
+			if(err){
+				console.log(err);
+				res.status(500).send({error:err});
+			} 
 
 			res.json(singlePost);
 		});
@@ -156,29 +167,32 @@ module.exports = (postSocket) => {
 	});
 
 	// //Get posts by IDs
-	router.get('/api/postsByIds',(req,res) => {
-		
-
+	router.get('/api/postsByIds',function(req,res) {
+	
 		if(req.query){
-			const postsIds = Object.values(req.query);
+			var postsIds = Object.values(req.query);
 
 			PostModel.find({
 		    	_id: { $in: postsIds }
 		  	})
-		    .exec((err, foundPosts) => {
-			  	if(err) console.log(err);
+		    .exec(function(err, foundPosts) {
+			  	if(err){
+			  		console.log(err);
+			  		res.status(500).send({error:err});
+			  	} 
 			  	res.json(foundPosts);
 			});
 		}
 	});
 
 	//Add a new post
-	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
-	router.post('/api/addPost', requireAuth, (req,res) => {
+	router.post('/api/addPost', requireAuth, function(req,res) {
 
-		let { newPost } = req.body;
-		const { _id, username } = req.user;
+		var newPost = req.body.newPost;
+		var _id = req.user._id;
+		var username = req.user.username;
 		
 		if(newPost){
 			newPost.author = {
@@ -187,9 +201,9 @@ module.exports = (postSocket) => {
 			}
 			newPost.image = "https://placehold.it/350x150";
 
-			const post = new PostModel(newPost);
+			var post = new PostModel(newPost);
 			
-			post.save((err,newPost) => {
+			post.save(function(err,newPost) {
 				if(err) console.log(err);
 
 			UserModel.findById(_id, function(err, foundAuthor) {
@@ -208,10 +222,11 @@ module.exports = (postSocket) => {
 	});
 
 	//EDIT A POST
-	router.put('/api/editPost', requireAuth, (req,res) => {
+	router.put('/api/editPost', requireAuth, function(req,res) {
 
-		let { postInfo } = req.body;
-		const { _id, username } = req.user;
+		var postInfo = req.body.postInfo;
+		var _id = req.user._id;
+		var username = req.user.username;
 
 		if(Object.keys(postInfo).length){
 			if(JSON.stringify(postInfo.authorId) === JSON.stringify(_id)) {		
@@ -219,11 +234,11 @@ module.exports = (postSocket) => {
 				//update a post and return the edited post
 				PostModel.findOneAndUpdate(
 					{ _id: postInfo.postId },
-					{...postInfo.editedFields}, 
+					postInfo.editedFields, 
 					{new: true}
 				)
 				.populate("comments")
-				.exec((err,editedPost) => {
+				.exec(function(err,editedPost) {
 						if(err) console.log(err);
 						res.json(editedPost);
 				});
@@ -235,16 +250,16 @@ module.exports = (postSocket) => {
 		}
 	});
 
-	router.delete("/api/deletePost", requireAuth, (req, res) => {
-		const { postId } = req.query;
-		const { _id } = req.user;
+	router.delete("/api/deletePost", requireAuth, function(req, res) {
+		var postId = req.query.postId;
+		var _id = req.user._id;
 
-		PostModel.findById(postId).lean().exec((err, foundPost) => {
+		PostModel.findById(postId).lean().exec(function(err, foundPost) {
 			if(err) {
 				console.log(err);
 			}
 			if(JSON.stringify(foundPost.author.id) === JSON.stringify(_id)) {
-				PostModel.findOneAndRemove({ _id: postId }, (err) => {
+				PostModel.findOneAndRemove({ _id: postId }, function(err) {
 					 if(err) console.log(err);
 				});
 
@@ -253,7 +268,7 @@ module.exports = (postSocket) => {
 						return res.status(422).send({error:err});
 					}
 
-					const postIndex = foundAuthor.posts.indexOf(postId);
+					var postIndex = foundAuthor.posts.indexOf(postId);
 					foundAuthor.posts.splice(postIndex,1);	
 					foundAuthor.save();	
 				});

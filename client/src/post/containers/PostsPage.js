@@ -23,7 +23,7 @@ class PostsPage extends Component {
   
   componentDidMount() {
       const urlQuery = this.props.location.query;
-      this.props.loadPosts(urlQuery);
+      // this.props.loadPosts(urlQuery);
       this.updateStateFilterOnPageLoad(urlQuery);  
   }
 

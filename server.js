@@ -1,12 +1,12 @@
-const express = require('express');
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const morgan = require('morgan');
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var path = require('path');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var cors = require('cors');
+var morgan = require('morgan');
 
 
 app.set('port', (process.env.PORT || 3001));
@@ -19,7 +19,7 @@ app.use(cors());
 app.use(bodyParser.json({type: '*/*'}));
 
 // mongoose.Promise = global.Promise; only if the browser-console shows promise Warning
-mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", err => {
+mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", function(err) {
   if(err) console.log(err);
 });
 
@@ -30,14 +30,14 @@ var postSocket = io.of('/post');
 var connections = [];
 postSocket.on('connection', function(socket) {
 	connections.push(socket.id);
-	console.log("comments " + connections.length);
+	// console.log("comments " + connections.length);
 	socket.on('roomPost', function(room) {
 		socket.join(room);
-		console.log(room + "comments");
+		// console.log(room + "comments");
 	});	
 	socket.on('disconnect', function(s) {
 		connections.splice(connections.indexOf(s.id), 1);
-		console.log("comments " + connections.length);
+		// console.log("comments " + connections.length);
 	});
 });
 
@@ -45,15 +45,15 @@ postSocket.on('connection', function(socket) {
 var notificationSocket = io.of('/notif');
 notificationSocket.on('connection', function(socket) {
 	connections.push(socket.id);
-	console.log("notif " + connections.length);
+	// console.log("notif " + connections.length);
 
 	socket.on('room', function(room) {
 		socket.join(room);
-		console.log(room + "notifs");
+		// console.log(room + "notifs");
 	});	
 	socket.on('disconnect', function(s) {
 		connections.splice(connections.indexOf(s.id), 1);
-		console.log("notif " + connections.length);
+		// console.log("notif " + connections.length);
 	});
 });
 
@@ -73,7 +73,7 @@ app.use(AuthenticationRoutes);
 
 
 
-http.listen(app.get('port'), () => {
+http.listen(app.get('port'), function() {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
 });
 

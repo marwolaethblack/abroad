@@ -114,8 +114,10 @@ class Header extends Component {
   )
 
   render() {
-    console.log("test");
-      console.log(this.context.router.getCurrentLocation());
+
+    const currentPathname = this.context.router.getCurrentLocation().pathname;
+    const { authenticated } = this.props;
+
     return (
       <header>
         <button id="mobile-menu-button" onClick={this.toggleMobileMenu} >
@@ -124,7 +126,7 @@ class Header extends Component {
         <div className={`main-header ${this.state.showMenu && "show"}`}>
           <section className="brand-logo">
             <Link to="/" className="navigation-link">Abroad</Link>
-              <Link to={{pathname:"/posts"}} activeClassName="active" className="navigation-link">All&nbsp;Posts</Link>
+              <Link to={{pathname:"/posts", query:this.props.filter}} className={`navigation-link ${currentPathname.indexOf('/posts') > -1 && "active"}`}>All&nbsp;Posts</Link>
           </section>
           <nav className="navigation-links">
             <ul>
@@ -132,10 +134,12 @@ class Header extends Component {
             </ul>
           </nav>
         </div>
-        <div id="notifications" className={this.state.showNotifications ? "show" : "hide"}>
-          <button className="btn-close" onClick={this.toggleNotifications} >X</button>
-          { this.renderNotifications() }
-        </div>
+        {authenticated &&
+          <div id="notifications" className={this.state.showNotifications ? "show" : "hide"}>
+            <button className="btn-close" onClick={this.toggleNotifications} >X</button>
+            { this.renderNotifications() }
+          </div>
+        }
       </header>
     )
   }
@@ -154,7 +158,6 @@ function mapDispatchToProps(dispatch) {
   return {
     signout(notifSocket) {
       dispatch(signoutUser(notifSocket));
-      console.log("fuck")
       console.log(notifSocket)
     },
 

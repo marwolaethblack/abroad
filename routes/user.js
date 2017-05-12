@@ -1,18 +1,19 @@
-import UserModel from '../models/User';
-import CommentModel from '../models/Comment';
-import PostModel from '../models/Post';
-import express from 'express';
-import passport from 'passport';
+var UserModel = require('../models/User');
+var CommentModel = require('../models/Comment');
+var PostModel = require('../models/Post');
+var express = require('express');
+var passport = require('passport');
+
 
 module.exports = function(notificationSocket) {
-	const router = express.Router();
-	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+	var router = express.Router();
+	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
-	router.get('/api/user', (req,res) => {
+	router.get('/api/user', function(req,res) {
 		UserModel.findById(req.query.id, {password: 0})
 			// .populate('posts comments')
 				.lean()
-				.exec((err, user) => {
+				.exec(function(err, user) {
 			if(err) {
 				return res.status(422).send({error:err});
 			}
@@ -20,10 +21,10 @@ module.exports = function(notificationSocket) {
 		});
 	});
 
-	router.put('/api/editUser', requireAuth, (req,res) => {
+	router.put('/api/editUser', requireAuth, function(req,res) {
 
-		let { userInfo } = req.body;
-		const { _id } = req.user;
+		let userInfo = req.body.userInfo;
+		const _id = req.user._id;
 
 		if(Object.keys(userInfo.editedFields).length){
 			if(JSON.stringify(userInfo.userId) === JSON.stringify(_id)) {		
@@ -31,11 +32,11 @@ module.exports = function(notificationSocket) {
 				//update a post and return the edited post
 				UserModel.findOneAndUpdate(
 					{ _id: userInfo.userId },
-					{...userInfo.editedFields}, 
+					userInfo.editedFields, 
 					{new: true}
 				)
 				// .populate("comments")
-				.exec((err,editedUser) => {
+				.exec(function(err,editedUser) {
 						if(err) console.log(err);
 						res.json(editedUser);
 				});
@@ -49,11 +50,11 @@ module.exports = function(notificationSocket) {
 
 
 
-	router.get('/api/user/notifications', (req,res) => {
+	router.get('/api/user/notifications', function(req,res) {
 		UserModel.findById(req.query.id)
 			    .populate({path: 'notifications', options: {limit: 20, lean: true, sort:{'createdAt': -1}}})
-				.exec((err, user) => {
-			if(err) {
+				.exec(function(err, user) {
+			if(err || !user) {
 				console.log(err);
 				return res.status(422).send({error:err});
 			}
