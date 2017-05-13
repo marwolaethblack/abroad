@@ -9,7 +9,7 @@ import AddPostForm from '../AddPostForm';
 class NewPostPage extends Component {
 
 	render() {
-		const { addNewPost, newPostForm, updateFilterValue } = this.props;
+		const { addNewPost, newPostForm } = this.props;
 		const handleAddPost = () =>{		
 			addNewPost(newPostForm.values);
 		}

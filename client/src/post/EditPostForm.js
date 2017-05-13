@@ -24,7 +24,7 @@ class FormInput extends Component {
   }
 
   render(){
-    const { input, label, placeholder, type, options, initialText, inputValue, meta: { touched, error, warning } } = this.props;
+    const { input, label, placeholder, type, options, initialText, meta: { touched, error, warning } } = this.props;
 
     const renderInputType = (type) => {
       switch(type){
@@ -82,7 +82,7 @@ class FormInput extends Component {
 
 
 const EditPostForm = props => {
-  const { handleSubmit, editPost, postContent, postId, authorId, pristine, submitting } = props;
+  const { handleSubmit, editPost, postContent, postId, authorId, submitting } = props;
   const { DOM: { textarea }} = React;
 
   const hadleFormSubmit = (editedFields) => {

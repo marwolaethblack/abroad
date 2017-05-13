@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import EditUserForm from '../EditUserForm';
 
 import { fetchUser, editUser } from '../actions/userActions';
@@ -8,7 +7,7 @@ import { fetchUser, editUser } from '../actions/userActions';
 class EditUserProfile extends Component {
 
   componentDidMount(){
-    this.props.getUser(this.props.params.id);
+    this.props.getUser(this.props.myUserId);
   }
 
     render() {
@@ -28,6 +27,7 @@ class EditUserProfile extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    myUserId: state.auth.id,
     user: state.user.userData,
     isFetching: state.isFetching,
     authenticated: state.auth.authenticated

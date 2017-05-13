@@ -24,7 +24,7 @@ export function editUser(userInfo) {
 		return axios.put('/api/editUser', {userInfo}, 
 					{headers: {authorization: localStorage.getItem('token')} })
 			.then(resp => {
-				browserHistory.push(`/user/${resp.data._id}`);
+				browserHistory.push('/my-profile');
 			})
 			.catch(err => {
 				dispatch({type: ActionTypes.EDIT_USER_ERROR, message: err.message});

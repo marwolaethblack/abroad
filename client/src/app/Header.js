@@ -36,7 +36,7 @@ class Header extends Component {
       </div>
     </li>,
     <li className="navigation-link" key={2}>
-      <Link to={"/user/" + this.props.id} activeClassName="active">Profile</Link>
+      <Link to={"/my-profile"} activeClassName="active">Profile</Link>
     </li>,
     <li className="navigation-link" key={1}>
       <Link to="/" onClick={() => this.props.signout(notifSocket)}>Sign Out</Link>
@@ -150,7 +150,7 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     id: state.auth.id,
     filter: state.filter,
-    notifications: state.notifications
+    notifications: state.notifications,
   }
 }
 

@@ -6,7 +6,7 @@ import AddComment from '../comment/AddComment';
 import Modal from '../widgets/Modal';
 import EditPostForm from './EditPostForm';
 import ReplyCommentForm from '../comment/ReplyCommentForm';
-import { newLineToBreak } from '../services/textFormatting';
+import { newLineToBreak, spaceToDash } from '../services/textFormatting';
 
 
 class ExtendedPost extends Component {
@@ -81,7 +81,7 @@ class ExtendedPost extends Component {
             <img alt={title} src={image}/>
             <h1>{title}</h1>
             <p>{country_from + " > " + country_in}</p>
-            <span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username }</Link> to {category}</span>
+            <span>Submitted {datePosted} ago by <Link to={`/user/${author.id}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
               { newLineToBreak(content) }
             </section>

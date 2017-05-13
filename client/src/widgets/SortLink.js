@@ -1,10 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 class SortLink extends Component {
 
-
-    
   render() {
   	const { currentUrl, sortBy } = this.props;
   	const isSelected = (sortType) => {

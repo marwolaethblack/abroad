@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import Header from './Header';
 import Footer from './Footer';

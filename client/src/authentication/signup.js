@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { signUpUser } from './actions/authentication';
 
 const renderField = (props) => {
-	const { input, label, type, meta: { touched, error, warning } } = props;
+	const { input, label, type, meta: { touched, error } } = props;
 	return (
 	<fieldset>
 	    <label>{label}</label>

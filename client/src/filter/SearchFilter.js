@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 
 import countries from '../constants/countries';
-import categories from '../constants/categories'
 import { date_ranges } from '../constants/post_created_ranges';
 import FilterDropdown from '../widgets/FilterDropdown';
 import CheckboxGroupCategories from '../widgets/CheckboxGroupCategories';
@@ -28,7 +27,6 @@ class SearchFilter extends Component {
     render() {
 
     	const query = this.props.stateQuery;
-    	console.log(query.searchText);
     	const { country_from, country_in, category, date_posted, searchText } = query;
     	const { filterUpdate } = this.props;
         return(

@@ -45,7 +45,7 @@ class ExtendedPostPage extends Component {
           <ExtendedPost {...singlePost} 
                         authenticated={authenticated}
                         deleteComment={removeComment}
-                        editComment = {updateComment}
+                        editComment={updateComment}
                         deletePost={removePost} 
                         editPost={updatePost}
                         socketAddComment={socketAddComment}

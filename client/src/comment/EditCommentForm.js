@@ -58,14 +58,13 @@ class EditCommentForm extends Component {
   } 
 
   handleFormSubmit = (editedComment) => {
-    const { commentId, authorId, postId, editComment } = this.props;
-    this.props.editComment({editedComment, commentId, authorId, postId});
-    this.props.afterSubmit();
+    const { commentId, authorId, postId, editComment, afterSubmit } = this.props;
+    editComment({editedComment, commentId, authorId, postId});
+    afterSubmit();
   }
 
   render(){
-    const { handleSubmit, editComment, commentContent, commentId, authorId, pristine, submitting } = this.props;
-    const { DOM: { textarea }} = React;
+    const { handleSubmit, commentContent, submitting } = this.props;
 
     return (
       <form onSubmit={handleSubmit(this.handleFormSubmit)}>

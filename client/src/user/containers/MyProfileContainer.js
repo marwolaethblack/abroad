@@ -4,25 +4,27 @@ import { fetchUser } from '../actions/userActions';
 import { fetchPostsByIds } from '../../post/actions/postActions';
 
 
-import UserPage from '../UserPage';
+import MyProfilePage from '../MyProfilePage';
 import Loader from '../../widgets/Loader';
 
-class UserPageContainer extends Component {
+class MyProfileContainer extends Component {
 	componentDidMount() {
-		const { id } = this.props.params;
-		this.props.getUser(id);
+		const { myUserId } = this.props;
+		this.props.getUser(myUserId);
 	}
 
 	render() {
-		const { user, usersPosts, isFetching } = this.props;
+		const { user, usersPosts, authenticated, isFetching, myUserId } = this.props;
 		if(isFetching.users) {
 			return (<Loader />);
 		} else {
 			if(!user.userData) {
 				return(<h1 className="main-page-content">No user found</h1>)
 			}
-			return (<UserPage {...user} 
+			return (<MyProfilePage {...user} 
+							  id={ myUserId }
 							  usersPosts={usersPosts} 
+							  authenticated={authenticated} 
 							  loadUsersPosts={this.props.getPostsByIds} 
 							  isFetching={isFetching} />
 			);
@@ -33,6 +35,7 @@ class UserPageContainer extends Component {
 
 const mapStateToProps = (state) => {
 	return {
+		myUserId: state.auth.id,
 		user: state.user,
 		usersPosts: state.posts,
 		isFetching: state.isFetching,
@@ -51,4 +54,4 @@ const mapDispatchToProps = (dispatch) => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserPageContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(MyProfileContainer);

@@ -17,12 +17,12 @@ class UsersPosts extends Component {
   postsPerLoad = 2;
 
   arraysAreEqual = (arr1, arr2) => 
-    arr1.length == arr2.length && arr1.every((element, index) => element === arr2[index] );
+    arr1.length === arr2.length && arr1.every((element, index) => element === arr2[index] );
 
   componentDidUpdate(prevProps){
     if(!this.arraysAreEqual(prevProps.usersPosts,this.props.usersPosts)) {
       this.setState((prevState)=>({loadedPosts:[...prevState.loadedPosts,...this.props.usersPosts]}));
-      if(this.props.postsIds.length == this.state.loadedPosts.length){
+      if(this.props.postsIds.length === this.state.loadedPosts.length){
         this.setState({allPostsAreLoaded: true});
       } 
     }
@@ -33,21 +33,21 @@ class UsersPosts extends Component {
     if(!this.state.allPostsAreLoaded && !this.props.isFetching.users){
       const { loadedPosts } = this.state;
   
-      const nextPostsIds = this.props.postsIds.
-        sort((a,b)=>{
+      const nextPostsIds = this.props.postsIds
+        .sort((a,b)=>{
           if(a>b) return -1;
           if(a<b) return 1;
           return 0;
-        }).
-        slice(loadedPosts.length, loadedPosts.length+this.postsPerLoad);
+        })
+        .slice(loadedPosts.length, loadedPosts.length+this.postsPerLoad);
 
       this.props.loadUsersPosts(nextPostsIds);
     }
   }
   
   render() {
-    const { posts,isFetching } = this.props;
-    const { loadedPosts, allPostsAreLoaded } = this.state;
+    const { isFetching } = this.props;
+    const { loadedPosts } = this.state;
 
     if(this.props.postsIds.length === 0) 
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
@@ -61,7 +61,7 @@ class UsersPosts extends Component {
           loadMore={this.handlePostsLoadOnScroll}
           threshold={100} >
           
-           {this.state.loadedPosts.map((post,index) => <RelatedPost key={post._id} {...post} />)}
+           {loadedPosts.map((post,index) => <RelatedPost key={post._id} {...post} />)}
           
         </InfiniteScroll>
 

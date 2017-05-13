@@ -9,6 +9,7 @@ import FrontPage from './app/FrontPage';
 import PostsPage from './post/containers/PostsPage';
 import ExtendedPostPage from './post/containers/ExtendedPostPage';
 import UserPageContainer from './user/containers/UserPageContainer';
+import MyProfileContainer from './user/containers/MyProfileContainer';
 import EditUserProfile from './user/containers/EditUserProfile';
 import NewPostPage from './post/containers/NewPostPage';
 
@@ -37,8 +38,9 @@ ReactDOM.render(
   			<Route path="posts" component={PostsPage} />
   		  <Route path="posts/:id(/:country_in)(/:category)(/:title)" component={ExtendedPostPage} />
         <Route path="add-post" component={RequireAuth(NewPostPage)} />
-        <Route path="user/:id" component={UserPageContainer} />
-        <Route path="user/:id/edit-profile" component={EditUserProfile} />
+        <Route path="user/:id(/:username)" component={UserPageContainer} />
+        <Route path="my-profile" component={RequireAuth(MyProfileContainer)} />
+        <Route path="my-profile/edit" component={RequireAuth(EditUserProfile)} />
         <Route path="signin" component={Signin} />
         <Route path="signup" component={Signup} />
   		</Route>

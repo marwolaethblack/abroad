@@ -12,12 +12,11 @@ const isInputEmpty = (value) => {
 }
 
 const validate = (values) => {
-const { country_from, country_in } = values;
 const errors = {};
 	
 	Object.keys(values).map(key => {
 		if(isInputEmpty(values[key])){
-			errors[key]= "required field";
+			return errors[key]= "required field";
 		}	
 	});
 

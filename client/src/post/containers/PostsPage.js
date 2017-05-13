@@ -59,16 +59,16 @@ class PostsPage extends Component {
     return (
       <section className="main-page-content">
           <SearchFilter
-           urlQuery={this.props.location.query} 
+           urlQuery={location.query} 
            stateQuery={stateQuery}
            filterUpdate={updateFilterValue} />
 
           <SortFilter location={location} />
 
               <AllPosts posts={posts}
-               loadPosts={this.props.loadPosts} 
+               loadPosts={loadPosts} 
                isFetching={isFetching}
-               urlQuery={this.props.location.query} />
+               urlQuery={location.query} />
 
       </section>
     )

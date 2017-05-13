@@ -5,7 +5,7 @@ import layerComments from '../../services/layerComments';
 export const singlePost = (state={},action) => {
     switch (action.type) {
         case ActionTypes.RECEIVED_SINGLE_POST: {
-            const layeredComments = layerComments(action.singlePost.comments);
+            layerComments(action.singlePost.comments);
             return {...state, ...action.singlePost }
         }
         case ActionTypes.COMMENT_ADDED:

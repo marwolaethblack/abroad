@@ -4,6 +4,7 @@ import EditCommentForm from './EditCommentForm';
 import ReplyCommentForm from './ReplyCommentForm';
 import Modal from '../widgets/Modal';
 import { Link } from 'react-router';
+import { spaceToDash } from '../services/textFormatting';
 
 
 class Comment extends Component {
@@ -67,7 +68,7 @@ class Comment extends Component {
                   <section className="comment-content">
                   { content }
                   </section>
-  	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author.id}`}>{author.username}</Link></span>
+  	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author.id}/${spaceToDash(author.username)}`}>{author.username}</Link></span>
                 <div>
                   {authenticated && <button style={{color:"blue"}} onClick={this.openReplyModal}>REPLY</button> }
                   {author.id === loggedUserId && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
