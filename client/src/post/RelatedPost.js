@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import postDateDiff from '../services/dateDifference';
-import { beautifyUrlSegment } from '../services/textFormatting';
+import { beautifyUrlSegment, spaceToDash } from '../services/textFormatting';
 
 
 class RelatedPost extends Component {
@@ -10,7 +10,7 @@ class RelatedPost extends Component {
 
         return(
         	<div>        	
-	        	<Link to={`/posts/${_id}/${beautifyUrlSegment(title)}`}><h3>{title}</h3></Link>
+	        	<Link to={`/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`}><h3>{title}</h3></Link>
                 <p>{country_from + " > " + country_in}</p>
 	        	<p>{"Category: " + category}</p>
                 <span>Upvotes {upvotes}</span> &nbsp;

@@ -1,7 +1,7 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import { beautifyUrlSegment } from '../../services/textFormatting';
+import { beautifyUrlSegment, spaceToDash } from '../../services/textFormatting';
 
 export const fetchPosts = filter => dispatch => {
     
@@ -105,7 +105,9 @@ export const addPost = (newPost) => (dispatch) =>{
                 type: ActionTypes.POST_ADDED,
                 newPost: resp.data
             });
-           browserHistory.push(`/posts/${resp.data._id}/${beautifyUrlSegment(resp.data.title)}`);
+
+            const { _id, country_in, title, category } = resp.data;
+            browserHistory.push(`/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`);
         })
         .catch(err => {
             console.log(err);

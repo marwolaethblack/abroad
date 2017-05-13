@@ -8,15 +8,19 @@ export const beautifyUrlSegment = (segment) => {
 				.replace(/[?!.()<>{}[\]"'`#^*:]/,'');
 
 	//escape special characters in url
-	segment = encodeURIComponent(segment)
-			//replace all spaces and slashed with dashes
-				.replace(new RegExp('%20|%2F','g'),'-')
+	segment = spaceToDash(segment)
+			//replace all slashes with dashes
+				.replace(new RegExp('%2F','g'),'-')
 				//replace repeating dashed with a single dash
 				.replace(/-+/g,"-")
 				//remove a dash if it's the first or last character of the segment
 				.replace(/^-|-$/,'');
 
 	return segment;
+}
+
+export const spaceToDash = (text) => {
+	return encodeURIComponent(text).replace(new RegExp('%20|%2F','g'),'-');
 }
 
 
