@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-
+import { connect } from 'react-redux';
 import countries from '../constants/countries';
 import categories from '../constants/categories';
 
@@ -167,8 +167,20 @@ const AddPostForm = props => {
   );
 };
 
-export default reduxForm({
+
+
+AddPostForm = reduxForm({
   form: 'addPostForm', // a unique identifier for this form
   validate,
   warn
 })(AddPostForm);
+
+AddPostForm = connect(
+  state => ({
+    initialValues: state.user.userData
+  }),
+)(AddPostForm)
+
+export default AddPostForm;
+
+

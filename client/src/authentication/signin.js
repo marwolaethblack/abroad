@@ -43,9 +43,9 @@ class Signin extends Component {
 	render() {
 		const { handleSubmit } = this.props;
 		return(
-			<div>
+			<div className="main-page-content offset-by-three six columns" >
 			
-				<form onSubmit={handleSubmit(this.handleFormSubmit)} className="main-page-content offset-by-four four columns sign-form">
+				<form onSubmit={handleSubmit(this.handleFormSubmit)} className="sign-form">
 					<h1>Sign in</h1>
 					<fieldset className='form-group'>
 						<label>Email:</label>
@@ -58,7 +58,10 @@ class Signin extends Component {
 					{this.renderAlert()}
 					<button action="submit" className="btn btn-primary">Sign In</button>
 				</form>
-				<button onClick={()=>this.props.socialSignin('facebook')}>FB LOGIN</button>
+
+				<button onClick={()=>this.props.socialSignin('facebook')} className="loginBtn loginBtn-facebook">
+				  Login with Facebook
+				</button>
 			</div>
 		);
 	}

@@ -5,16 +5,42 @@ import Comment from '../comment/Comment';
 import AddComment from '../comment/AddComment';
 import Modal from '../widgets/Modal';
 import EditPostForm from './EditPostForm';
+import SharePost from './SharePost';
 import ReplyCommentForm from '../comment/ReplyCommentForm';
-import { newLineToBreak, spaceToDash } from '../services/textFormatting';
+import { newLineToBreak, spaceToDash, beautifyUrlSegment } from '../services/textFormatting';
+import { fbPromises } from '../authentication/social/fb';
+import fbConfig from '../../../auth/config/fb';
+import FacebookProvider, { Share } from 'react-facebook';
 
 
 class ExtendedPost extends Component {
+
+  addMetaTags = (postObject) => {
+    //url,title,description,image
+    Object.keys(postObject).forEach(key => {
+          let meta = document.createElement('meta');
+
+          //create attribute - property
+          var attr = document.createAttribute("property");
+          attr.value = 'og:'+key;  
+          meta.setAttributeNode(attr);  
+
+          meta.content = postObject[key];
+          document.getElementsByTagName('head')[0].appendChild(meta);
+    });
+  }
 
   componentWillMount() { 
     const { socket }  = this.props;
     socket.emit('roomPost', this.props._id);
     socket.on('add comment', (payload) => this.props.socketAddComment(payload));
+  }
+
+  componentDidMount(){
+     //create meta tags for FB sharing
+    const {image, title, content, category, country_in } = this.props;
+    const url = `http:/\/abroad-react-redux.herokuapp.com/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`
+    this.addMetaTags({image, title, description: content, url });
   }
 
   constructor(){
@@ -76,6 +102,13 @@ class ExtendedPost extends Component {
             postContent={content} />
 
         </Modal>
+
+      <FacebookProvider appId={fbConfig.appID}>
+        <Share
+         href={`http://abroad-react-redux.herokuapp.com/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`}>
+            <button>SHARE ON FB</button>
+         </Share>
+      </FacebookProvider>
 
         <span>Upvotes {upvotes}</span>
             <img alt={title} src={image}/>

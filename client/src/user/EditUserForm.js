@@ -73,9 +73,8 @@ EditUserForm = reduxForm({
 
 EditUserForm = connect(
   state => ({
-    initialValues: state.user.userData // pull initial values from account reducer
+    initialValues: state.user.userData
   }),
-  // { load: loadAccount }               // bind account loading action creator
 )(EditUserForm)
 
 export default EditUserForm;
