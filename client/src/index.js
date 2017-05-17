@@ -12,6 +12,8 @@ import UserPageContainer from './user/containers/UserPageContainer';
 import MyProfileContainer from './user/containers/MyProfileContainer';
 import EditUserProfile from './user/containers/EditUserProfile';
 import NewPostPage from './post/containers/NewPostPage';
+import NotFoundPage from './app/NotFoundPage';
+
 
 import Signin from './authentication/signin';
 import Signup from './authentication/signup';
@@ -43,6 +45,7 @@ ReactDOM.render(
         <Route path="my-profile/edit" component={RequireAuth(EditUserProfile)} />
         <Route path="signin" component={Signin} />
         <Route path="signup" component={Signup} />
+        <Route path="*" component={NotFoundPage} />
   		</Route>
   	</Router>
   </Provider>,

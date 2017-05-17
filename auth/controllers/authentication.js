@@ -5,10 +5,11 @@ var config = require('../../config');
 var bcrypt = require("bcrypt-nodejs");
 import isEmail from 'validator/lib/isEmail';
 
-function tokenForUser(user) {
+exports.tokenForUser = function(user) {
     var timestamp = new Date().getTime();
     return jwt.encode({ sub: user.id, iat: timestamp}, config.secret);
 }
+
 
 exports.signin = function(req, res, next) {
     //User has already their email and password authd we just need to give them a token
@@ -27,14 +28,11 @@ exports.signup = function(req,res,next){
         return res.status(422).send({error: "Invalid email"});
     }
     //see if given user with email or username exists
-    User.findOne({$or: [{'email': email}, {'username': username}]}).lean().exec(function(err, existingUser){
+    User.findOne({'email': email}).lean().exec(function(err, existingUser){
         if(err) { return next(err); }
         
         //if yes return error
         if(existingUser) {
-            if(existingUser.username === username) {
-               return res.status(422).send({error: "Username already in use"}); 
-            }   
             return res.status(422).send({error: "Email already in use"});
         }
         
@@ -67,7 +65,7 @@ exports.signup = function(req,res,next){
                     if(err) {return next(err);}
                     res.json({
                         token: tokenForUser(user),
-                        id: user.id,
+                        id: user._id,
                         username: user.username });
                     });
                     

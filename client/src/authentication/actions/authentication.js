@@ -2,6 +2,48 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { ActionTypes } from '../../constants/actionTypes';
 import { getNotifications } from '../../user/actions/userActions';
+import { fbPromises } from '../social/fb';
+
+
+function parseJwt(token) {
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace('-', '+').replace('_', '/');
+            return JSON.parse(window.atob(base64));
+};
+
+export function socialAuth(provider) {
+	return function(dispatch) {
+		//add FB SDK script 
+	    fbPromises.init()
+            .then(
+                function(){
+                	//open fb login window after FB SDK is loaded
+                    window.FB.login(function(response) {
+                    	//a user successfully logged in
+                        if (response.authResponse) {
+                        	//get the user's FB info
+                         window.FB.api('/me?fields=id,name,email,locale', function(response) {
+					        axios.get('/api/socialUser', {params: { ...response, provider } })
+								.then(resp => {
+									dispatch({type: ActionTypes.AUTH_USER, id: resp.data.id, username: resp.data.username});
+									localStorage.setItem('token', resp.data.token);
+									localStorage.setItem('id', resp.data.id);
+									browserHistory.goBack();
+									dispatch(getNotifications(resp.data.id));
+								})
+								.catch(err => {
+									dispatch({type: ActionTypes.FETCH_USER_ERROR, error: err.message});
+								});
+					        });
+				        } else {
+				           	console.log('User cancelled login or did not fully authorize.');
+				        }
+		            }, {scope: 'email,public_profile'});
+		        }
+        )
+
+	}
+}
 
 
 export function signinUser({ email, password }) {
@@ -39,6 +81,18 @@ export function signoutUser(notifSocket) {
 	localStorage.removeItem("id");
 	localStorage.removeItem('username');
 	notifSocket.close();
+
+	//FB log out
+    fbPromises.init()
+        .then(
+            () => {
+                fbPromises.checkLoginState().then(resp => {
+                	if(resp.status === 'connected'){
+                		window.FB.logout();
+                	}
+                })
+            }
+    )
 
 	return {
 		type: ActionTypes.UNAUTH_USER,

@@ -9,8 +9,8 @@ import io from 'socket.io-client';
 let notifSocket = io('/notif');
 
 class Header extends Component {
-   constructor() {
-    super();
+   constructor(props) {
+    super(props);
     //prop to show mobile menu
     this.state = { 
       showMenu: false,
@@ -158,7 +158,6 @@ function mapDispatchToProps(dispatch) {
   return {
     signout(notifSocket) {
       dispatch(signoutUser(notifSocket));
-      console.log(notifSocket)
     },
 
     fetchNotif(id) {

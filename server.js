@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var cors = require('cors');
 var morgan = require('morgan');
+var passport = require('passport');
 
 
 app.set('port', (process.env.PORT || 3001));
@@ -14,6 +15,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 }
 
+
+app.use(passport.initialize());
 app.use(express.static(__dirname + '/public'));
 app.use(cors());
 app.use(bodyParser.json({type: '*/*'}));

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 
 import { fetchPosts } from '../post/actions/postActions';
 import { filterUpdate } from '../filter/actions/filterActions';
+import { socialAuth } from '../authentication/actions/authentication';
+
 import FrontPageTitle from '../widgets/FrontPageTitle';
 import FrontPagePosts from '../post/FrontPagePosts';
 import SimplePostFilter from '../filter/SimplePostFilter';
@@ -14,7 +16,11 @@ import defaultPostsFilter from '../constants/defaultPostsFilter';
 class FrontPage extends Component {
 
   componentWillMount(){
-     this.props.updateFilterValue("category",["All"]);  
+
+    const { updateFilterValue } = this.props;
+
+
+     updateFilterValue("category",["All"]);  
   }
   
   componentDidMount(){
@@ -45,11 +51,15 @@ class FrontPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
+  authenticated: state.auth.authenticated,
   posts: state.posts,
   filterQuery: state.filter //query used only for default filter
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  socialLogin(id){
+    dispatch(socialAuth(id));
+  },
   loadPosts(query){
     dispatch(fetchPosts(query));
   },

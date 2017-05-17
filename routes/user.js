@@ -1,8 +1,11 @@
 var UserModel = require('../models/User');
 var CommentModel = require('../models/Comment');
 var PostModel = require('../models/Post');
+var NotificationModel = require('../models/Notification');
 var express = require('express');
 var passport = require('passport');
+var Authentication = require('../auth/controllers/authentication');
+var countries = require('../client/src/constants/countries');
 
 
 module.exports = function(notificationSocket) {
@@ -18,6 +21,73 @@ module.exports = function(notificationSocket) {
 				return res.status(422).send({error:err});
 			}
 			res.json(user);
+		});
+	});
+
+	router.get('/api/socialUser', function(req,res) {
+
+		var userInfo = req.query;
+
+		UserModel.findOne({socialId: userInfo.id, provider: userInfo.provider})
+		.lean()
+		.exec(function(err, user) {
+			if(err) {
+				return res.status(422).send({error:err});
+			}
+
+			if(user){			
+				// console.log("TOTO JE POSLANE: ");
+				// console.log({...user,token: Authentication.tokenForUser({ id: user._id })});
+				res.json({
+                        token: Authentication.tokenForUser({ id: user._id }),
+                        id: user._id,
+                        username: user.username 
+                });
+				// res.json({user,token: Authentication.tokenForUser({ id: user._id })});
+			} else {
+				// console.log("==========================================");
+				// console.log("==========================================");
+				// console.log("==========================================");
+
+
+				// console.log("REQ.query: ");
+				// console.log(userInfo);
+
+		        var user = new UserModel({
+		        	socialId: userInfo.id,
+		            username: userInfo.name,
+		            email: userInfo.email,
+		            provider: userInfo.provider,
+		            notifications: []
+		        });
+
+		        if(userInfo.provider === 'facebook'){
+		        	user['image'] = 'https://graph.facebook.com/'+req.query.id+'/picture?type=large';
+		        }
+
+		        //get a user's country from FB locale - en_US -> <language>_<country>
+		        if(userInfo.locale){
+		        	var country_code = userInfo.locale.slice(-2);
+		        	user['country_from'] = countries.default[country_code];
+		        }
+
+		         var newNotif = new NotificationModel({
+		            text: "Welcome to abroad"
+		        });
+
+		        newNotif.save();
+		        user.notifications.push(newNotif);
+
+		        user.save(function(err){
+                    if(err) {res.json(err)}
+
+                    res.json({
+                        token: Authentication.tokenForUser({ id: user._id }),
+                        id: user._id,
+                        username: user.username 
+                   	});
+				});
+		    }
 		});
 	});
 

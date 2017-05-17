@@ -4,6 +4,7 @@ const passport = require("passport");
 const express = require('express');
 
 
+
 module.exports = function (notifSocket) {
 
 	const router = express.Router();
@@ -13,6 +14,7 @@ module.exports = function (notifSocket) {
 
 	router.post('/api/signin', requireSignin, Authentication.signin);
 	router.post("/api/signup", Authentication.signup);
+	
 
 	return router;
 }
