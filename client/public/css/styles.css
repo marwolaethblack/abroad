@@ -126,10 +126,14 @@ a {
 	letter-spacing: .2em;
 }
 
+.navigation-link>a:hover {
+	color: rgb(213, 67, 255);
+}
 
-.navigation-link:hover {
-	background: rgba(0,0,0,0.75);
-	color: white;
+
+.navigation-link:hover{
+	background: rgba(0,0,0,0.8);
+	color: rgb(213, 67, 255);
 } 
 
 .main-header #notifications-icon {
@@ -203,7 +207,7 @@ header #notifications ul li:nth-child(even) {
 	color: #fff;
 	background: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url('../images/front-page-pic-min.jpg') no-repeat center center;
 	background-size: cover;
-	min-height: 70%;
+	min-height: 70vh;
 }
 
 #front-page-title h1{

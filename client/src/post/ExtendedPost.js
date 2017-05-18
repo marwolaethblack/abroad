@@ -16,7 +16,15 @@ import FacebookProvider, { Share } from 'react-facebook';
 class ExtendedPost extends Component {
 
   addMetaTags = (postObject) => {
-    //url,title,description,image
+
+    // create this: <html prefix="og: http://ogp.me/ns#">
+    let htmlTag = document.getElementsByTagName('html')[0];
+    let attr = document.createAttribute("prefix");
+    attr.value = 'og: http:/\/ogp.me/ns#';  
+    htmlTag.setAttributeNode(attr);  
+
+    //url,title,description,image -> properties recognized by FB Open Graph
+    //for sharing a post on FB
     Object.keys(postObject).forEach(key => {
           let meta = document.createElement('meta');
 
@@ -24,7 +32,7 @@ class ExtendedPost extends Component {
           var attr = document.createAttribute("property");
           attr.value = 'og:'+key;  
           meta.setAttributeNode(attr);  
-
+          
           meta.content = postObject[key];
           document.getElementsByTagName('head')[0].appendChild(meta);
     });

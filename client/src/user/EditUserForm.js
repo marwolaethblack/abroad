@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+import { browserHistory } from 'react-router';
 
 import countries from '../constants/countries';
 
@@ -14,14 +15,32 @@ const isInputEmpty = (value) => {
 const validate = (values) => {
 const errors = {};
 	
+	//all values are required
 	Object.keys(values).map(key => {
 		if(isInputEmpty(values[key])){
 			return errors[key]= "required field";
 		}	
 	});
 
+	if(values.username.length < 3 || values.username.length > 30){
+		errors.username = 'Your username must be between 3 and 30 characters long.'
+	}
+
+
   return errors;
 };
+
+const renderField = (props) => {
+	const { input, label, type, meta: { touched, error } } = props;
+	return (
+	<fieldset>
+	    <label>{label}</label>
+	    <div>
+	      <input {...input} placeholder={label} type={type}/>
+	      {touched && (error && <span>{error}</span>)}
+	    </div>
+  	</fieldset> );
+}
 
 
 class EditUserForm extends Component {
@@ -32,7 +51,22 @@ class EditUserForm extends Component {
 	}
 
 	handleFormSubmit = (editedFields) => {
-		this.props.editUser({editedFields, userId:this.props.userInfo._id});
+		let userInfoChanged = false;
+
+		//find out whether the user's information changed
+		for(let userPropKey of Object.keys(this.props.userInfo)){
+			if(this.props.userInfo[userPropKey] !== editedFields[userPropKey]){
+				userInfoChanged = true;
+				break;
+			}
+		}
+
+		//if the user didn't change any info, redirect him back to his profile
+		if(userInfoChanged){
+			this.props.editUser({editedFields, userId:this.props.userInfo._id});
+		} else {
+			browserHistory.push('/my-profile');
+		}	
 	}
 
 	render(){
@@ -55,10 +89,16 @@ class EditUserForm extends Component {
 						<option key="-1" value="">Choose a country you live in</option>
 							{ Object.values(countries).map((country,i) => <option key={i} value={country}>{country}</option> ) }
 						</Field>
+
+						<Field 
+						name="username" 
+						component={renderField} 
+						label="Username" type="text"  />
+
 					</div>
 				</div>
 					{this.props.errorMessage}
-				<button disabled={submitting || pristine} type="submit" >Edit</button>
+				<button disabled={submitting} type="submit" >Edit</button>
 			</form>
 		);		
 	}
