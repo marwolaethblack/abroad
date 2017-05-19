@@ -8,7 +8,7 @@ var Authentication = require('../auth/controllers/authentication');
 var countries = require('../client/src/constants/countries');
 
 
-module.exports = function(notificationSocket) {
+module.exports = function() {
 	var router = express.Router();
 	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
@@ -118,20 +118,6 @@ module.exports = function(notificationSocket) {
 		}
 	});
 
-
-
-	router.get('/api/user/notifications', function(req,res) {
-		UserModel.findById(req.query.id)
-			    .populate({path: 'notifications', options: {limit: 20, lean: true, sort:{'createdAt': -1}}})
-				.exec(function(err, user) {
-			if(err || !user) {
-				console.log(err);
-				return res.status(422).send({error:err});
-			}
-			res.json(user.notifications);
-
-		});
-	});
 
 	return router;
 }

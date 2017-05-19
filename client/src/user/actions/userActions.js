@@ -32,21 +32,3 @@ export function editUser(userInfo) {
 	}
 }
 
-export function getNotifications(id) {
-	return function(dispatch) {
-		return axios.get('/api/user/notifications', {params: {id} })
-			.then(resp => {
-				dispatch({type: ActionTypes.GET_NOTIFICATIONS, notifications: resp.data});
-			})
-			.catch(err => {
-				dispatch({type: ActionTypes.GET_NOTIFICATIONS_ERROR, message: err.message});
-			});
-	}
-}
-
-export function socketNotificationsUpdate(notification) {
-	return function(dispatch) {
-		dispatch({type:ActionTypes.NOTIFICATIONS_UPDATE, notification});
-	}
-}
-

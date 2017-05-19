@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { ActionTypes } from '../../constants/actionTypes';
-import { getNotifications } from '../../user/actions/userActions';
+import { getNotifications } from '../../notification/actions/notifActions';
 import { fbPromises } from '../social/fb';
 
 

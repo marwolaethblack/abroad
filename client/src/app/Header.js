@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { signoutUser } from '../authentication/actions/authentication';
-import { getNotifications, socketNotificationsUpdate } from '../user/actions/userActions';
+import { getNotifications, socketNotificationsUpdate, notificationsWereSeen } from '../notification/actions/notifActions';
 import io from 'socket.io-client';
 
 
@@ -22,8 +22,11 @@ class Header extends Component {
     router: React.PropTypes.object.isRequired
   };
 
+
+
   renderLinks() {
     if(this.props.authenticated) {
+    let unseenNotifications = this.props.notifications.filter(notif => !notif.seen);
       //show a link to sign out
     return [ 
     <li className="navigation-link" key={3}>
@@ -32,7 +35,7 @@ class Header extends Component {
     <li className="navigation-link" key={4} onClick={this.toggleNotifications}>
       <div id="notifications-icon">
         <i className="fa fa-bell" aria-hidden="true"></i>
-        <span id="notifications-number">{ this.props.notifications.length }</span>
+        <span id="notifications-number">{ unseenNotifications.length }</span>
       </div>
     </li>,
     <li className="navigation-link" key={2}>
@@ -57,7 +60,7 @@ class Header extends Component {
   }
 
   renderNotifications(){
-    let notifications = <li> No new notifications </li>;
+    let notifications;
 
     if(this.props.notifications.length > 0){
       notifications = this.props.notifications.map((notification,i) => {
@@ -70,10 +73,12 @@ class Header extends Component {
           </li>
         )
       });
+    } else {
+       notifications = <li> No new notifications </li>;
     }
   
     return <ul> { notifications } </ul>;
-  }
+ }
   
   componentWillMount() {
     if(this.props.authenticated) {
@@ -98,9 +103,22 @@ class Header extends Component {
     });
   }
 
+  unseenNotificationsExist = (notifications) => {
+    for(let n of notifications){
+      if(!n.seen){
+        return true;
+      }
+    }
+    return false;
+  }
+
   toggleNotifications = () => {
     this.setState(prevState => {
-        return { showNotifications: !prevState.showNotifications }
+      if(!prevState.showNotifications && this.unseenNotificationsExist(this.props.notifications)){
+        this.props.notificationsSeen(this.props.notifications, this.props.id);
+      }
+
+      return { showNotifications: !prevState.showNotifications }
     });
   }
 
@@ -166,6 +184,10 @@ function mapDispatchToProps(dispatch) {
 
     updateNotifications(notification) {
       dispatch(socketNotificationsUpdate(notification));
+    },
+
+    notificationsSeen(notifs, userId){
+      dispatch(notificationsWereSeen(notifs, userId));
     }
   }
 }

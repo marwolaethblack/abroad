@@ -68,11 +68,13 @@ var UserRoutes = require('./routes/user')(notificationSocket);
 var PostRoutes = require('./routes/posts')(postSocket);
 var CommentRoutes = require('./routes/comments')(postSocket, notificationSocket);
 var AuthenticationRoutes = require('./routes/auth')(notificationSocket);
+var NotificationRoutes = require('./routes/notifications')(notificationSocket);
 
 app.use(PostRoutes);
 app.use(UserRoutes);
 app.use(CommentRoutes);
 app.use(AuthenticationRoutes);
+app.use(NotificationRoutes);
 
 
 

@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 
 const notificationSchema = new mongoose.Schema({
-  createdAt: { type: Date, expires: 60*60*24*14, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
   postId: {
          type: mongoose.Schema.Types.ObjectId,
          ref: "Post"
     },
-  text: String
+  text: String,
+  seen: { type: Boolean, default: false, required: true }
   
 });
 
