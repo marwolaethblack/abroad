@@ -12,6 +12,7 @@ import UserPageContainer from './user/containers/UserPageContainer';
 import MyProfileContainer from './user/containers/MyProfileContainer';
 import EditUserProfile from './user/containers/EditUserProfile';
 import NewPostPage from './post/containers/NewPostPage';
+import Notifications from './notification/containers/Notifications';
 import NotFoundPage from './app/NotFoundPage';
 
 
@@ -43,6 +44,7 @@ ReactDOM.render(
         <Route path="user/:id(/:username)" component={UserPageContainer} />
         <Route path="my-profile" component={RequireAuth(MyProfileContainer)} />
         <Route path="my-profile/edit" component={RequireAuth(EditUserProfile)} />
+        <Route path="notifications" component={RequireAuth(Notifications)} />
         <Route path="signin" component={Signin} />
         <Route path="signup" component={Signup} />
         <Route path="*" component={NotFoundPage} />

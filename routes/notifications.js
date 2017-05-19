@@ -9,9 +9,13 @@ module.exports = function(notificationSocket) {
 	var router = express.Router();
 	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
-	router.get('/api/user/notifications', requireAuth, function(req,res) {
+	router.get('/api/notifications', requireAuth, function(req,res) {
+		
+		//number of returned notifications;
+		const limit = req.query.limit || 0;
+
 		UserModel.findById(req.query.id)
-			    .populate({path: 'notifications', options: {limit: 20, lean: true, sort:{'createdAt': -1}}})
+			    .populate({path: 'notifications', options: {limit, lean: true, sort:{'createdAt': -1}}})
 				.exec(function(err, user) {
 			if(err || !user) {
 				console.log(err);

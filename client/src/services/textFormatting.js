@@ -32,3 +32,12 @@ export const newLineToBreak = (text) => {
 	  return <span key={key}>{item}<br/></span>
 	});
 }
+
+export const formatDate = (date) => {
+	
+	//convert dateTime to String
+	date = "" + new Date(date);
+	//date example: Fri May 19 2017 22:17:18 GMT+0200 (Stredoeurópsky čas (letný))
+	const index = date.lastIndexOf("GMT");
+	return date.substr(0,index-1);
+}

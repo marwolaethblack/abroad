@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { signoutUser } from '../authentication/actions/authentication';
-import { getNotifications, socketNotificationsUpdate, notificationsWereSeen } from '../notification/actions/notifActions';
+import { getLatestNotifications, socketNotificationsUpdate, notificationsWereSeen } from '../notification/actions/notifActions';
 import io from 'socket.io-client';
 
 
@@ -26,7 +26,11 @@ class Header extends Component {
 
   renderLinks() {
     if(this.props.authenticated) {
-    let unseenNotifications = this.props.notifications.filter(notif => !notif.seen);
+    let unseenNotifications = [];
+    if(this.props.notifications.length > 0){
+       unseenNotifications = this.props.notifications.filter(notif => !notif.seen);
+    }
+     
       //show a link to sign out
     return [ 
     <li className="navigation-link" key={3}>
@@ -63,11 +67,11 @@ class Header extends Component {
     let notifications;
 
     if(this.props.notifications.length > 0){
-      notifications = this.props.notifications.map((notification,i) => {
+      notifications = this.props.notifications.slice(0,5).map((notification,i) => {
         return (
           <li key={i}> { notification.text } 
             { notification.postId && <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
-                >>> 
+                &nbsp;>>> 
               </Link> 
             }
           </li>
@@ -77,12 +81,17 @@ class Header extends Component {
        notifications = <li> No new notifications </li>;
     }
   
-    return <ul> { notifications } </ul>;
+    return (
+      <ul>
+        { notifications }
+        <li><Link to="/notifications" onClick={this.toggleNotifications}>See all -></Link></li>
+      </ul>
+    );
  }
   
   componentWillMount() {
     if(this.props.authenticated) {
-      this.props.fetchNotif(this.props.id);
+      this.props.fetchLatestNotif(this.props.id);
       notifSocket.emit('room', this.props.id);
       notifSocket.on('new notification', (payload) => {
         this.props.updateNotifications(payload)
@@ -168,7 +177,7 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     id: state.auth.id,
     filter: state.filter,
-    notifications: state.notifications,
+    notifications: state.notifications.latest
   }
 }
 
@@ -177,9 +186,9 @@ function mapDispatchToProps(dispatch) {
     signout(notifSocket) {
       dispatch(signoutUser(notifSocket));
     },
-
-    fetchNotif(id) {
-      dispatch(getNotifications(id));
+    //fetch only the first 5 notifications
+    fetchLatestNotif(id) {
+      dispatch(getLatestNotifications(id,5));
     },
 
     updateNotifications(notification) {

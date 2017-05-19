@@ -2,12 +2,25 @@ import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 
 
-export function getNotifications(userId) {
+export function getNotificationsOnPage(userId, limit=0) {
 	return function(dispatch) {
-		return axios.get('/api/user/notifications', {params: {id: userId},
+		return axios.get('/api/notifications', {params: {id: userId, limit},
 		 headers: {authorization: localStorage.getItem('token')} })
 			.then(resp => {
 				dispatch({type: ActionTypes.GET_NOTIFICATIONS, notifications: resp.data});
+			})
+			.catch(err => {
+				dispatch({type: ActionTypes.GET_NOTIFICATIONS_ERROR, message: err.message});
+			});
+	}
+}
+
+export function getLatestNotifications(userId, limit=0) {
+	return function(dispatch) {
+		return axios.get('/api/notifications', {params: {id: userId, limit},
+		 headers: {authorization: localStorage.getItem('token')} })
+			.then(resp => {
+				dispatch({type: ActionTypes.GET_LATEST_NOTIFICATIONS, notifications: resp.data});
 			})
 			.catch(err => {
 				dispatch({type: ActionTypes.GET_NOTIFICATIONS_ERROR, message: err.message});

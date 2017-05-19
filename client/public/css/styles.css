@@ -191,6 +191,24 @@ header #notifications ul li:nth-child(even) {
 }
 
 
+/*NOTIFICATIONS PAGE*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+
+#all-notifications ul {
+	list-style-type: none;
+}
+
+#all-notifications ul li {
+	display: flex;
+	flex-direction: column;
+	border-bottom: 1px solid #a4a0a0;
+}
+
+
 /*FRONT PAGE*/
 /*+++++++++++++++++++++++++++++*/
 /*+++++++++++++++++++++++++++++*/
