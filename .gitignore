@@ -1,6 +1,7 @@
 cra-server-ex.graffle
 node_modules
 npm-debug.log
+*.log
 client/build
 config.js
 auth/config/
