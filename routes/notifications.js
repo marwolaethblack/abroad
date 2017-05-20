@@ -9,20 +9,49 @@ module.exports = function(notificationSocket) {
 	var router = express.Router();
 	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
-	router.get('/api/notifications', requireAuth, function(req,res) {
+	//LATEST NOTIFICATIONS
+	router.get('/api/notifications-latest', requireAuth, (req,res) => {
 		
 		//number of returned notifications;
-		const limit = req.query.limit || 0;
+		const limit = req.query.limit || 5;
 
 		UserModel.findById(req.query.id)
 			    .populate({path: 'notifications', options: {limit, lean: true, sort:{'createdAt': -1}}})
-				.exec(function(err, user) {
+				.exec((err, user) => {
+					if(err || !user) {
+						console.log(err);
+						return res.status(422).send({error:err});
+					}
+					res.json(user.notifications);
+				});
+	});
+
+
+	//NOTIFICATIONS WITH PAGINATION
+	router.get('/api/notifications-paginate', requireAuth, (req,res) => {
+	
+		//number of returned notifications;
+		//limit and page must be int
+		const limit = req.query.limit*1 || 15;
+		const page = req.query.page*1 || 1;
+
+		UserModel.findById(req.query.id, (err,user) => {
+
 			if(err || !user) {
 				console.log(err);
 				return res.status(422).send({error:err});
 			}
-			res.json(user.notifications);
 
+			NotificationModel.paginate(
+				{ _id:{ $in: user.notifications }},
+				{ page, limit, sort: { createdAt: -1 }},
+				(err, result) => {
+					if(err) {
+						console.log(err);
+						return res.status(422).send({error:err});
+					}
+					res.json(result);
+			});
 		});
 	});
 

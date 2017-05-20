@@ -165,6 +165,8 @@ header #notifications {
 
 header #notifications ul {
 	margin-top: 4em;
+	max-height: 70vh;
+	overflow-y: scroll;
 }
 
 header #notifications ul li {
@@ -202,10 +204,43 @@ header #notifications ul li:nth-child(even) {
 	list-style-type: none;
 }
 
-#all-notifications ul li {
+#all-notifications .notif-content li {
 	display: flex;
 	flex-direction: column;
 	border-bottom: 1px solid #a4a0a0;
+}
+
+#all-notifications .loader {
+	display: inline-block;
+}
+
+#all-notifications .pagination ul {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+#all-notifications .pagination ul li{
+	font-size: 2em;
+	padding: 1%;
+	margin: 2%;
+}
+
+#all-notifications .pagination ul li.active{
+	border-bottom: 1px solid #817f7f;
+}
+
+@media (min-width: 600px) {
+
+	#all-notifications .pagination ul {
+		justify-content: left;
+	}
+
+	#all-notifications .pagination ul li{
+		font-size: 1.5em;
+		padding: 1%;
+		margin: 0;
+	}
 }
 
 

@@ -2,12 +2,16 @@ import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 
 
-export function getNotificationsOnPage(userId, limit=0) {
+export function getNotificationsOnPage(userId, page=1, limit=15) {
 	return function(dispatch) {
-		return axios.get('/api/notifications', {params: {id: userId, limit},
+
+		dispatch({type: ActionTypes.GET_NOTIFICATIONS_START});
+
+		return axios.get('/api/notifications-paginate', {params: {id: userId, page, limit},
 		 headers: {authorization: localStorage.getItem('token')} })
 			.then(resp => {
-				dispatch({type: ActionTypes.GET_NOTIFICATIONS, notifications: resp.data});
+				dispatch({type: ActionTypes.GET_NOTIFICATIONS, notifications: resp.data.docs, pages: resp.data.pages});
+				dispatch({type: ActionTypes.RECEIVED_NOTIFICATIONS});
 			})
 			.catch(err => {
 				dispatch({type: ActionTypes.GET_NOTIFICATIONS_ERROR, message: err.message});
@@ -15,9 +19,9 @@ export function getNotificationsOnPage(userId, limit=0) {
 	}
 }
 
-export function getLatestNotifications(userId, limit=0) {
+export function getLatestNotifications(userId, limit=5) {
 	return function(dispatch) {
-		return axios.get('/api/notifications', {params: {id: userId, limit},
+		return axios.get('/api/notifications-latest', {params: {id: userId, limit},
 		 headers: {authorization: localStorage.getItem('token')} })
 			.then(resp => {
 				dispatch({type: ActionTypes.GET_LATEST_NOTIFICATIONS, notifications: resp.data});

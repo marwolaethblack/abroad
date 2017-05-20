@@ -29,15 +29,47 @@ class Notifications extends Component {
        notifications = <li> No notifications yet. </li>;
     }
   
-    return <ul> { notifications } </ul>;
- }
+    return <ul className="notif-content"> { notifications } </ul>;
+  }
+
+  renderPaginaton(){
+    const { location } = this.props;
+    let pages = this.props.notifPages;
+    let pagination = [];
+
+    const isActive = (pageNo) => {
+      const { page } = location.query;
+      return ((page == pageNo) || (!page && pageNo == 1));
+    }
+
+    if(pages){
+      for(let pageNo=1; pageNo<=pages; pageNo++){
+        pagination[pageNo] = (
+          <li key={pageNo} className={(isActive(pageNo)) ? 'active' : ''}>
+            <Link to={`/notifications?page=${pageNo}`}>{pageNo}</Link>
+          </li>
+        ) 
+      }
+    }
+    return <ul> { pagination } </ul>
+  }
   
   componentWillMount() {
-    if(this.props.authenticated) {
-      this.props.fetchNotif(this.props.id,20);
+    const { authenticated, location, userId, fetchNotif } = this.props;
+
+    if(authenticated) {
+      let page = location.query.page || 1;
+      fetchNotif(userId, page);
     }
   }
 
+  componentWillUpdate(prevProps){
+    const { location, userId, fetchNotif } = this.props;
+
+    if(prevProps.location.query.page !== location.query.page){
+      fetchNotif(userId, location.query.page);
+    }
+  }
 
   render() {
     const { authenticated } = this.props;
@@ -46,6 +78,10 @@ class Notifications extends Component {
         {authenticated &&
           <div id="all-notifications">
             { this.renderNotifications() }
+            <span className="loader">{ this.props.loading && 'loading...' }</span>
+            <div className="pagination">
+              { this.renderPaginaton() }
+            </div>
           </div>
         }
       </section>
@@ -57,16 +93,20 @@ class Notifications extends Component {
 function mapStateToProps(state) {
   return {
     authenticated: state.auth.authenticated,
-    id: state.auth.id,
+    userId: state.auth.id,
     filter: state.filter,
     notifications: state.notifications.onPage,
+    notifPages: state.notifications.pages,
+    loading: state.isFetching.notifications
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return { 
-    fetchNotif(userId) {
-      dispatch(getNotificationsOnPage(userId,20));
+    fetchNotif(userId,page) {
+      //3rd param in getNotificationsOnPage
+      //is a number of notifications per page
+      dispatch(getNotificationsOnPage(userId,page,2));
     }
   }
 }

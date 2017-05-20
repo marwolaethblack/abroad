@@ -29,6 +29,12 @@ export const loading = (state=false, action) => {
         case AT.EDIT_USER_ERROR: {
             return {...state, users: false}
         }
+        case AT.GET_NOTIFICATIONS_START: {
+            return { ...state, notifications: true }
+        }
+        case AT.RECEIVED_NOTIFICATIONS: {
+            return { ...state, notifications: false}
+        }
         default:
             return state;
     }

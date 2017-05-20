@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import paginate from 'mongoose-paginate';
 
 const notificationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
@@ -11,6 +12,7 @@ const notificationSchema = new mongoose.Schema({
   
 });
 
-
+//add the paginate function to notificationSchema
+notificationSchema.plugin(paginate);
 
 module.exports = mongoose.model("Notification", notificationSchema);

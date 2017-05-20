@@ -27,7 +27,7 @@ class Header extends Component {
   renderLinks() {
     if(this.props.authenticated) {
     let unseenNotifications = [];
-    if(this.props.notifications.length > 0){
+    if(this.props.notifications && this.props.notifications.length > 0){
        unseenNotifications = this.props.notifications.filter(notif => !notif.seen);
     }
      
@@ -66,7 +66,7 @@ class Header extends Component {
   renderNotifications(){
     let notifications;
 
-    if(this.props.notifications.length > 0){
+    if(this.props.notifications && this.props.notifications.length > 0){
       notifications = this.props.notifications.slice(0,5).map((notification,i) => {
         return (
           <li key={i}> { notification.text } 
