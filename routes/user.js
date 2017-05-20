@@ -1,6 +1,4 @@
 var UserModel = require('../models/User');
-var CommentModel = require('../models/Comment');
-var PostModel = require('../models/Post');
 var NotificationModel = require('../models/Notification');
 var express = require('express');
 var passport = require('passport');

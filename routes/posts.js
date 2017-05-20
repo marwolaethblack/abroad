@@ -109,7 +109,11 @@ module.exports = (postSocket) => {
 		}
 
 		var loadPosts = function(filterQuery, sortQuery={ _id:-1 }, skip=0, limit=4){
-			PostModel.find(filterQuery).sort(sortQuery).limit(limit).skip(skip).lean().exec(function(err,posts) {
+			PostModel.find(filterQuery)
+			.populate({path: 'author', options: {lean: true, select: '_id username'}})
+			.sort(sortQuery)
+			.limit(limit)
+			.skip(skip).lean().exec(function(err,posts) {
 					if(err){
 						console.log(err);
 					} else {
@@ -155,7 +159,10 @@ module.exports = (postSocket) => {
 			socket.join(roomId);
 		});
 
-		PostModel.findById(req.query.id).populate({path: 'comments', options: {lean: true}}).exec(function(err, singlePost){
+		PostModel.findById(req.query.id)
+		.populate({path: 'comments', options: {lean: true}})
+		.populate({path: 'author', options: {lean: true, select: '_id username'}})
+		.exec(function(err, singlePost){
 			if(err){
 				console.log(err);
 				res.status(500).send({error:err});
@@ -171,6 +178,7 @@ module.exports = (postSocket) => {
 	
 		if(req.query){
 			var postsIds = Object.values(req.query);
+			postsIds = Array.isArray(postsIds) ? postsIds : [postsIds];
 
 			PostModel.find({
 		    	_id: { $in: postsIds }
@@ -191,14 +199,11 @@ module.exports = (postSocket) => {
 	router.post('/api/addPost', requireAuth, function(req,res) {
 
 		var newPost = req.body.newPost;
-		var _id = req.user._id;
+		var userId = req.user._id;
 		var username = req.user.username;
 		
 		if(newPost){
-			newPost.author = {
-				id: _id,
-				username
-			}
+			newPost.author = { _id : userId}
 			newPost.image = "https://placehold.it/350x150";
 
 			var post = new PostModel(newPost);
@@ -206,7 +211,7 @@ module.exports = (postSocket) => {
 			post.save(function(err,newPost) {
 				if(err) console.log(err);
 
-			UserModel.findById(_id, function(err, foundAuthor) {
+			UserModel.findById(userId, function(err, foundAuthor) {
 				if(err) {
 					return res.status(422).send({error:err});
 				}
@@ -225,11 +230,11 @@ module.exports = (postSocket) => {
 	router.put('/api/editPost', requireAuth, function(req,res) {
 
 		var postInfo = req.body.postInfo;
-		var _id = req.user._id;
+		var userId = req.user._id;
 		var username = req.user.username;
 
 		if(Object.keys(postInfo).length){
-			if(JSON.stringify(postInfo.authorId) === JSON.stringify(_id)) {		
+			if(JSON.stringify(postInfo.authorId) === JSON.stringify(userId)) {		
 				
 				//update a post and return the edited post
 				PostModel.findOneAndUpdate(
@@ -237,7 +242,7 @@ module.exports = (postSocket) => {
 					postInfo.editedFields, 
 					{new: true}
 				)
-				.populate("comments")
+				// .populate({path: ['comments','author.id'], options: {lean: true}})
 				.exec(function(err,editedPost) {
 						if(err) console.log(err);
 						res.json(editedPost);
@@ -258,7 +263,7 @@ module.exports = (postSocket) => {
 			if(err) {
 				console.log(err);
 			}
-			if(JSON.stringify(foundPost.author.id) === JSON.stringify(_id)) {
+			if(JSON.stringify(foundPost.author._id) === JSON.stringify(_id)) {
 				PostModel.findOneAndRemove({ _id: postId }, function(err) {
 					 if(err) console.log(err);
 				});

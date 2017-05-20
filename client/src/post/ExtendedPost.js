@@ -104,7 +104,7 @@ class ExtendedPost extends Component {
                title="EDIT POST">
 
           <EditPostForm postId={_id} 
-            authorId={author.id} 
+            authorId={author._id} 
             editPost={editPost}
             onSubmitted={this.closeEditPostModal}
             postContent={content} />
@@ -122,12 +122,12 @@ class ExtendedPost extends Component {
             <img alt={title} src={image}/>
             <h1>{title}</h1>
             <p>{country_from + " > " + country_in}</p>
-            <span>Submitted {datePosted} ago by <Link to={`/user/${author.id}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
+            <span>Submitted {datePosted} ago by <Link to={`/user/${author._id}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
               { newLineToBreak(content) }
             </section>
-        { loggedUserId === author.id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
-        { loggedUserId === author.id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
+        { loggedUserId === author._id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
+        { loggedUserId === author._id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
             <section className="post-comments">
               <p>{comments.length + " comments"}</p>
               {authenticated ? <AddComment /> : <Link to="/signin">Sign in to add a comment.</Link>}

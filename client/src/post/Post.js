@@ -16,7 +16,7 @@ class Post extends Component {
 	        	<Link to={`/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`}><h3>{title}</h3></Link>
 	        	<span>
                     Submitted {datePosted} ago by 
-                    {author !== undefined && <Link to={`/user/${author.id}/${spaceToDash(author.username)}`}>{author.username}</Link>}
+                    {author !== undefined && <Link to={`/user/${author.id}/${spaceToDash(author.username)}`}> {author.username} </Link>}
                     to {category}
                 </span>
 	        	<p>Comments: {comments !== undefined&& comments.length}</p>

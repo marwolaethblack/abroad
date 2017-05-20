@@ -72,7 +72,7 @@ module.exports = function(postSocket, notificationSocket) {
 
 								if(fComment.author.username !== user.username) {
 
-										UserModel.findById(fComment.author.id, function(err, fUser) {
+										UserModel.findById(fComment.author._id, function(err, fUser) {
 										var notifText = user.username + " has replied to your comment in post: " + foundPost.title;
 										var newNotif = new NotificationModel({
 											postId: foundPost._id,
@@ -89,7 +89,7 @@ module.exports = function(postSocket, notificationSocket) {
 
 								if(user.username !== foundPost.author.username) {
 
-									UserModel.findById(foundPost.author.id, function(err, fUser) {
+									UserModel.findById(foundPost.author._id, function(err, fUser) {
 										var notifText = user.username + " has commented on your post: " + foundPost.title;
 										var newNotif = new NotificationModel({
 											postId: foundPost._id,
@@ -150,7 +150,7 @@ module.exports = function(postSocket, notificationSocket) {
 
 							if(user.username !== foundPost.author.username) {
 
-								UserModel.findById(foundPost.author.id, function(err, fUser) {
+								UserModel.findById(foundPost.author._id, function(err, fUser) {
 									var notifText = user.username + " has commented on your post: " + foundPost.title;
 									var newNotif = new NotificationModel({
 										postId: foundPost._id,
@@ -216,7 +216,7 @@ module.exports = function(postSocket, notificationSocket) {
 			if(err) {
 				console.log(err);
 			}
-			if(JSON.stringify(foundComment.author.id) === JSON.stringify(_id)) {
+			if(JSON.stringify(foundComment.author._id) === JSON.stringify(_id)) {
 				CommentModel.findByIdAndRemove(commentId, (err) => {
 					if(err) {
 						console.log(err);

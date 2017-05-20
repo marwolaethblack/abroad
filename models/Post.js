@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const CommentModel = require('./Comment');
+const UserModel = require('./User');
 
 const postSchema = new mongoose.Schema({
    country_from: String,
@@ -7,12 +8,9 @@ const postSchema = new mongoose.Schema({
    city: String,
    title: String,
    author: {
-         id: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-         },
-         username: String
-    },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+   }, 
    category: String,
    content: String,
    image: String,

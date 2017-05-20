@@ -63,11 +63,11 @@ class Notifications extends Component {
     }
   }
 
-  componentWillUpdate(prevProps){
+  componentWillUpdate(nextProps){
     const { location, userId, fetchNotif } = this.props;
 
-    if(prevProps.location.query.page !== location.query.page){
-      fetchNotif(userId, location.query.page);
+    if(nextProps.location.query.page !== location.query.page){
+      fetchNotif(userId, nextProps.location.query.page);
     }
   }
 
@@ -106,7 +106,7 @@ function mapDispatchToProps(dispatch) {
     fetchNotif(userId,page) {
       //3rd param in getNotificationsOnPage
       //is a number of notifications per page
-      dispatch(getNotificationsOnPage(userId,page,2));
+      dispatch(getNotificationsOnPage(userId,page,5));
     }
   }
 }
