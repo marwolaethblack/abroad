@@ -65,7 +65,7 @@ class AllPosts extends Component {
     const { loadedPosts } = this.state;
 
     if(loadedPosts.length === 0 && !isFetching.posts) 
-      return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
+      return <span style={{color:"red", fontSize:"2em"}}>Change filter and try again.</span>
 
     return (
      <div className="posts-page container" style={{height:"auto"}}>

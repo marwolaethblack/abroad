@@ -2,10 +2,22 @@ import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { beautifyUrlSegment, spaceToDash } from '../../services/textFormatting';
+import { getUserCountryCode }  from '../../services/userLocation';
+import countries from '../../constants/countries'
+
+
+const getCountryIn = () => {
+        return new Promise((resolve, reject) => {
+            getUserCountryCode().then(countryCode => {
+                if(countries[countryCode]){
+                    resolve(countries[countryCode]);
+                }
+                reject();
+            });
+        });
+}
 
 export const fetchPosts = filter => dispatch => {
-    
-    dispatch({ type: ActionTypes.FETCH_POSTS });
 
     let category = [];
     if(filter.category !== undefined){
@@ -13,8 +25,14 @@ export const fetchPosts = filter => dispatch => {
             category = Array.isArray(filter.category) ? [...filter.category] : filter.category;
         }
     }
-    
-    axios.get('/api/posts',{params:{...filter,category}})
+
+    if(!filter.country_from){
+        filter.country_from = "Slovakia";
+    }
+
+    //actual fetching
+    const receivePosts = (filterChange) => {
+        axios.get('/api/posts',{params:{...filter, ...filterChange, category }})
         .then(resp => {
             dispatch({
                 type: ActionTypes.RECEIVED_POSTS,
@@ -30,6 +48,20 @@ export const fetchPosts = filter => dispatch => {
                 message: err
             });
         });
+    }
+    
+    
+    dispatch({ type: ActionTypes.FETCH_POSTS });
+
+    if(!filter.country_in){
+        getCountryIn().then(country_in => {
+            receivePosts({ country_in });
+        }).catch(()=>{
+            receivePosts({ country_in: 'Denmark' });
+        });
+    } else {
+        receivePosts();
+    }  
 };
 
 //Gets posts related to a currently open post
@@ -101,6 +133,10 @@ export const fetchPostsByIds = (Ids, page=1, limit=5) => dispatch => {
 export const addPost = (newPost) => (dispatch) =>{
 
     dispatch({type:ActionTypes.ADDING_POST});
+
+    Object.values(newPost).foreach(postValue => {
+        postValue.trim();
+    });
 
     axios.post('/api/addPost',
               { newPost }, 

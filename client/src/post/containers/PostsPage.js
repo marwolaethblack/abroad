@@ -7,8 +7,8 @@ import SearchFilter from '../../filter/SearchFilter';
 import SortFilter from '../../filter/SortFilter';
 import AllPosts from '../../post/AllPosts';
 import { getUserCountryCode }  from '../../services/userLocation';
-import categories from '../../constants/categories'
-import countries from '../../constants/countries'
+import categories from '../../constants/categories';
+import countries from '../../constants/countries';
 
 
 class PostsPage extends Component {
