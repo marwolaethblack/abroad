@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const CommentModel = require('./Comment');
 const UserModel = require('./User');
+import paginate from 'mongoose-paginate';
 
 const postSchema = new mongoose.Schema({
    country_from: String,
@@ -32,6 +33,9 @@ postSchema.post('findOneAndRemove', (deletedPost) => {
       });
    }  
 });
+
+//add the paginate function to postSchema
+postSchema.plugin(paginate);
 
 const ModelClass = mongoose.model("Post", postSchema);
 

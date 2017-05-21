@@ -25,7 +25,7 @@ import categories from '../constants/categories';
 
   const validate = (values) => {
     const { title, country_from, country_in, category, content } = values;
-    const errors = {};
+    let errors = {};
 
       if(isInputEmpty(title)){
         errors.title = "required field";

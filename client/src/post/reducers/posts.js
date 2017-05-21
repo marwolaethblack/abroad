@@ -1,15 +1,15 @@
 import { ActionTypes } from '../../constants/actionTypes';
 
-export const posts = (state=[],action) => {
+export const posts = (state={data:[], pages:0},action) => {
     switch (action.type) {
         case ActionTypes.RECEIVED_POSTS: {
-            return action.posts;
+            return {...state, data:action.posts};
         }
         case ActionTypes.RECEIVED_POSTS_BY_IDS: {
-            return action.posts;
+            return {...state, data:action.posts, pages: action.pages};
         }
         case ActionTypes.POST_ADDED: {
-            return [...state, action.newPost];
+            return {...state, data:[...state.data,action.newPost]};
         }
         default:
             return state;

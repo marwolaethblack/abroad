@@ -76,7 +76,7 @@ class PostsPage extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  posts: state.posts,
+  posts: state.posts.data,
   stateQuery: state.filter,
   isFetching: state.isFetching
 });
@@ -101,7 +101,6 @@ PostsPage.propTypes = {
     country_in: PropTypes.string.isRequired,
     upvotes: PropTypes.number.isRequired,
     image: PropTypes.string,
-    author: PropTypes.object.isRequired,
     comments: PropTypes.array.isRequired
 
   }))

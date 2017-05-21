@@ -52,7 +52,7 @@ class FrontPage extends Component {
 
 const mapStateToProps = (state) => ({
   authenticated: state.auth.authenticated,
-  posts: state.posts,
+  posts: state.posts.data,
   filterQuery: state.filter //query used only for default filter
 });
 

@@ -1,70 +1,68 @@
 import React, { Component, PropTypes } from 'react';
 import RelatedPost from './RelatedPost';
-import InfiniteScroll from 'redux-infinite-scroll';
+import { Link } from 'react-router';
 
 class UsersPosts extends Component {
 
-  constructor(props){
-    super(props);
-    this.handlePostsLoadOnScroll = this.handlePostsLoadOnScroll.bind(this);
-    this.state = {
-      loadedPosts:[],
-      allPostsAreLoaded:false
+  componentWillMount() {
+    const { location, postsIds, loadUsersPosts } = this.props;
+
+      let page = location.query.page || 1;
+      //3rd parameter => limit
+      loadUsersPosts(postsIds, page, 3);
+  }
+
+  componentWillUpdate(nextProps){
+    const { location, postsIds, loadUsersPosts } = this.props;
+
+    if(nextProps.location.query.page !== location.query.page){
+      loadUsersPosts(postsIds, nextProps.location.query.page,3);
     }
   }
 
-//how many posts are loaded per one load in the infinite scroller
-  postsPerLoad = 2;
+  renderPaginaton(){
+    const { location } = this.props;
+    let pages = this.props.postsPages;
+    let pagination = [];
 
-  arraysAreEqual = (arr1, arr2) => 
-    arr1.length === arr2.length && arr1.every((element, index) => element === arr2[index] );
-
-  componentDidUpdate(prevProps){
-    if(!this.arraysAreEqual(prevProps.usersPosts,this.props.usersPosts)) {
-      this.setState((prevState)=>({loadedPosts:[...prevState.loadedPosts,...this.props.usersPosts]}));
-      if(this.props.postsIds.length === this.state.loadedPosts.length){
-        this.setState({allPostsAreLoaded: true});
-      } 
+    const isActive = (pageNo) => {
+      const { page } = location.query;
+      return ((page == pageNo) || (!page && pageNo == 1));
     }
+
+    if(pages){
+      for(let pageNo=1; pageNo<=pages; pageNo++){
+        pagination[pageNo] = (
+          <li key={pageNo} className={(isActive(pageNo)) ? 'active' : ''}>
+            <Link to={`${location.pathname}?page=${pageNo}`}>{pageNo}</Link>
+          </li>
+        ) 
+      }
+    }
+    return <ul> { pagination } </ul>
   }
 
-  handlePostsLoadOnScroll(){
-
-    if(!this.state.allPostsAreLoaded && !this.props.isFetching.users){
-      const { loadedPosts } = this.state;
-  
-      const nextPostsIds = this.props.postsIds
-        .sort((a,b)=>{
-          if(a>b) return -1;
-          if(a<b) return 1;
-          return 0;
-        })
-        .slice(loadedPosts.length, loadedPosts.length+this.postsPerLoad);
-
-      this.props.loadUsersPosts(nextPostsIds);
-    }
-  }
   
   render() {
-    const { isFetching } = this.props;
-    const { loadedPosts } = this.state;
+    const { isFetching, usersPosts } = this.props;
 
     if(this.props.postsIds.length === 0) 
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
 
+    //RelatedPost components is used also for user's posts
     return (
-     <div className="users-posts" style={{height:"auto"}}>
+     <div className="users-posts">
         <h3>MY POSTS</h3>
-        <InfiniteScroll
-          loadingMore={isFetching.posts}
-          elementIsScrollable={false}
-          loadMore={this.handlePostsLoadOnScroll}
-          threshold={100} >
-          
-           {loadedPosts.map((post,index) => <RelatedPost key={post._id} {...post} />)}
-          
-        </InfiniteScroll>
+       
+          <div id="usersPosts">
+            {usersPosts.map((post,index) => <RelatedPost key={post._id} {...post} />)}
+            <span className="loader">{ this.props.isFetching.posts && 'loading...' }</span>
 
+            <div className="pagination">
+              { this.renderPaginaton() }
+            </div>
+          </div>
+          
      </div>
     )
   }

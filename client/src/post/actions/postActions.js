@@ -25,7 +25,6 @@ export const fetchPosts = filter => dispatch => {
              });
         })
         .catch(err => {
-            console.log(err);
             dispatch({
                 type: ActionTypes.FETCH_POSTS_ERROR,
                 message: err
@@ -43,7 +42,6 @@ const fetchRelatedPosts = singlePost => dispatch => {
             });
          })
          .catch(err => {
-            console.log(err);
             dispatch({
                 type: ActionTypes.FETCH_POSTS_ERROR,
                 message: err
@@ -67,7 +65,6 @@ export const fetchSinglePost = id => dispatch => {
             dispatch(fetchRelatedPosts(resp.data));
         })
         .catch(err => {
-            console.log(err);
             dispatch({
                 type: ActionTypes.FETCH_SINGLE_POST_ERROR,
                 message: err
@@ -76,20 +73,29 @@ export const fetchSinglePost = id => dispatch => {
 };
 
 //Get posts by array of post Ids
-export const fetchPostsByIds = Ids => dispatch => {
+//used to get user's posts for pagination
+export const fetchPostsByIds = (Ids, page=1, limit=5) => dispatch => {
 
     dispatch({ type: ActionTypes.FETCH_POSTS });
 
-    axios.get('/api/postsByIds',{params: Ids})
+    axios.get('/api/postsByIds',{params: {Ids, page, limit}})
         .then(resp => {
             dispatch({
-                type: ActionTypes.RECEIVED_POSTS,
-                posts: resp.data
+                type: ActionTypes.RECEIVED_POSTS_BY_IDS,
+                posts: resp.data.docs,
+                pages: resp.data.pages
             });
+
             dispatch({
                 type: ActionTypes.FETCH_POSTS_DONE
             });
         })
+        .catch(err => {
+            dispatch({
+                type: ActionTypes.FETCH_POSTS_ERROR,
+                message: err
+            });
+         });
 }
 
 export const addPost = (newPost) => (dispatch) =>{

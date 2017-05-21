@@ -3,9 +3,9 @@ import { Link } from 'react-router';
 import Post from '../post/Post';
 import UsersPosts from '../post/UsersPosts';
 
-export default function UserPage(props) {
+export default function MyProfilePage(props) {
 	const { username, image, country_in, country_from, comments, posts } = props.userData;
-	const { loadUsersPosts, usersPosts, isFetching} = props; 
+	const { loadUsersPosts, usersPosts, postsPages, isFetching, location} = props; 
 
 	return(
 		<section className="container main-page-content">
@@ -20,12 +20,13 @@ export default function UserPage(props) {
 			</figure>
 
 			<section>
-				<UsersPosts loadUsersPosts={loadUsersPosts} 
-				 postsIds={posts} 
+				<UsersPosts
+				 location={location} 
+				 loadUsersPosts={loadUsersPosts}
 				 usersPosts={usersPosts}
-				 isFetching={isFetching} 
-				 usersPosts={usersPosts} />
-
+				 postsPages={postsPages}
+				 postsIds={posts} 
+				 isFetching={isFetching} />
 			</section>
 		</section>
 	);

@@ -14,19 +14,22 @@ class MyProfileContainer extends Component {
 	}
 
 	render() {
-		const { user, usersPosts, authenticated, isFetching, myUserId } = this.props;
+		const { user, usersPosts, postsPages, authenticated, isFetching, myUserId } = this.props;
 		if(isFetching.users) {
 			return (<Loader />);
 		} else {
 			if(!user.userData) {
 				return(<h1 className="main-page-content">No user found</h1>)
 			}
-			return (<MyProfilePage {...user} 
-							  id={ myUserId }
-							  usersPosts={usersPosts} 
-							  authenticated={authenticated} 
-							  loadUsersPosts={this.props.getPostsByIds} 
-							  isFetching={isFetching} />
+			return (<MyProfilePage 
+					  {...user} 
+					  userId={ myUserId }
+					  usersPosts={usersPosts}
+					  postsPages={postsPages}
+					  location={this.props.location}
+					  authenticated={authenticated} 
+					  loadUsersPosts={this.props.getPostsByIds} 
+					  isFetching={isFetching} />
 			);
 		}
 	}
@@ -37,7 +40,8 @@ const mapStateToProps = (state) => {
 	return {
 		myUserId: state.auth.id,
 		user: state.user,
-		usersPosts: state.posts,
+		usersPosts: state.posts.data,
+		postsPages: state.posts.pages,
 		isFetching: state.isFetching,
 		authenticated: state.auth.authenticated
 	}
@@ -48,8 +52,8 @@ const mapDispatchToProps = (dispatch) => {
 		getUser(id) {
 			dispatch(fetchUser(id));
 		},
-		getPostsByIds(postsIds){
-			dispatch(fetchPostsByIds(postsIds))
+		getPostsByIds(postsIds,page,limit){
+			dispatch(fetchPostsByIds(postsIds,page,limit))
 		}
 	}
 }

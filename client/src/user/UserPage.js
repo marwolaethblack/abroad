@@ -5,7 +5,7 @@ import UsersPosts from '../post/UsersPosts';
 
 export default function UserPage(props) {
 	const { username, image, country_in, country_from, email, comments, posts, _id } = props.userData;
-	const { loadUsersPosts, usersPosts, isFetching} = props; //ID from the URL 
+	const { loadUsersPosts, usersPosts, postsPages, isFetching, location} = props; //ID from the URL 
 
 	return(
 		<section className="container main-page-content">
@@ -19,11 +19,13 @@ export default function UserPage(props) {
 			</figure>
 
 			<section>
-				<UsersPosts loadUsersPosts={loadUsersPosts} 
-				 postsIds={posts} 
+				 <UsersPosts
+				 location={location} 
+				 loadUsersPosts={loadUsersPosts}
 				 usersPosts={usersPosts}
+				 postsPages={postsPages}
+				 postsIds={posts} 
 				 isFetching={isFetching} />
-
 			</section>
 		</section>
 	);

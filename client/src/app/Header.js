@@ -43,7 +43,7 @@ class Header extends Component {
       </div>
     </li>,
     <li className="navigation-link" key={2}>
-      <Link to={"/my-profile"} activeClassName="active">Profile</Link>
+      <Link to={"/my-profile"} activeClassName="active">My Profile</Link>
     </li>,
     <li className="navigation-link" key={1}>
       <Link to="/" onClick={() => this.props.signout(notifSocket)}>Sign Out</Link>

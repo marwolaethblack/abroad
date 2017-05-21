@@ -61,6 +61,10 @@ class EditUserForm extends Component {
 			}
 		}
 
+		if(editedFields.username){
+			editedFields.username = editedFields.username.trim();
+		}
+
 		//if the user didn't change any info, redirect him back to his profile
 		if(userInfoChanged){
 			this.props.editUser({editedFields, userId:this.props.userInfo._id});

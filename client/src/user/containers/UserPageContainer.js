@@ -14,17 +14,20 @@ class UserPageContainer extends Component {
 	}
 
 	render() {
-		const { user, usersPosts, isFetching } = this.props;
+		const { user, usersPosts, isFetching, postsPages, getPostsByIds, location } = this.props;
 		if(isFetching.users) {
 			return (<Loader />);
 		} else {
 			if(!user.userData) {
 				return(<h1 className="main-page-content">No user found</h1>)
 			}
-			return (<UserPage {...user} 
-							  usersPosts={usersPosts} 
-							  loadUsersPosts={this.props.getPostsByIds} 
-							  isFetching={isFetching} />
+			return (<UserPage 
+						{...user}
+						usersPosts={usersPosts}
+						postsPages={postsPages} 
+						loadUsersPosts={getPostsByIds} 
+						location={location}
+						isFetching={isFetching} />
 			);
 		}
 	}
@@ -34,7 +37,8 @@ class UserPageContainer extends Component {
 const mapStateToProps = (state) => {
 	return {
 		user: state.user,
-		usersPosts: state.posts,
+		usersPosts: state.posts.data,
+		postsPages: state.posts.pages,
 		isFetching: state.isFetching,
 		authenticated: state.auth.authenticated
 	}
@@ -45,8 +49,8 @@ const mapDispatchToProps = (dispatch) => {
 		getUser(id) {
 			dispatch(fetchUser(id));
 		},
-		getPostsByIds(postsIds){
-			dispatch(fetchPostsByIds(postsIds))
+		getPostsByIds(postsIds,page,limit){
+			dispatch(fetchPostsByIds(postsIds,page,limit))
 		}
 	}
 }

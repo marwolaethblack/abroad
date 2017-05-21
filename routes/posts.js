@@ -175,20 +175,22 @@ module.exports = (postSocket) => {
 
 	// //Get posts by IDs
 	router.get('/api/postsByIds',function(req,res) {
-	
-		if(req.query){
-			var postsIds = Object.values(req.query);
+		if(req.query.Ids){
+			let postsIds = Object.values(req.query.Ids);
 			postsIds = Array.isArray(postsIds) ? postsIds : [postsIds];
 
-			PostModel.find({
-		    	_id: { $in: postsIds }
-		  	})
-		    .exec(function(err, foundPosts) {
-			  	if(err){
-			  		console.log(err);
-			  		res.status(500).send({error:err});
-			  	} 
-			  	res.json(foundPosts);
+			const page = req.query.page*1 || 1;
+			const limit = req.query.limit*1 || 10;
+
+		    PostModel.paginate(
+				{ _id: { $in: postsIds }},
+				{ page, limit, sort: { _id: -1 }},
+				(err, result) => {
+					if(err) {
+						console.log(err);
+						return res.status(422).send({error:err});
+					}
+					res.json(result);
 			});
 		}
 	});
@@ -200,7 +202,6 @@ module.exports = (postSocket) => {
 
 		var newPost = req.body.newPost;
 		var userId = req.user._id;
-		var username = req.user.username;
 		
 		if(newPost){
 			newPost.author = { _id : userId}
@@ -231,7 +232,6 @@ module.exports = (postSocket) => {
 
 		var postInfo = req.body.postInfo;
 		var userId = req.user._id;
-		var username = req.user.username;
 
 		if(Object.keys(postInfo).length){
 			if(JSON.stringify(postInfo.authorId) === JSON.stringify(userId)) {		
