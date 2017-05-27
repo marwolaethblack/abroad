@@ -41,7 +41,7 @@ class FrontPage extends Component {
     return (
       <div>
         <FrontPageTitle />
-        <div className="main-page-content">     
+        <div className="main-page-content">    
           <SimplePostFilter query={this.props.filterQuery} filterUpdate={this.props.updateFilterValue} />
           <FrontPagePosts posts={this.props.posts} />
         </div>

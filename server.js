@@ -10,6 +10,7 @@ var morgan = require('morgan');
 var passport = require('passport');
 
 
+
 app.set('port', (process.env.PORT || 3001));
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
@@ -18,8 +19,10 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(passport.initialize());
 app.use(express.static(__dirname + '/public'));
+app.use(express.static('./uploads'));
 app.use(cors());
-app.use(bodyParser.json({type: '*/*'}));
+// app.use(bodyParser.json({type: '*/*'}));
+// app.use(bodyParser.urlencoded({extended: true}))
 
 // mongoose.Promise = global.Promise; only if the browser-console shows promise Warning
 mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", function(err) {

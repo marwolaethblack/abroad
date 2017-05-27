@@ -22,6 +22,11 @@ ul {
 	width: 100%;
 }
 
+img.fileUploadPreview {
+	width: 100%;
+	height: auto;
+}
+
 #react-container>div {
 	display: flex;
 	flex-direction: column;
@@ -529,8 +534,9 @@ header #notifications ul li:nth-child(even) {
 /*-+-+-+-+-+-+-+-+-+-+-*/
 /*-+-+-+-+-+-+-+-+-+-+-*/
 
-.extended-post img{
-	max-width: 100%;
+
+.extended-post img.title-img{
+	width: 30%;
 }
 
 .extended-post-comment {

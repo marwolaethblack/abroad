@@ -4,11 +4,19 @@ var UserModel = require('../models/User');
 var express = require('express');
 var passport = require('passport');
 import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
+import { createFilePath } from '../services/fileUpload';
+import mkdirp from 'mkdirp';
+import multer from 'multer';
+
+
 
 
 module.exports = (postSocket) => {
 
 	var router = express.Router();
+
+	// //destination to the folder with uploaded files
+	// var upload = multer({ 'dest': __dirname+'/uploads/posts' });
 		
 	router.get('/api/posts', function(req,res){
 
@@ -198,14 +206,60 @@ module.exports = (postSocket) => {
 	//Add a new post
 	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
-	router.post('/api/addPost', requireAuth, function(req,res) {
+	// configuring Multer to use files directory for storing files
+	const storage =   multer.diskStorage({
+	  destination: function (req, file, callback) {
+	  	const dir = './uploads/posts/'+createFilePath(file.originalname);
+	  	mkdirp(dir, function (err) {
+		    if (err){
+		    	console.error(err);
+		    } 
+		    else {
+		    	callback(null, dir);
+		    }
+		});
+	  },
+	  filename: function (req, file, callback) {
+	    callback(null, file.originalname.substring(0,file.originalname.lastIndexOf('.')) + '-' + Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'),file.originalname.length));
+	  }
+	});
 
-		var newPost = req.body.newPost;
+	//Upload only images of these formats
+	const ALLOWED_FILE_TYPES = ['jpeg','png','gif','bmp'];
+	const fileFilter = (req, file, cb) => {
+ 	
+		const index = file.mimetype.indexOf('/');
+		const uploadFileType = file.mimetype.substr(index+1);
+
+		//check if the file being uploaded has an allowed extension 
+	 	if(ALLOWED_FILE_TYPES.indexOf(uploadFileType) > -1){
+		  // Accept the file
+		  cb(null, true);
+	 	} else {
+	 	  // Reject the file 
+		  cb(null, false);
+	 	}
+	}
+
+	const upload = multer({ storage, fileFilter, limits: { fileSize: 3000000, files: 1 }, });
+
+	router.post('/api/addPost', requireAuth, upload.single('file'), function(req,res) {
+
+		var newPost = req.body;
 		var userId = req.user._id;
-		
+
 		if(newPost){
 			newPost.author = { _id : userId}
-			newPost.image = "https://placehold.it/350x150";
+
+			if(req.file){
+				//remve 'uploads/' from the file destination
+				const cutOff = 'uploads/';
+				const index = req.file.destination.indexOf(cutOff);
+				newPost.image = req.file.destination.substr(index + cutOff.length) + "/"+req.file.filename;
+			} else {
+				newPost.image = "https://placehold.it/350x150";
+			}
+			
 
 			var post = new PostModel(newPost);
 			
