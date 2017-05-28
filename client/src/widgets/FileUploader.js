@@ -1,7 +1,7 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
 
-export const FILE_FIELD_NAME = 'file';
+export const FILE_FIELD_NAME = 'image';
 
 const FileUploader = (field) => {
   const files = field.input.value;

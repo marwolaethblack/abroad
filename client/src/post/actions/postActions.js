@@ -3,7 +3,8 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { beautifyUrlSegment, spaceToDash } from '../../services/textFormatting';
 import { getUserCountryCode }  from '../../services/userLocation';
-import { changeFilename }  from '../../services/fileUpload';
+// import { changeFilename }  from '../../services/fileUpload';
+import { trimFormValues,createFileFormData } from '../../services/formHandling';
 import countries from '../../constants/countries'
 import { FILE_FIELD_NAME } from '../../widgets/FileUploader';
 
@@ -137,31 +138,11 @@ export const addPost = (newPost) => (dispatch) =>{
     dispatch({type:ActionTypes.ADDING_POST});
 
     //trim values of form fields
-    let formValues = Object.values(newPost);
-    if(Array.isArray(formValues)){
-        Object.keys(newPost).forEach(key => {
-            if(typeof newPost[key] === "string"){
-                newPost[key] = newPost[key].trim();
-            }
-        });
-    }
+    newPost = trimFormValues(newPost);
 
     //assign form fields into FormData to send the form as multipart/form-data
-    let body = new FormData();
-    Object.keys(newPost).forEach(( key ) => {
-        if(key === FILE_FIELD_NAME){
-            //change the filename if it's shorter
-            //than 6 chars together with its extension
-            let fileName = newPost[FILE_FIELD_NAME][0].name;
-            if(fileName.length <= 6){
-                fileName = changeFilename(fileName);
-            }
-            body.append(key, newPost[ key ][0], fileName);
-        } else {
-            body.append(key, newPost[ key ]);
-        }
-    });
-    
+    let body = createFileFormData(newPost);
+
     axios.post('/api/addPost',
               body, 
               {headers: {authorization: localStorage.getItem('token')}

@@ -4,6 +4,10 @@ var express = require('express');
 var passport = require('passport');
 var Authentication = require('../auth/controllers/authentication');
 var countries = require('../client/src/constants/countries');
+import { createFilePath } from '../services/fileUpload';
+import mkdirp from 'mkdirp';
+import multer from 'multer';
+import fs from 'fs';
 
 
 module.exports = function() {
@@ -79,21 +83,66 @@ module.exports = function() {
 		});
 	});
 
-	router.put('/api/editUser', requireAuth, function(req,res) {
+	//EDIT USER
 
-		let userInfo = req.body.userInfo;
-		const _id = req.user._id;
+	// configuring Multer to use files directory for storing files
+	const storage =   multer.diskStorage({
+	  destination: function (req, file, callback) {
+	  	const dir = './uploads/userProfiles/'+createFilePath(file.originalname);
+	  	mkdirp(dir, function (err) {
+		    if (err){
+		    	console.error(err);
+		    } 
+		    else {
+		    	callback(null, dir);
+		    }
+		});
+	  },
+	  filename: function (req, file, callback) {
+	    callback(null, file.originalname.substring(0,file.originalname.lastIndexOf('.')) + '-' + Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'),file.originalname.length));
+	  }
+	});
 
-		if(Object.keys(userInfo.editedFields).length){
-			if(JSON.stringify(userInfo.userId) === JSON.stringify(_id)) {		
+	//Upload only images of these formats
+	const ALLOWED_FILE_TYPES = ['jpeg','png','gif','bmp'];
+	const fileFilter = (req, file, cb) => {
+ 	
+		const index = file.mimetype.indexOf('/');
+		const uploadFileType = file.mimetype.substr(index+1);
+
+		//check if the file being uploaded has an allowed extension 
+	 	if(ALLOWED_FILE_TYPES.indexOf(uploadFileType) > -1){
+		  // Accept the file
+		  cb(null, true);
+	 	} else {
+	 	  // Reject the file 
+		  cb(null, false);
+	 	}
+	}
+
+	const upload = multer({ storage, fileFilter, limits: { fileSize: 3000000, files: 1 }, });
+
+	router.put('/api/editUser', requireAuth, upload.single('image'), function(req,res) {
+
+		let userInfo = req.body;
+		const userId = req.user._id;
+
+		if(Object.keys(userInfo).length){
+			if(JSON.stringify(userInfo._id) === JSON.stringify(userId)) {		
+
+				if(req.file){
+					//remove 'uploads' from the file destination
+					const cutOff = 'uploads';
+					const index = req.file.destination.indexOf(cutOff);
+					userInfo.image = req.file.destination.substr(index + cutOff.length) + "/"+req.file.filename;
+				}
 				
 				//update a post and return the edited post
 				UserModel.findOneAndUpdate(
-					{ _id: userInfo.userId },
-					userInfo.editedFields, 
+					{ _id: userId },
+					userInfo, 
 					{new: true}
 				)
-				// .populate("comments")
 				.exec(function(err,editedUser) {
 						if(err) console.log(err);
 						res.json(editedUser);

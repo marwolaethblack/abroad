@@ -244,7 +244,7 @@ module.exports = (postSocket) => {
 
 	const upload = multer({ storage, fileFilter, limits: { fileSize: 3000000, files: 1 }, });
 
-	router.post('/api/addPost', requireAuth, upload.single('file'), function(req,res) {
+	router.post('/api/addPost', requireAuth, upload.single('image'), function(req,res) {
 
 		var newPost = req.body;
 		var userId = req.user._id;
@@ -326,9 +326,15 @@ module.exports = (postSocket) => {
 
 					 //delete an image of the deleted post from the file system
 					 const imgPath = './uploads'+removedDoc.image;
-					 fs.unlink(removedDocPic, function (err) {
-					  if (err) console.log(err);
-					});
+					 //check if the image exists
+					 fs.stat(imgPath, (err,stats) => {
+					 	if(stats){
+					 		//delete the image
+					 		fs.unlink(imgPath, (err) => {
+							  if (err) console.log(err);
+							});
+						 } 
+					 }) 
 				});
 
 				UserModel.findById(_id, function(err, foundAuthor) {

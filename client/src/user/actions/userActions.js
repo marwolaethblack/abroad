@@ -1,6 +1,7 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
+import { trimFormValues,createFileFormData } from '../../services/formHandling';
 
 export function fetchUser(id) {
 	return function(dispatch) {
@@ -16,12 +17,18 @@ export function fetchUser(id) {
 	}
 }
 
-//userInfo = { editedFields, userId }
+
 export function editUser(userInfo) {
 	return function(dispatch) {
 		 dispatch({ type: ActionTypes.EDITING_USER });
 
-		return axios.put('/api/editUser', {userInfo}, 
+		//trim values of form fields
+	    userInfo = trimFormValues(userInfo);
+
+	    //assign form fields into FormData to send the form as multipart/form-data
+	    let body = createFileFormData(userInfo);
+
+		return axios.put('/api/editUser', body, 
 					{headers: {authorization: localStorage.getItem('token')} })
 			.then(resp => {
 				browserHistory.push('/my-profile');

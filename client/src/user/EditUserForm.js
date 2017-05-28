@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
 import { browserHistory } from 'react-router';
+import FileUploader, { FILE_FIELD_NAME } from '../widgets/FileUploader';
 
 import countries from '../constants/countries';
 
@@ -67,7 +68,7 @@ class EditUserForm extends Component {
 
 		//if the user didn't change any info, redirect him back to his profile
 		if(userInfoChanged){
-			this.props.editUser({editedFields, userId:this.props.userInfo._id});
+			this.props.editUser(editedFields);
 		} else {
 			browserHistory.push('/my-profile');
 		}	
@@ -76,12 +77,16 @@ class EditUserForm extends Component {
 	render(){
 
 		const { handleSubmit, submitting, pristine} = this.props;
+		const userImage = this.props.userInfo ? this.props.userInfo.image : "";
 
 		return(
-			<form onSubmit={handleSubmit(this.handleFormSubmit)}>
+			<form onSubmit={handleSubmit(this.handleFormSubmit)} 
+			encType="multipart/form-data" 
+			className="editProfile">
 				<div>
 					<h2>Edit your profile</h2>
 					<div>
+						{ userImage && <img alt="profile-pic" src={userImage} className="profile-pic" /> }
 						<label htmlFor="country_from">I'm from: </label>
 						<Field name="country_from" component="select">
 						<option key="-1" value="">Choose a country you're from</option>
@@ -99,6 +104,11 @@ class EditUserForm extends Component {
 						component={renderField} 
 						label="Username" type="text"  />
 
+						<label htmlFor={FILE_FIELD_NAME}>Change profile pic</label>
+						<Field 
+				        name={FILE_FIELD_NAME} 
+				        component={FileUploader} />
+
 					</div>
 				</div>
 					{this.props.errorMessage}
@@ -109,16 +119,19 @@ class EditUserForm extends Component {
 
 };
 
-
 EditUserForm = reduxForm({
   form: 'editUser', // a unique identifier for this form
   validate
 })(EditUserForm);
 
 EditUserForm = connect(
-  state => ({
-    initialValues: state.user.userData
-  }),
+  state => {
+  	if(state.user.userData){
+  		let { country_from, country_in, username, image, _id } = state.user.userData;
+	  	return { initialValues: { country_from, country_in, username, image, _id } }
+  	}
+  	return {};
+  },
 )(EditUserForm)
 
 export default EditUserForm;
