@@ -7,6 +7,7 @@ import { date_ranges, getDateTimestamp } from '../client/src/constants/post_crea
 import { createFilePath } from '../services/fileUpload';
 import mkdirp from 'mkdirp';
 import multer from 'multer';
+import fs from 'fs';
 
 
 
@@ -249,11 +250,12 @@ module.exports = (postSocket) => {
 		var userId = req.user._id;
 
 		if(newPost){
-			newPost.author = { _id : userId}
+			newPost.author = { _id : userId};
+			newPost.comments = [];
 
 			if(req.file){
-				//remve 'uploads/' from the file destination
-				const cutOff = 'uploads/';
+				//remove 'uploads' from the file destination
+				const cutOff = 'uploads';
 				const index = req.file.destination.indexOf(cutOff);
 				newPost.image = req.file.destination.substr(index + cutOff.length) + "/"+req.file.filename;
 			} else {
@@ -317,9 +319,16 @@ module.exports = (postSocket) => {
 			if(err) {
 				console.log(err);
 			}
-			if(JSON.stringify(foundPost.author._id) === JSON.stringify(_id)) {
-				PostModel.findOneAndRemove({ _id: postId }, function(err) {
+
+			if(JSON.stringify(foundPost.author) === JSON.stringify(_id)) {
+				PostModel.findOneAndRemove({ _id: postId }, function(err,removedDoc) {
 					 if(err) console.log(err);
+
+					 //delete an image of the deleted post from the file system
+					 const imgPath = './uploads'+removedDoc.image;
+					 fs.unlink(removedDocPic, function (err) {
+					  if (err) console.log(err);
+					});
 				});
 
 				UserModel.findById(_id, function(err, foundAuthor) {

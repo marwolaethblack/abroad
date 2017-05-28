@@ -34,23 +34,13 @@ module.exports = function() {
 			}
 
 			if(user){			
-				// console.log("TOTO JE POSLANE: ");
-				// console.log({...user,token: Authentication.tokenForUser({ id: user._id })});
 				res.json({
                         token: Authentication.tokenForUser({ id: user._id }),
                         id: user._id,
                         username: user.username 
                 });
-				// res.json({user,token: Authentication.tokenForUser({ id: user._id })});
+
 			} else {
-				// console.log("==========================================");
-				// console.log("==========================================");
-				// console.log("==========================================");
-
-
-				// console.log("REQ.query: ");
-				// console.log(userInfo);
-
 		        var user = new UserModel({
 		        	socialId: userInfo.id,
 		            username: userInfo.name,

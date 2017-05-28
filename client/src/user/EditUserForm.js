@@ -22,7 +22,7 @@ const errors = {};
 		}	
 	});
 
-	if(values.username.length < 3 || values.username.length > 30){
+	if(values.username && (values.username.length < 3 || values.username.length > 30)){
 		errors.username = 'Your username must be between 3 and 30 characters long.'
 	}
 
