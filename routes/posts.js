@@ -259,7 +259,7 @@ module.exports = (postSocket) => {
 				const index = req.file.destination.indexOf(cutOff);
 				newPost.image = req.file.destination.substr(index + cutOff.length) + "/"+req.file.filename;
 			} else {
-				newPost.image = "https://placehold.it/350x150";
+				// newPost.image = "https://placehold.it/350x150";
 			}
 			
 

@@ -12,7 +12,7 @@ class Post extends Component {
         return(
         	<article className="allposts-post">
 	        	<span>Upvotes {upvotes}</span>
-	        	<img src={image} alt={title} />
+	        	<img src={image ? image : `images/post-categories/${category}.jpg`} alt={title} />
 	        	<Link to={`/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`}><h3>{title}</h3></Link>
 	        	<span>
                     Submitted {datePosted} ago by 

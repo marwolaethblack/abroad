@@ -119,7 +119,7 @@ class ExtendedPost extends Component {
       </FacebookProvider>
 
         <span>Upvotes {upvotes}</span>
-             <img className="title-img" alt={title} src={image} />
+             <img className="title-img" alt={title} src={image ? image : `/images/post-categories/${category}.jpg`} />
             <h1>{title}</h1>
             <p>{country_from + " > " + country_in}</p>
             <span>Submitted {datePosted} ago by <Link to={`/user/${author._id}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
