@@ -22,11 +22,6 @@ ul {
 	width: 100%;
 }
 
-img.fileUploadPreview {
-	width: 100%;
-	height: auto;
-}
-
 #react-container>div {
 	display: flex;
 	flex-direction: column;
@@ -737,6 +732,40 @@ form.editProfile img.profile-pic{
 	width: 70%;
 	height: auto;
 	max-height: 40vh;
+}
+
+/*FILE UPLOAD*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+/*+++++++++++++++++++++++++++++*/
+
+#fileUploader .description {
+	padding: .5em;
+}
+
+img.fileUploadPreview {
+	width: 100%;
+	height: auto;
+}
+
+aside.rejectedFiles {
+	border: 1px solid red;
+	border-radius: 3%;
+	padding: .5em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+aside.rejectedFiles h3 {
+	text-align: center;
+}
+
+aside.rejectedFiles ul {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 /*UNKNOWN*/

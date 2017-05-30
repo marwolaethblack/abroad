@@ -163,6 +163,7 @@ const AddPostForm = props => {
         label="Category"
         options={postCategories} />
 
+        <label htmlFor={FILE_FIELD_NAME}>( optional ) Image:</label>
         <Field 
         name={FILE_FIELD_NAME} 
         component={FileUploader} />
