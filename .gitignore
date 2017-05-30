@@ -6,3 +6,4 @@ client/build
 config.js
 auth/config/
 ssl_db
+uploads

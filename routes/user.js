@@ -131,21 +131,37 @@ module.exports = function() {
 			if(JSON.stringify(userInfo._id) === JSON.stringify(userId)) {		
 
 				if(req.file){
-					//remove 'uploads' from the file destination
+					//remove 'uploads' from the file destination path
 					const cutOff = 'uploads';
 					const index = req.file.destination.indexOf(cutOff);
 					userInfo.image = req.file.destination.substr(index + cutOff.length) + "/"+req.file.filename;
 				}
 				
-				//update a post and return the edited post
+				//update the user
 				UserModel.findOneAndUpdate(
 					{ _id: userId },
-					userInfo, 
-					{new: true}
+					userInfo
 				)
-				.exec(function(err,editedUser) {
+				.exec(function(err,oldUserData) {
 						if(err) console.log(err);
-						res.json(editedUser);
+
+					//if a user changes a profile pic,
+					//delete the former one
+					if(oldUserData.image){
+						 //delete an image of the deleted post from the file system
+						 const imgPath = './uploads'+oldUserData.image;
+						 //check if the image exists
+						 fs.stat(imgPath, (err,stats) => {
+						 	if(stats){
+						 		//delete the image
+						 		fs.unlink(imgPath, (err) => {
+								  if (err) console.log(err);
+								});
+							 } 
+						 }); 
+					}
+
+					res.json(oldUserData);
 				});
 			} else {
 				return res.status(401).send({error:"Unauthorized"});

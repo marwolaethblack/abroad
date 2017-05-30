@@ -334,7 +334,7 @@ module.exports = (postSocket) => {
 							  if (err) console.log(err);
 							});
 						 } 
-					 }) 
+					 }); 
 				});
 
 				UserModel.findById(_id, function(err, foundAuthor) {
