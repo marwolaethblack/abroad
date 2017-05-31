@@ -276,7 +276,7 @@ module.exports = (postSocket) => {
 				foundAuthor.posts.push(newPost);	
 				foundAuthor.save();
 			});
-				res.json(post);
+				res.json(newPost);
 			});
 		} else {
 			return res.status(422).send({error:"Wuut? No post was sent."});

@@ -8,11 +8,18 @@ export const singlePost = (state={},action) => {
             layerComments(action.singlePost.comments);
             return action.singlePost;
         }
-        case ActionTypes.COMMENT_ADDED:
-        case ActionTypes.COMMENT_DELETED: 
+        case ActionTypes.COMMENT_ADDED: 
         case ActionTypes.COMMENT_EDITED: {
             const layeredComments = layerComments(action.updatedComments);
             return {...state, comments: layeredComments};
+        }
+        case ActionTypes.COMMENT_DELETED: {
+            layerComments(action.updatedPost.comments);
+            return action.updatedPost;
+        }
+        case ActionTypes.MARK_ANSWERED: {
+            layerComments(action.answeredPost.comments);
+            return action.answeredPost;
         }
         case 'SOCKET_ADD_COMMENT': {
             const comments = layerComments(action.payload);

@@ -15,6 +15,7 @@ const postSchema = new mongoose.Schema({
    category: String,
    content: String,
    image: String,
+   isAnswered: Boolean,
    upvotes: { type: Number, default: 0 },
    comments: [{
          type: mongoose.Schema.Types.ObjectId,

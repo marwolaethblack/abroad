@@ -13,6 +13,7 @@ var commentSchema = new mongoose.Schema({
   content: String,
   upvotes: Number,
   comments: { type : Array , "default" : [] },
+  isAnswer: Boolean
   
 });
 

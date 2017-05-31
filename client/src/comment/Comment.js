@@ -18,6 +18,7 @@ class Comment extends Component {
         this.closeEditCommentModal = this.closeEditCommentModal.bind(this);
         this.openReplyModal = this.openReplyModal.bind(this);
         this.closeReplyModal = this.closeReplyModal.bind(this);
+        this.markPostAsAnswered = this.markPostAsAnswered.bind(this);
     }
 
     renderComments = (comments) => {
@@ -41,6 +42,10 @@ class Comment extends Component {
         deleteComment(id);
     }
 
+  markPostAsAnswered = (postId, commentId, authorId) => {
+    this.props.answerPost(postId, commentId, authorId);
+  }
+
   openEditCommentModal = () => {
         this.setState({ isEditCommentModalOpen: true });
   }
@@ -58,19 +63,19 @@ class Comment extends Component {
   }
 
     render() {
-        const { isPostAuthor, authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment, parents } = this.props;
+        const { isPostAuthor, isPostAnswered, authenticated, upvotes, _id, author, postId, comments, isAnswer, content, deleteComment, editComment, markPostAsAnswered, parents } = this.props;
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
         	<article className="extended-post-comment">
-            <div className={author === loggedUserId ? "own-comment whole-comment" : "whole-comment"}>
+            <div className={`whole-comment ${ isAnswer && 'answer' } ${ author._id === loggedUserId && 'own-comment' } `}>
   	        	<span>Upvotes {upvotes}</span>
                   <section className="comment-content">
                   { content }
                   </section>
   	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author}/${spaceToDash(author.username)}`}>{author.username}</Link></span>
                 <div>
-                  {(parents.length === 1 && isPostAuthor) && <button onClick={()=>{alert("answered");}}>Mark as answered</button> }
+                  {(parents.length === 1 && isPostAuthor && !isPostAnswered) && <button onClick={()=>{this.markPostAsAnswered(postId, _id, loggedUserId);}}>Mark as answered</button> }
                   {authenticated && <button style={{color:"blue"}} onClick={this.openReplyModal}>REPLY</button> }
                   {author._id === loggedUserId && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
                   {author._id === loggedUserId && <button style={{color:"red"}}  onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</button> }

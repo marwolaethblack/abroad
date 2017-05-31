@@ -166,7 +166,7 @@ export const addPost = (newPost) => (dispatch) =>{
 }
 
 //postInfo = { editedPost, postId, posttAuthorId }
-export const editPost = (postInfo) => (dispatch) =>{
+export const editPost = (postInfo) => (dispatch) => {
 
     dispatch({type:ActionTypes.EDITING_POST});
 
@@ -189,6 +189,29 @@ export const editPost = (postInfo) => (dispatch) =>{
             console.log(err);
             dispatch({
                 type: ActionTypes.EDIT_POST_ERROR,
+                message: err.response.data.error
+            });
+        });
+}
+
+
+export const answerPost = (postId, commentId, authorId) => (dispatch) =>{
+
+    axios.put('/api/answerPost', { commentId, postId, authorId }, 
+                {headers: {authorization: localStorage.getItem('token')} })
+        .then(resp => {
+
+            //all post's comments are returned in response 
+            //so they can be layered in the reducer
+            dispatch({
+                type: ActionTypes.MARK_ANSWERED,
+                answeredPost: resp.data
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.EDIT_COMMENT_ERROR,
                 message: err.response.data.error
             });
         });

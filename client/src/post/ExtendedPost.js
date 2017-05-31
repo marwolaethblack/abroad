@@ -71,10 +71,12 @@ class ExtendedPost extends Component {
               <Comment {...comment} 
                        key={comment._id}
                        postId={this.props._id}
-                       deleteComment={deleteComment} 
+                       deleteComment={deleteComment}
+                       answerPost={this.props.answerPost} 
                        editComment={this.props.editComment}
                        authenticated={this.props.authenticated}
-                       isPostAuthor = {loggedUserId === this.props.author._id} />
+                       isPostAuthor = {loggedUserId === this.props.author._id}
+                       isPostAnswered={this.props.isAnswered} />
               ) 
             }
         return "No comments to show";

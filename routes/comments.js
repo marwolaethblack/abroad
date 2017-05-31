@@ -59,7 +59,7 @@ module.exports = function(postSocket, notificationSocket) {
 								console.log(err);
 							}
 							
-							PostModel.populate(foundPost, { path: 'comments'}, function(err, populatedPost) {
+							PostModel.populate(foundPost, { path: 'comments', populate : {path : 'author', options: {lean: true, select: '_id username'}}}, function(err, populatedPost) {
 								if(err) {
 									console.log(err);
 								}
@@ -138,14 +138,14 @@ module.exports = function(postSocket, notificationSocket) {
 							console.log(err);
 						}
 						
-						PostModel.populate(foundPost, { path: 'comments'}, function(err, populatedPost) {
+						PostModel.populate(foundPost, { path: 'comments',populate : {path : 'author', options: {lean: true, select: '_id username'}}}, function(err, populatedPost) {
 							if(err) {
 								console.log(err);
 							}
 
 							res.json(populatedPost);
 							postSocket.to(postId).emit('add comment', populatedPost.comments);							
-							
+
 
 							if(JSON.stringify(user._id) !== JSON.stringify(foundPost.author)) {
 
@@ -196,7 +196,9 @@ module.exports = function(postSocket, notificationSocket) {
 							console.log(err);
 							res.json(err);
 						} 
-					CommentModel.find({postId: editedComment.postId}).lean().exec(function(err, comments) {
+					CommentModel.find({postId: editedComment.postId})
+					.populate({path : 'author', options: {lean: true, select: '_id username'}})
+					.exec(function(err, comments) {
 						res.json(comments);
 					});
 						
@@ -210,6 +212,60 @@ module.exports = function(postSocket, notificationSocket) {
 	});
 
 
+	//MARK A COMMENT AS AN ANSWER
+	router.put('/api/answerPost', requireAuth, (req,res) => {
+
+		let { commentId, postId, authorId } = req.body;
+		var { _id, username } = req.user;
+
+
+
+		if(commentId){
+			if(JSON.stringify(authorId) === JSON.stringify(_id)) {		
+				
+				//update a comment and return the edited comment
+				CommentModel.findOneAndUpdate(
+					{ _id: commentId },
+					{ isAnswer: true }
+				)
+				.exec((err,editedComment) => {
+						if(err){
+							console.log(err);
+							res.json(err);
+						}
+
+					//mark the post as answered
+					PostModel.findOneAndUpdate(
+						{ _id: postId },
+						{ isAnswered: true }, 
+						{ new: true}
+					).populate({path: 'comments', options: {lean: true, populate : {path : 'author', options: {lean: true, select: '_id username'}}}})
+					.populate({path: 'author', options: {lean: true, select: '_id username'}})
+					.exec((err,answeredPost) => {
+						if(err){
+							console.log(err);
+							res.json(err);
+						}
+						res.json(answeredPost);
+					});
+
+
+					// CommentModel.find({postId: editedComment.postId})
+					// .populate({path : 'author', options: {lean: true, select: '_id username'}})
+					// .exec(function(err, comments) {
+					// 	res.json(comments);
+					// });
+						
+				});
+			} else {
+				return res.status(401).send({error:"Unauthorized"});
+			}
+		} else {
+			return res.status(422).send({error:"Wuut? Your request is WRONG!!!."});
+		}
+	});
+
+
 	router.delete("/api/deleteComment", requireAuth, (req, res) => {
 		var { commentId } = req.query;
 		var { _id } = req.user;
@@ -218,7 +274,7 @@ module.exports = function(postSocket, notificationSocket) {
 			if(err) {
 				console.log(err);
 			}
-			if(JSON.stringify(foundComment.author._id) === JSON.stringify(_id)) {
+			if(foundComment && JSON.stringify(foundComment.author) === JSON.stringify(_id)) {
 				CommentModel.findByIdAndRemove(commentId, (err) => {
 					if(err) {
 						console.log(err);
@@ -246,14 +302,22 @@ module.exports = function(postSocket, notificationSocket) {
 								res.json(err);
 							}
 
+							//check whether the deleted comment was an answer
+							let deletedCommentWasAnswer = {};
+							if(foundComment.isAnswer){
+								deletedCommentWasAnswer = { isAnswered: false }
+							}
+
 							//get a post with updated comments
-							PostModel.findByIdAndUpdate(foundComment.postId,{ $pull: {comments: {$in: [...commentChildren,commentId] }}}, {multi:true,new:true})
-								.populate({path: 'comments', options: {lean: true}}).exec((err, singlePost) => {
+							PostModel.findByIdAndUpdate(foundComment.postId,{...deletedCommentWasAnswer, $pull: {comments: {$in: [...commentChildren,commentId] }}}, {multi:true,new:true})
+								.populate({path: 'comments', options: {lean: true, populate : {path : 'author', options: {lean: true, select: '_id username'}}}})
+								.populate({path: 'author', options: {lean: true, select: '_id username'} })
+								.exec((err, singlePost) => {
 									if(err){
 										console.log(err);
 										res.json(err);
 									} 
-									res.json(singlePost.comments);
+									res.json(singlePost);
 							});
 						});
 					});

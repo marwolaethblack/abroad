@@ -1,5 +1,5 @@
   const layerComments = (comments) => {
-    const sort = function (a, b) {
+    const sortByParents = function (a, b) {
       if (a.parents.length < b.parents.length) {
         return 1;
       }
@@ -10,7 +10,18 @@
       return 0;
     };
 
-    comments.sort(sort);
+    const sortByObjectIds = function (a, b) {
+      if (a._id > b._id) {
+        return 1;
+      }
+      if (a._id < b._id) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    };
+
+    comments.sort(sortByParents);
 
     comments.slice(0).forEach(comment => {
 
@@ -28,6 +39,9 @@
            }
         }    
     });
+
+    comments.sort(sortByObjectIds);
+
     return comments;
   }
 
