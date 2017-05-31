@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { getNotificationsOnPage } from '../actions/notifActions';
-import { formatDate } from '../../services/textFormatting';
+import { formatDate, spaceToDash } from '../../services/textFormatting';
 
 
 class Notifications extends Component {
@@ -16,8 +16,16 @@ class Notifications extends Component {
           <li key={i}>
             <span>{ formatDate(notification.createdAt) }</span>
             <span>
-              { notification.text } 
-              { notification.postId && <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
+
+              { <Link to={`/user/${notification.author._id}/${spaceToDash(notification.author.username)}`}>
+                  { notification.author.username }
+                </Link>
+
+              } 
+              <span> { notification.text } </span>
+
+              { notification.postId && 
+                <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
                   &nbsp;>>> 
                 </Link> 
               }

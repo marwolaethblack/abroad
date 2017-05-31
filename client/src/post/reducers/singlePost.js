@@ -6,7 +6,7 @@ export const singlePost = (state={},action) => {
     switch (action.type) {
         case ActionTypes.RECEIVED_SINGLE_POST: {
             layerComments(action.singlePost.comments);
-            return {...state, ...action.singlePost }
+            return action.singlePost;
         }
         case ActionTypes.COMMENT_ADDED:
         case ActionTypes.COMMENT_DELETED: 

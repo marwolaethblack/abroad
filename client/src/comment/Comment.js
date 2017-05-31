@@ -58,21 +58,22 @@ class Comment extends Component {
   }
 
     render() {
-        const { authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment, parents } = this.props;
+        const { isPostAuthor, authenticated, upvotes, _id, author, postId, comments, content, deleteComment, editComment, parents } = this.props;
         const datePosted = postDateDiff(_id);
         const loggedUserId = localStorage.getItem('id');
         return(
         	<article className="extended-post-comment">
-            <div className={author.id === loggedUserId ? "own-comment whole-comment" : "whole-comment"}>
+            <div className={author === loggedUserId ? "own-comment whole-comment" : "whole-comment"}>
   	        	<span>Upvotes {upvotes}</span>
                   <section className="comment-content">
                   { content }
                   </section>
-  	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author.id}/${spaceToDash(author.username)}`}>{author.username}</Link></span>
+  	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author}/${spaceToDash(author.username)}`}>{author.username}</Link></span>
                 <div>
+                  {(parents.length === 1 && isPostAuthor) && <button onClick={()=>{alert("answered");}}>Mark as answered</button> }
                   {authenticated && <button style={{color:"blue"}} onClick={this.openReplyModal}>REPLY</button> }
-                  {author.id === loggedUserId && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
-                  {author.id === loggedUserId && <button style={{color:"red"}}  onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</button> }
+                  {author._id === loggedUserId && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
+                  {author._id === loggedUserId && <button style={{color:"red"}}  onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</button> }
                 </div>
   	        	<span>{comments !== undefined && comments.length} comments</span>
             </div>
@@ -87,7 +88,7 @@ class Comment extends Component {
 
                 <EditCommentForm 
                  commentId={_id} 
-                 authorId={author.id} 
+                 authorId={author._id} 
                  postId={postId}
                  editComment={editComment}
                  afterSubmit={this.closeEditCommentModal}

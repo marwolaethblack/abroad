@@ -65,13 +65,17 @@ class ExtendedPost extends Component {
   renderComments = (comments, deleteComment) => {
             if(comments.length !== 0)
             {
-               return comments.map(comment => 
-                <Comment {...comment} 
-                         key={comment._id}
-                         postId={this.props._id}
-                         deleteComment={deleteComment} 
-                         editComment={this.props.editComment}
-                         authenticated={this.props.authenticated} />) 
+              const loggedUserId = localStorage.getItem('id');
+
+              return comments.map(comment => 
+              <Comment {...comment} 
+                       key={comment._id}
+                       postId={this.props._id}
+                       deleteComment={deleteComment} 
+                       editComment={this.props.editComment}
+                       authenticated={this.props.authenticated}
+                       isPostAuthor = {loggedUserId === this.props.author._id} />
+              ) 
             }
         return "No comments to show";
   }

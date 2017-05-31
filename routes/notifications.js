@@ -16,7 +16,7 @@ module.exports = function(notificationSocket) {
 		const limit = req.query.limit || 5;
 
 		UserModel.findById(req.query.id)
-			    .populate({path: 'notifications', options: {limit, lean: true, sort:{'createdAt': -1}}})
+			    .populate({path: 'notifications', options: {limit, lean: true, sort:{createdAt: -1}, populate : {path : 'author', options: {lean: true, select: '_id username'}}}})
 				.exec((err, user) => {
 					if(err || !user) {
 						console.log(err);
@@ -44,7 +44,7 @@ module.exports = function(notificationSocket) {
 
 			NotificationModel.paginate(
 				{ _id:{ $in: user.notifications }},
-				{ page, limit, sort: { createdAt: -1 }},
+				{ page, limit, sort: { createdAt: -1 }, populate : {path : 'author', options: {lean: true, select: '_id username'}}},
 				(err, result) => {
 					if(err) {
 						console.log(err);

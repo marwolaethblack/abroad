@@ -8,6 +8,10 @@ const notificationSchema = new mongoose.Schema({
          ref: "Post"
     },
   text: String,
+  author: {
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "User"
+  },
   seen: { type: Boolean, default: false, required: true }
   
 });

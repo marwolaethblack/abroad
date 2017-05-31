@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { signoutUser } from '../authentication/actions/authentication';
 import { getLatestNotifications, socketNotificationsUpdate, notificationsWereSeen } from '../notification/actions/notifActions';
 import io from 'socket.io-client';
+import { spaceToDash, beautifyUrlSegment } from '../services/textFormatting';
 
 
 let notifSocket = io('/notif');
@@ -69,8 +70,17 @@ class Header extends Component {
     if(this.props.notifications && this.props.notifications.length > 0){
       notifications = this.props.notifications.slice(0,5).map((notification,i) => {
         return (
-          <li key={i}> { notification.text } 
-            { notification.postId && <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
+          <li key={i}> 
+
+            { <Link to={`/user/${notification.author._id}/${spaceToDash(notification.author.username)}`}>
+                { notification.author.username }
+              </Link>
+            } 
+
+            { notification.text } 
+
+            { notification.postId && 
+              <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
                 &nbsp;>>> 
               </Link> 
             }

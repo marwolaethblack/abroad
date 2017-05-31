@@ -169,7 +169,7 @@ module.exports = (postSocket) => {
 		});
 
 		PostModel.findById(req.query.id)
-		.populate({path: 'comments', options: {lean: true}})
+		.populate({path: 'comments', options: {lean: true},  populate : {path : 'author', options: {lean: true, select: '_id username'}}})
 		.populate({path: 'author', options: {lean: true, select: '_id username'}})
 		.exec(function(err, singlePost){
 			if(err){

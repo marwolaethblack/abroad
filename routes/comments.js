@@ -7,7 +7,7 @@ var Authentication = require("../auth/controllers/authentication");
 var passportService = require("../auth/services/passport");
 var passport = require("passport");
 var express = require('express');
-
+import { spaceToDash } from '../services/textFormatting';
 
 module.exports = function(postSocket, notificationSocket) {
 
@@ -35,10 +35,7 @@ module.exports = function(postSocket, notificationSocket) {
 						content: comment,
 						upvotes: 0,
 						postId: foundPost._id,
-						author: {
-							id: _id,
-							username: username
-						},
+						author: { _id },
 						comments: []
 					});
 
@@ -70,37 +67,41 @@ module.exports = function(postSocket, notificationSocket) {
 								res.json(populatedPost);
 								postSocket.to(postId).emit('add comment', populatedPost.comments);
 
-								if(fComment.author.username !== user.username) {
+								if(JSON.stringify(fComment.author) !== JSON.stringify(user._id)) {
 
-										UserModel.findById(fComment.author._id, function(err, fUser) {
-										var notifText = user.username + " has replied to your comment in post: " + foundPost.title;
+										UserModel.findById(fComment.author, function(err, fUser) {
+										var notifText = ` has replied to your comment in post: ${foundPost.title}`;
 										var newNotif = new NotificationModel({
 											postId: foundPost._id,
-											text: notifText
+											text: notifText,
+											author: { _id: user._id }
 										});
 
 										newNotif.save(function(err) {
 											fUser.notifications.push(newNotif);
 											fUser.save();
-											notificationSocket.to(fUser._id.toString()).emit('new notification', newNotif);
+											notificationSocket.to(fUser._id.toString())
+											.emit('new notification', {...newNotif._doc, author: { _id:user._id, username:user.username } });
 										})
 									});
 								}
 
-								if(user.username !== foundPost.author.username) {
 
-									UserModel.findById(foundPost.author._id, function(err, fUser) {
-										var notifText = user.username + " has commented on your post: " + foundPost.title;
+								if(JSON.stringify(user._id) !== JSON.stringify(foundPost.author)) {
+
+									UserModel.findById(foundPost.author, function(err, fUser) {
+										var notifText = ' has commented on your post: '+ foundPost.title;
 										var newNotif = new NotificationModel({
 											postId: foundPost._id,
-											text: notifText
+											text: notifText,
+											author: { _id: user._id }
 										});
 
 
 										newNotif.save(function(err) {
 											fUser.notifications.push(newNotif);
 											fUser.save();
-											notificationSocket.to(fUser._id.toString()).emit('new notification', newNotif);
+											notificationSocket.to(fUser._id.toString()).emit('new notification', {...newNotif._doc, author:{ _id: user._id, username: user.username } });
 										})
 									 });
 							   	 }
@@ -113,10 +114,7 @@ module.exports = function(postSocket, notificationSocket) {
 						content: comment,
 						upvotes: 0,
 						postId: foundPost._id,
-						author: {
-							id: _id,
-							username: username
-						},
+						author: { _id },
 						parents: [],
 						comments: []
 					});
@@ -147,22 +145,26 @@ module.exports = function(postSocket, notificationSocket) {
 
 							res.json(populatedPost);
 							postSocket.to(postId).emit('add comment', populatedPost.comments);							
+							
 
-							if(user.username !== foundPost.author.username) {
+							if(JSON.stringify(user._id) !== JSON.stringify(foundPost.author)) {
 
-								UserModel.findById(foundPost.author._id, function(err, fUser) {
-									var notifText = user.username + " has commented on your post: " + foundPost.title;
+								UserModel.findById(foundPost.author, function(err, fUser) {
+									// "<Link to=user/"+user._id+"/"+user.username "+ " has commented on your post: " + foundPost.title;
+									var notifText = ` has commented on your post: ${foundPost.title}`;
 									var newNotif = new NotificationModel({
 										postId: foundPost._id,
-										text: notifText
+										text: notifText,
+										author: { _id: user._id }
 									});
 
 
 									newNotif.save(function(err) {
 										fUser.notifications.push(newNotif);
 										fUser.save();
-										notificationSocket.to(fUser._id.toString()).emit('new notification', newNotif);
+										notificationSocket.to(fUser._id.toString()).emit('new notification', {...newNotif._doc, author: {_id: user._id, username: user.username} });
 									})
+
 								});
 							}
 						});
