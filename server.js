@@ -63,15 +63,6 @@ notificationSocket.on('connection', function(socket) {
 	});
 });
 
-// //socket for real time comment loading
-// var postSocket = io.of('/post');
-
-
-// //socket for real time notifications
-// var notificationSocket = io.of('/notif');
-
-
-
 
 //Routes
 var UserRoutes = require('./routes/user')(notificationSocket);

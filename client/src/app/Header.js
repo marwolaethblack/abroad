@@ -5,6 +5,7 @@ import { signoutUser } from '../authentication/actions/authentication';
 import { getLatestNotifications, socketNotificationsUpdate, notificationsWereSeen } from '../notification/actions/notifActions';
 import io from 'socket.io-client';
 import { spaceToDash, beautifyUrlSegment } from '../services/textFormatting';
+import onClickOutside from 'react-onclickoutside';
 
 
 let notifSocket = io('/notif');
@@ -100,6 +101,7 @@ class Header extends Component {
  }
   
   componentWillMount() {
+
     if(this.props.authenticated) {
       this.props.fetchLatestNotif(this.props.id);
       notifSocket.emit('room', this.props.id);
@@ -108,6 +110,7 @@ class Header extends Component {
       });
     }
   }
+  
 
   componentWillUnmount() {
     notifSocket.close();
@@ -120,6 +123,10 @@ class Header extends Component {
     }
      return { showMenu : !prevState.showMenu }
     });
+  }
+
+  closeMobileMenu = (e) => {
+      this.setState({ showMenu : false, showNotifications: false });
   }
 
   unseenNotificationsExist = (notifications) => {
@@ -141,6 +148,10 @@ class Header extends Component {
     });
   }
 
+  handleClickOutside = evt => {
+    this.closeMobileMenu();
+  }
+
 
   hamburger = (
     <div id="hamburger">
@@ -160,7 +171,7 @@ class Header extends Component {
         <button id="mobile-menu-button" onClick={this.toggleMobileMenu} >
           {this.state.showMenu ? "X" : this.hamburger}
         </button>
-        <div className={`main-header ${this.state.showMenu && "show"}`}>
+        <div className={`main-header ${this.state.showMenu && "show"}`}  >
           <section className="brand-logo">
             <Link to="/" className="navigation-link">Abroad</Link>
               <Link to={{pathname:"/posts", query:this.props.filter}} className={`navigation-link ${currentPathname.indexOf('/posts') > -1 && "active"}`}>All&nbsp;Posts</Link>
@@ -211,7 +222,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(onClickOutside(Header));
 
 //  for later use
 // <Link to={{pathname:"/posts",query:this.props.filter}} className={`navigation-link ${this.context.router.location.pathname === "/posts" ? "active" : ""}`}>All&nbsp;Posts</Link>

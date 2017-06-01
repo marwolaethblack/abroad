@@ -25,10 +25,12 @@ class App extends Component {
   }
 
   render() {
-        return (
+    return (
       <div className="main">
         <Header />
-        {this.renderChildren(this.props)}
+        <div id="main-content">
+          {this.renderChildren(this.props)}
+        </div>
         <Footer />
       </div>
     );

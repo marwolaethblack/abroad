@@ -19,6 +19,7 @@
     "react-dropzone": "^3.13.1",
     "react-facebook": "^4.0.8",
     "react-linkify": "^0.2.1",
+    "react-onclickoutside": "^6.0.1",
     "react-redux": "^5.0.3",
     "react-router": "^3.0.2",
     "react-router-redux": "^4.0.8",
