@@ -298,10 +298,9 @@ module.exports = (postSocket) => {
 					postInfo.editedFields, 
 					{new: true}
 				)
-				// .populate({path: ['comments','author.id'], options: {lean: true}})
 				.exec(function(err,editedPost) {
 						if(err) console.log(err);
-						res.json(editedPost);
+						res.json(editedPost.content3210);
 				});
 			} else {
 				return res.status(401).send({error:"Unauthorized"});

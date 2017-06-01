@@ -1,7 +1,7 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import { beautifyUrlSegment, spaceToDash } from '../../services/textFormatting';
+import { beautifyUrlSegment, spaceToDash, removeMultipleNewLines } from '../../services/textFormatting';
 import { getUserCountryCode }  from '../../services/userLocation';
 // import { changeFilename }  from '../../services/fileUpload';
 import { trimFormValues,createFileFormData } from '../../services/formHandling';
@@ -140,6 +140,9 @@ export const addPost = (newPost) => (dispatch) =>{
     //trim values of form fields
     newPost = trimFormValues(newPost);
 
+     //replace all multiple new lines with one line /n
+    newPost.content = removeMultipleNewLines(newPost.content);
+
     //assign form fields into FormData to send the form as multipart/form-data
     let body = createFileFormData(newPost);
 
@@ -165,10 +168,13 @@ export const addPost = (newPost) => (dispatch) =>{
         });
 }
 
-//postInfo = { editedPost, postId, posttAuthorId }
+//postInfo = { editedFields, postId, posttAuthorId }
 export const editPost = (postInfo) => (dispatch) => {
 
     dispatch({type:ActionTypes.EDITING_POST});
+
+    //replace all multiple new lines with one line /n
+    postInfo.editedFields.content = removeMultipleNewLines(postInfo.editedFields.content);
 
     axios.put('/api/editPost', { postInfo }, 
                 {headers: {authorization: localStorage.getItem('token')} })
@@ -176,8 +182,8 @@ export const editPost = (postInfo) => (dispatch) => {
 
             //resp is the edited post from the server
             dispatch({
-                type: ActionTypes.RECEIVED_SINGLE_POST,
-                singlePost: resp.data
+                type: ActionTypes.RECEIVED_EDITED_POST,
+                newContent: resp.data
             });
 
             dispatch({

@@ -81,8 +81,7 @@ const mapDispatchToProps = (dispatch) => {
         updatePost(newPost){
           dispatch(editPost(newPost));
         },
-
-        
+   
         markPostAsAnswered(postId, commentId, authorId){
           dispatch(answerPost(postId, commentId, authorId));
         },

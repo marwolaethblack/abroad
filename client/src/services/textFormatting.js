@@ -33,6 +33,12 @@ export const newLineToBreak = (text) => {
 	});
 }
 
+export const removeMultipleNewLines = (text) => {
+
+	return text.replace(/\n+/g, '\n\n').replace(/\n+/g, '\r\n');
+}
+
+
 export const formatDate = (date) => {
 	
 	//convert dateTime to String

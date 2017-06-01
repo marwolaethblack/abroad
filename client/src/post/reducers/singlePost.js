@@ -8,6 +8,9 @@ export const singlePost = (state={},action) => {
             layerComments(action.singlePost.comments);
             return action.singlePost;
         }
+        case ActionTypes.RECEIVED_EDITED_POST: {
+            return {...state,content: action.newContent};
+        }
         case ActionTypes.COMMENT_ADDED: 
         case ActionTypes.COMMENT_EDITED: {
             const layeredComments = layerComments(action.updatedComments);
