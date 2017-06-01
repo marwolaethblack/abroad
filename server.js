@@ -33,14 +33,42 @@ mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", fu
   if(err) console.log(err);
 });
 
+
 //Socket namespaces
 
 //socket for real time comment loading
 var postSocket = io.of('/post');
+var connections = [];
 
+postSocket.on('connection', function(socket) {
+	connections.push(socket.id);
+	socket.on('roomPost', function(room) {
+		socket.join(room);
+	});	
+	socket.on('disconnect', function(s) {
+		connections.splice(connections.indexOf(s.id), 1);
+	});
+});
 
 //socket for real time notifications
 var notificationSocket = io.of('/notif');
+notificationSocket.on('connection', function(socket) {
+	connections.push(socket.id);
+
+	socket.on('room', function(room) {
+		socket.join(room);
+	});	
+	socket.on('disconnect', function(s) {
+		connections.splice(connections.indexOf(s.id), 1);
+	});
+});
+
+// //socket for real time comment loading
+// var postSocket = io.of('/post');
+
+
+// //socket for real time notifications
+// var notificationSocket = io.of('/notif');
 
 
 

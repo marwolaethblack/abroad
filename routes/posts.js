@@ -300,7 +300,7 @@ module.exports = (postSocket) => {
 				)
 				.exec(function(err,editedPost) {
 						if(err) console.log(err);
-						res.json(editedPost.content3210);
+						res.json(editedPost.content);
 				});
 			} else {
 				return res.status(401).send({error:"Unauthorized"});

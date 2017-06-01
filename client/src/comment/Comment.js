@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Linkify from 'react-linkify';
 import postDateDiff from '../services/dateDifference';
 import EditCommentForm from './EditCommentForm';
 import ReplyCommentForm from './ReplyCommentForm';
@@ -77,7 +78,9 @@ class Comment extends Component {
             <div className={`whole-comment ${ isAnswer && 'answer' } ${ author._id === loggedUserId && 'own-comment' } `}>
   	        	<span>Upvotes {upvotes}</span>
                   <section className="comment-content">
-                  { content }
+                    <Linkify properties={{target: '_blank'}}>
+                      { content }
+                    </Linkify>
                   </section>
   	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author}/${spaceToDash(author.username)}`}>{author.username}</Link></span>
                 <div>

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import Linkify from 'react-linkify';
 import postDateDiff from '../services/dateDifference';
 import Comment from '../comment/Comment';
 import AddComment from '../comment/AddComment';
@@ -131,7 +132,9 @@ class ExtendedPost extends Component {
             <p>{country_from + " > " + country_in}</p>
             <span>Submitted {datePosted} ago by <Link to={`/user/${author._id}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
-              { newLineToBreak(content) }
+              <Linkify properties={{target: '_blank'}}>
+                { newLineToBreak(content) }
+              </Linkify>
             </section>
         { loggedUserId === author._id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
         { loggedUserId === author._id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
