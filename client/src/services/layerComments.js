@@ -42,6 +42,14 @@
 
     comments.sort(sortByObjectIds);
 
+    //show the comment selected as an answer first
+    const answerCommentIndex = comments.findIndex(x => x.isAnswer);
+
+    if(answerCommentIndex > -1){
+        const commentAsAnswer = comments.splice(answerCommentIndex, 1);
+        comments = [...commentAsAnswer,...comments]; 
+    }
+
     return comments;
   }
 
