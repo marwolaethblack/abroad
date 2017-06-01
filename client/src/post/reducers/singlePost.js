@@ -17,9 +17,13 @@ export const singlePost = (state={},action) => {
             layerComments(action.updatedPost.comments);
             return action.updatedPost;
         }
-        case ActionTypes.MARK_ANSWERED: {
+        case ActionTypes.MARK_POST_ANSWERED: {
             layerComments(action.answeredPost.comments);
             return action.answeredPost;
+        }
+        case ActionTypes.REMOVE_POST_ANSWER: {
+            layerComments(action.changedAnswerPost.comments);
+            return action.changedAnswerPost;
         }
         case 'SOCKET_ADD_COMMENT': {
             const comments = layerComments(action.payload);

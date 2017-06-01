@@ -73,6 +73,7 @@ class ExtendedPost extends Component {
                        postId={this.props._id}
                        deleteComment={deleteComment}
                        answerPost={this.props.answerPost} 
+                       removePostAnswer={this.props.removePostAnswer}
                        editComment={this.props.editComment}
                        authenticated={this.props.authenticated}
                        isPostAuthor = {loggedUserId === this.props.author._id}

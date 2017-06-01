@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { fetchSinglePost, editPost, deletePost, answerPost } from '../actions/postActions';
+import { fetchSinglePost, editPost, deletePost, answerPost, removePostAnswer } from '../actions/postActions';
 import { editComment, deleteComment } from '../../comment/actions/commentActions';
 import RelatedPosts from '../../post/RelatedPosts';
 import ExtendedPost from '../ExtendedPost';
@@ -30,7 +30,7 @@ class ExtendedPostPage extends Component {
 
     const { singlePost, relatedPosts, loading,
             authenticated, removeComment, removePost, 
-            updatePost, markPostAsAnswered, updateComment, socketAddComment, socket } = this.props;
+            updatePost, markPostAsAnswered, removeAnswer, updateComment, socketAddComment, socket } = this.props;
 
     const isEmpty = Object.keys(singlePost).length === 0;
     if(loading.posts) {
@@ -49,6 +49,7 @@ class ExtendedPostPage extends Component {
                         deletePost={removePost} 
                         editPost={updatePost}
                         answerPost={markPostAsAnswered}
+                        removePostAnswer={removeAnswer}
                         socketAddComment={socketAddComment}
                         socket={socket}
                         />
@@ -84,6 +85,10 @@ const mapDispatchToProps = (dispatch) => {
         
         markPostAsAnswered(postId, commentId, authorId){
           dispatch(answerPost(postId, commentId, authorId));
+        },
+
+        removeAnswer(postId, commentId, authorId){
+          dispatch(removePostAnswer(postId, commentId, authorId));
         },
 
         updateComment(newComment){

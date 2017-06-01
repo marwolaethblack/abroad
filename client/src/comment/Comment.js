@@ -19,6 +19,8 @@ class Comment extends Component {
         this.openReplyModal = this.openReplyModal.bind(this);
         this.closeReplyModal = this.closeReplyModal.bind(this);
         this.markPostAsAnswered = this.markPostAsAnswered.bind(this);
+        this.removePostAnswer = this.removePostAnswer.bind(this);
+        
     }
 
     renderComments = (comments) => {
@@ -44,6 +46,10 @@ class Comment extends Component {
 
   markPostAsAnswered = (postId, commentId, authorId) => {
     this.props.answerPost(postId, commentId, authorId);
+  }
+
+  removePostAnswer = (postId, commentId, authorId) => {
+    this.props.removePostAnswer(postId, commentId, authorId);
   }
 
   openEditCommentModal = () => {
@@ -76,9 +82,10 @@ class Comment extends Component {
   	        	<span>Submitted {datePosted} ago by <Link to={`/user/${author}/${spaceToDash(author.username)}`}>{author.username}</Link></span>
                 <div>
                   {(parents.length === 1 && isPostAuthor && !isPostAnswered) && <button onClick={()=>{this.markPostAsAnswered(postId, _id, loggedUserId);}}>Mark as answered</button> }
+                  {(parents.length === 1 && isPostAuthor && isAnswer) && <button onClick={()=>{this.removePostAnswer(postId, _id, loggedUserId);}}>Remove the answer</button> }
                   {authenticated && <button style={{color:"blue"}} onClick={this.openReplyModal}>REPLY</button> }
-                  {author._id === loggedUserId && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
-                  {author._id === loggedUserId && <button style={{color:"red"}}  onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</button> }
+                  {(author._id === loggedUserId && !isAnswer) && <button style={{color:"green"}} onClick={this.openEditCommentModal}>EDIT COMMENT</button> }
+                  {(author._id === loggedUserId && !isAnswer) && <button style={{color:"red"}}  onClick={()=>{this.handleDeleteClick(deleteComment, _id);}}>Delete</button> }
                 </div>
   	        	<span>{comments !== undefined && comments.length} comments</span>
             </div>

@@ -218,8 +218,6 @@ module.exports = function(postSocket, notificationSocket) {
 		let { commentId, postId, authorId } = req.body;
 		var { _id, username } = req.user;
 
-
-
 		if(commentId){
 			if(JSON.stringify(authorId) === JSON.stringify(_id)) {		
 				
@@ -247,15 +245,7 @@ module.exports = function(postSocket, notificationSocket) {
 							res.json(err);
 						}
 						res.json(answeredPost);
-					});
-
-
-					// CommentModel.find({postId: editedComment.postId})
-					// .populate({path : 'author', options: {lean: true, select: '_id username'}})
-					// .exec(function(err, comments) {
-					// 	res.json(comments);
-					// });
-						
+					});					
 				});
 			} else {
 				return res.status(401).send({error:"Unauthorized"});
@@ -264,6 +254,51 @@ module.exports = function(postSocket, notificationSocket) {
 			return res.status(422).send({error:"Wuut? Your request is WRONG!!!."});
 		}
 	});
+
+
+	//REMOVE THE PREVIOUSLY SELECTED ANSWER FOR A POST
+	router.put('/api/removeAnswer', requireAuth, (req,res) => {
+
+		let { commentId, postId, authorId } = req.body;
+		var { _id, username } = req.user;
+
+		if(commentId){
+			if(JSON.stringify(authorId) === JSON.stringify(_id)) {		
+				
+				//update a comment and return the edited comment
+				CommentModel.findOneAndUpdate(
+					{ _id: commentId },
+					{ isAnswer: false }
+				)
+				.exec((err,comment) => {
+						if(err){
+							console.log(err);
+							res.json(err);
+						}
+
+					//mark the post as unanswered again
+					PostModel.findOneAndUpdate(
+						{ _id: postId },
+						{ isAnswered: false }, 
+						{ new: true}
+					).populate({path: 'comments', options: {lean: true, populate : {path : 'author', options: {lean: true, select: '_id username'}}}})
+					.populate({path: 'author', options: {lean: true, select: '_id username'}})
+					.exec((err,changedAnswerPost) => {
+						if(err){
+							console.log(err);
+							res.json(err);
+						}
+						res.json(changedAnswerPost);
+					});					
+				});
+			} else {
+				return res.status(401).send({error:"Unauthorized"});
+			}
+		} else {
+			return res.status(422).send({error:"Wuut? Your request is WRONG!!!."});
+		}
+	});
+
 
 
 	router.delete("/api/deleteComment", requireAuth, (req, res) => {

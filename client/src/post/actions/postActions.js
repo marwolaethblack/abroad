@@ -204,8 +204,30 @@ export const answerPost = (postId, commentId, authorId) => (dispatch) =>{
             //all post's comments are returned in response 
             //so they can be layered in the reducer
             dispatch({
-                type: ActionTypes.MARK_ANSWERED,
+                type: ActionTypes.MARK_POST_ANSWERED,
                 answeredPost: resp.data
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({
+                type: ActionTypes.EDIT_COMMENT_ERROR,
+                message: err.response.data.error
+            });
+        });
+}
+
+export const removePostAnswer = (postId, commentId, authorId) => (dispatch) =>{
+
+    axios.put('/api/removeAnswer', { commentId, postId, authorId }, 
+                {headers: {authorization: localStorage.getItem('token')} })
+        .then(resp => {
+
+            //all post's comments are returned in response 
+            //so they can be layered in the reducer
+            dispatch({
+                type: ActionTypes.REMOVE_POST_ANSWER,
+                changedAnswerPost: resp.data
             });
         })
         .catch(err => {
