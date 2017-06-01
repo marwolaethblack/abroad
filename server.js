@@ -25,7 +25,7 @@ if (process.env.NODE_ENV != 'production') {
 }
 app.use(express.static('./uploads'));
 app.use(cors());
-app.use(bodyParser.json({type: '*/*'}));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 // mongoose.Promise = global.Promise; only if the browser-console shows promise Warning
