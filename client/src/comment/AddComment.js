@@ -11,6 +11,7 @@ const AddComment = (props) => {
 			const { postId } = props;
 			const { comment } = formProps;
 			props.postComment(postId, comment);
+			
 		}
 
 		const { handleSubmit, submitting, pristine} = props;

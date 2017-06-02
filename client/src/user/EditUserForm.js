@@ -16,15 +16,19 @@ const isInputEmpty = (value) => {
 const validate = (values) => {
 const errors = {};
 	
-	//all values are required
+	//if a value is empty, don't save it
 	Object.keys(values).map(key => {
 		if(isInputEmpty(values[key])){
-			return errors[key]= "required field";
+			delete values[key];
 		}	
 	});
 
 	if(values.username && (values.username.length < 3 || values.username.length > 30)){
 		errors.username = 'Your username must be between 3 and 30 characters long.'
+	}
+
+	if(values.about && values.about.length > 200){
+		errors.about = 'About section must not be longer than 200 characters.'
 	}
 
 
@@ -40,6 +44,20 @@ const renderField = (props) => {
 	      <input {...input} placeholder={label} type={type}/>
 	      {touched && (error && <span>{error}</span>)}
 	    </div>
+  	</fieldset> );
+}
+
+const renderTextarea = (props) => {
+
+	const { input, label, type, placeholder, maxLength, meta: { touched, error } } = props;
+	return (
+	<fieldset>
+	    <label>{label}</label>
+	    <div>
+	      <textarea {...input} maxLength={maxLength} placeholder={placeholder} type={type} > </textarea>
+	      <span>{input.value.length}/{maxLength}</span>
+	    </div>
+	    {touched && (error && <span>{error}</span>)}
   	</fieldset> );
 }
 
@@ -100,6 +118,13 @@ class EditUserForm extends Component {
 						</Field>
 
 						<Field 
+						name="about"
+						component={renderTextarea}
+						maxLength="200"
+						placeholder="Write about yourself"
+						label="About" />
+
+						<Field 
 						name="username" 
 						component={renderField} 
 						label="Username" type="text"  />
@@ -127,8 +152,8 @@ EditUserForm = reduxForm({
 EditUserForm = connect(
   state => {
   	if(state.user.userData){
-  		let { country_from, country_in, username, image, _id } = state.user.userData;
-	  	return { initialValues: { country_from, country_in, username, image, _id } }
+  		let { country_from, country_in, username, image, about, _id } = state.user.userData;
+	  	return { initialValues: { country_from, country_in, username, about, image, _id } }
   	}
   	return {};
   },

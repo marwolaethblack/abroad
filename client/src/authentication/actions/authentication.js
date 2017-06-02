@@ -103,6 +103,8 @@ export function signUpUser({ email, password, username }) {
 	return function(dispatch) {
 		axios.post("/api/signup", {email, password, username})
 			.then(response => {
+				console.log("FUCK response: ");
+				console.log(response);
 				dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username});
 				//Save token and user ID to local storage
 				localStorage.setItem('token', response.data.token);

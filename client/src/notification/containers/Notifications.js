@@ -17,14 +17,14 @@ class Notifications extends Component {
             <span>{ formatDate(notification.createdAt) }</span>
             <span>
 
-              { <Link to={`/user/${notification.author._id}/${spaceToDash(notification.author.username)}`}>
+              { notification.author && <Link to={`/user/${notification.author._id}/${spaceToDash(notification.author.username)}`}>
                   { notification.author.username }
                 </Link>
 
               } 
               <span> { notification.text } </span>
 
-              { notification.postId && 
+              { notification.postId && notification.author &&
                 <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
                   &nbsp;>>> 
                 </Link> 

@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import Linkify from 'react-linkify';
 import Post from '../post/Post';
 import UsersPosts from '../post/UsersPosts';
 
+
 export default function UserPage(props) {
-	const { username, image, country_in, country_from, email, comments, posts, _id } = props.userData;
+	const { username, image, about, country_in, country_from, email, comments, posts, _id } = props.userData;
 	const { loadUsersPosts, usersPosts, postsPages, isFetching, location} = props; //ID from the URL 
 
 	return(
@@ -12,6 +14,7 @@ export default function UserPage(props) {
 			<figure id="user-info">	
 				<figcaption>
 					<h1>{username}</h1>
+					{ about && <Linkify> <p>{about}</p> </Linkify> }
 					{ country_from && <p>I'm from {country_from}</p> }
 					{ country_in && <p>I currently live in {country_in} </p> }
 				</figcaption>

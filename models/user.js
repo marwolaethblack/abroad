@@ -4,12 +4,16 @@ const bcrypt = require("bcrypt-nodejs");
 
 //Define our model
 const userSchema = new Schema({
-	socialId: { type: String, unique: true },
+	socialId: { type: String, index: {
+      unique: true,
+      partialFilterExpression: {socialId: {$type: 'string'}}
+    }},
 	provider: String,
 	username: String,
 	email: { type: String, unique: true, lowercase: true, dropDups: true },
 	password: String,
 	image: String,
+	about: String,
 	country_from: String,
 	country_in: {
 		country: String,
@@ -28,6 +32,7 @@ const userSchema = new Schema({
          ref: "Notification"
     }]
 });
+
 
 userSchema.methods.comparePassword = function(candidatePassword, callback) {
 	bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {

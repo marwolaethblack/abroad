@@ -75,7 +75,7 @@ const renderOptions = (options) => {
 }
 
 const renderField = (
-  { input, label, placeholder, type, options, initialText, meta: { touched, error, warning } },
+  { input, label, placeholder, maxLength, type, options, initialText, meta: { touched, error, warning } },
 ) => {
 
   const renderInputType = (type) => {

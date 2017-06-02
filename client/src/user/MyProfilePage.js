@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
+import Linkify from 'react-linkify';
 import Post from '../post/Post';
 import UsersPosts from '../post/UsersPosts';
 
 export default function MyProfilePage(props) {
-	const { username, image, country_in, country_from, comments, posts } = props.userData;
+	const { username, image, about, country_in, country_from, comments, posts } = props.userData;
 	const { loadUsersPosts, usersPosts, postsPages, isFetching, location} = props; 
 
 	return(
@@ -12,6 +13,7 @@ export default function MyProfilePage(props) {
 			<figure id="user-info">	
 				<figcaption>
 					<h1>{username}</h1>
+					{ about && <Linkify> <p>{about}</p> </Linkify> }
 					{ country_from && <p>I'm from {country_from}</p> }
 					{ country_in && <p>I currently live in {country_in} </p> }
 					<Link to={'/my-profile/edit'}>Edit profile</Link>

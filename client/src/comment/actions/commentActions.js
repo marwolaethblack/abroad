@@ -1,5 +1,6 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
+import {reset} from 'redux-form';
 
 
 export const addComment = (postId, comment, parentId) => (dispatch) => {
@@ -15,6 +16,8 @@ export const addComment = (postId, comment, parentId) => (dispatch) => {
                 type: ActionTypes.COMMENT_ADDED,
                 updatedComments: resp.data.comments
             });
+            //clear the form
+            dispatch(reset('addComment'));
         })
         .catch(err => {
             console.log(err);

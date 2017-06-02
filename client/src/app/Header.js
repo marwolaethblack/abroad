@@ -73,14 +73,14 @@ class Header extends Component {
         return (
           <li key={i}> 
 
-            { <Link to={`/user/${notification.author._id}/${spaceToDash(notification.author.username)}`}>
+            { notification.author && <Link to={`/user/${notification.author._id}/${spaceToDash(notification.author.username)}`}>
                 { notification.author.username }
               </Link>
             } 
 
             { notification.text } 
 
-            { notification.postId && 
+            { notification.postId && notification.author &&
               <Link to={`/posts/${notification.postId}`} onClick={this.toggleNotifications}> 
                 &nbsp;>>> 
               </Link> 
