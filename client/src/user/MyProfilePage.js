@@ -17,6 +17,8 @@ export default function MyProfilePage(props) {
 					{ country_from && <p>I'm from {country_from}</p> }
 					{ country_in && <p>I currently live in {country_in} </p> }
 					<Link to={'/my-profile/edit'}>Edit profile</Link>
+					<br/>
+					<Link to={'/my-profile/subscriptions'}>Edit my notification subscriptions</Link>
 				</figcaption>
 				<img src={image ? image : "http://placehold.it/350x150"} className="profile-pic"/>
 			</figure>

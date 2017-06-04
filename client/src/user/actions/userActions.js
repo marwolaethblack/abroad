@@ -39,3 +39,45 @@ export function editUser(userInfo) {
 	}
 }
 
+
+
+
+export function addNotificationSubscription(subscription) {
+	return function(dispatch) {
+		
+	 axios.put('/api/notifications/addSubscription', subscription, {headers: {authorization: localStorage.getItem('token')} })
+						.then(resp => {
+							console.log(resp.data);
+							dispatch({type: ActionTypes.SUBSCRIPTION_ADDED, subscription: resp.data})
+						})
+						.catch(err => {
+							dispatch({
+				                type: ActionTypes.ADD_SUBSCRIPTION_ERROR,
+				                message: err.response.data.error
+				            });
+						})
+	}
+
+}
+
+
+export function deleteNotificationSubscription(index) {
+	return function(dispatch) {
+		console.log(index);
+	 axios.delete('/api/notifications/deleteSubscription', { params: { index } , headers: {authorization: localStorage.getItem('token')}
+	 													     })
+						.then(resp => {
+							dispatch({type: ActionTypes.SUBSCRIPTION_REMOVED, subscriptions: resp.data})
+						})
+						.catch(err => {
+							dispatch({
+				                type: ActionTypes.REMOVE_SUBSCRIPTION_ERROR,
+				                message: err.response.data.error
+				            });
+						})
+	}
+
+}
+
+
+

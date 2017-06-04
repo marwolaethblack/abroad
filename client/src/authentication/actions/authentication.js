@@ -53,10 +53,11 @@ export function signinUser({ email, password }) {
 		.then(response =>{
 			//If request is good...
 			// - Update state to indicate user is authenticated
-			dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username})
+			dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username, subscriptions:response.data.subscriptions})
 			//- Save the JWT token and user ID
 			localStorage.setItem('token', response.data.token);
 			localStorage.setItem('id', response.data.id);
+			localStorage.setItem('subscriptions', JSON.stringify(response.data.subscriptions));
 			// redirect to route /feature
 			browserHistory.goBack();
 			dispatch(getNotifications(response.data.id));
@@ -80,6 +81,7 @@ export function signoutUser(notifSocket) {
 	localStorage.removeItem("token");
 	localStorage.removeItem("id");
 	localStorage.removeItem('username');
+	localStorage.removeItem('subscriptions');
 	notifSocket.close();
 
 	//FB log out

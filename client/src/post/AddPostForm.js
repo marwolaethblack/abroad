@@ -183,11 +183,7 @@ AddPostForm = reduxForm({
   warn
 })(AddPostForm);
 
-AddPostForm = connect(
-  state => ({
-    initialValues: state.user.userData
-  }),
-)(AddPostForm)
+AddPostForm = connect()(AddPostForm)
 
 export default AddPostForm;
 

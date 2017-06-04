@@ -45,6 +45,9 @@ postSocket.on('connection', function(socket) {
 	socket.on('roomPost', function(room) {
 		socket.join(room);
 	});	
+
+	
+
 	socket.on('disconnect', function(s) {
 		connections.splice(connections.indexOf(s.id), 1);
 	});
@@ -58,6 +61,11 @@ notificationSocket.on('connection', function(socket) {
 	socket.on('room', function(room) {
 		socket.join(room);
 	});	
+
+	socket.on('subscriptionRoom', function(room) {
+		socket.join(room);
+	});	
+
 	socket.on('disconnect', function(s) {
 		connections.splice(connections.indexOf(s.id), 1);
 	});
@@ -66,7 +74,7 @@ notificationSocket.on('connection', function(socket) {
 
 //Routes
 var UserRoutes = require('./routes/user')(notificationSocket);
-var PostRoutes = require('./routes/posts')(postSocket);
+var PostRoutes = require('./routes/posts')(postSocket, notificationSocket);
 var CommentRoutes = require('./routes/comments')(postSocket, notificationSocket);
 var AuthenticationRoutes = require('./routes/auth')(notificationSocket);
 var NotificationRoutes = require('./routes/notifications')(notificationSocket);

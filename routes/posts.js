@@ -1,6 +1,7 @@
 var PostModel = require('../models/Post');
 var CommentModel = require('../models/Comment');
 var UserModel = require('../models/User');
+var NotificationModel = require('../models/Notification');
 var express = require('express');
 var passport = require('passport');
 import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
@@ -12,7 +13,7 @@ import fs from 'fs';
 
 
 
-module.exports = (postSocket) => {
+module.exports = (postSocket, notificationSocket) => {
 
 	var router = express.Router();
 
@@ -248,6 +249,7 @@ module.exports = (postSocket) => {
 
 		var newPost = req.body;
 		var userId = req.user._id;
+		var reqUsername = req.user.username;
 
 		if(newPost){
 			newPost.author = { _id : userId};
@@ -268,15 +270,50 @@ module.exports = (postSocket) => {
 			post.save(function(err,newPost) {
 				if(err) console.log(err);
 
-			UserModel.findById(userId, function(err, foundAuthor) {
-				if(err) {
-					return res.status(422).send({error:err});
-				}
+				UserModel.findById(userId, function(err, foundAuthor) {
+					if(err) {
+						return res.status(422).send({error:err});
+					}
 
-				foundAuthor.posts.push(newPost);	
-				foundAuthor.save();
-			});
+					foundAuthor.posts.push(newPost);	
+					foundAuthor.save(function(err) {
+
+						UserModel.find({
+							$and: [
+								{ 'subscriptions.notifications_country': newPost.country_in },
+								{ 'subscriptions.notifications_category': newPost.category }
+							]
+						})
+						.exec(function(err, foundUsers) {
+							if(err) {
+								console.log(err);
+							}
+
+							var notif = new NotificationModel();
+								notif.postId = newPost._id;
+								notif.author = { _id: userId }
+								notif.text = ` has added a new post to the category ${newPost.category} in ${newPost.country_in}.`;
+								notif.save(function(err) {
+
+									for (var i = 0; i < foundUsers.length; i++) {
+										if(foundUsers[i].username.toString() === reqUsername.toString()) {
+											break;
+										}
+										foundUsers[i].notifications.push(notif);
+										foundUsers[i].save();
+										notificationSocket
+										.to(newPost.country_in.toString() + newPost.category.toString())
+										.emit("new notification", {...notif._doc,  author: { _id:userId, username: reqUsername } });
+									}	
+
+								});					
+
+						})
+					});
+				});
+
 				res.json(newPost);
+				
 			});
 		} else {
 			return res.status(422).send({error:"Wuut? No post was sent."});

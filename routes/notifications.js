@@ -76,6 +76,39 @@ module.exports = function(notificationSocket) {
 				)
 			});
 	});
+
+
+	router.put('/api/notifications/addSubscription', requireAuth, function(req,res) {
+
+		UserModel.findById(req.user._id)
+			.exec(function(err, user) {
+				if(err || !user) {
+					return res.status(422).send({error:err});
+				}
+
+				user.subscriptions.push(req.body);
+				user.save(function(err) {
+					res.json(req.body);	
+				});
+							
+			});
+	});
+
+	router.delete('/api/notifications/deleteSubscription', requireAuth, function(req,res) {
+
+		UserModel.findById(req.user._id)
+			.exec(function(err, user) {
+				if(err || !user) {
+					return res.status(422).send({error:err});
+				}
+				console.log(req.query);
+				console.log(user.subscriptions);
+				user.subscriptions.splice(req.query.index, 1);
+				user.save(function(err) {
+					res.json(user.subscriptions);
+				});				
+			});
+	});
 	
 
 	return router;

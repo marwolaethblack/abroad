@@ -5,6 +5,7 @@ import { browserHistory } from 'react-router';
 import FileUploader, { FILE_FIELD_NAME } from '../widgets/FileUploader';
 
 import countries from '../constants/countries';
+import categories from '../constants/categories';
 
 const isInputEmpty = (value) => {
 	if(!value) {
@@ -149,6 +150,7 @@ EditUserForm = reduxForm({
   validate
 })(EditUserForm);
 
+
 EditUserForm = connect(
   state => {
   	if(state.user.userData){
@@ -156,7 +158,7 @@ EditUserForm = connect(
 	  	return { initialValues: { country_from, country_in, username, about, image, _id } }
   	}
   	return {};
-  },
+  }
 )(EditUserForm)
 
 export default EditUserForm;

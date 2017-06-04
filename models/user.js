@@ -19,6 +19,7 @@ const userSchema = new Schema({
 		country: String,
 		city: String
 	},
+	subscriptions: Array,
 	posts: [{
          type: mongoose.Schema.Types.ObjectId,
          ref: "Post"

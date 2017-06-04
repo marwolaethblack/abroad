@@ -105,6 +105,12 @@ class Header extends Component {
     if(this.props.authenticated) {
       this.props.fetchLatestNotif(this.props.id);
       notifSocket.emit('room', this.props.id);
+      if(this.props.subscriptions && this.props.subscriptions.length > 0) {
+         this.props.subscriptions.forEach(sub => {
+         notifSocket.emit('subscriptionRoom', sub.notifications_country + sub.notifications_category);
+        });
+      }
+     
       notifSocket.on('new notification', (payload) => {
         this.props.updateNotifications(payload)
       });
@@ -198,7 +204,8 @@ function mapStateToProps(state) {
     authenticated: state.auth.authenticated,
     id: state.auth.id,
     filter: state.filter,
-    notifications: state.notifications.latest
+    notifications: state.notifications.latest,
+    subscriptions: state.auth.subscriptions
   }
 }
 
