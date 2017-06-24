@@ -47,13 +47,19 @@ export function socialAuth(provider) {
 
 
 export function signinUser({ email, password }) {
-	return function(dispatch) {
+	return (dispatch) => {
 	//Submit email pasword to server
-	axios.post("/api/signin", {email, password})
-		.then(response =>{
+	axios.post("/api/signin", { email, password })
+		.then(response => {
 			//If request is good...
 			// - Update state to indicate user is authenticated
-			dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username, subscriptions:response.data.subscriptions})
+
+			dispatch({
+				type: ActionTypes.AUTH_USER, 
+				id: response.data.id, 
+				username: response.data.username, 
+				subscriptions:response.data.subscriptions
+			});
 			//- Save the JWT token and user ID
 			localStorage.setItem('token', response.data.token);
 			localStorage.setItem('id', response.data.id);
@@ -102,25 +108,30 @@ export function signoutUser(notifSocket) {
 }
 
 export function signUpUser({ email, password, username }) {
-	return function(dispatch) {
-		axios.post("/api/signup", {email, password, username})
-			.then(response => {
-				console.log("FUCK response: ");
-				console.log(response);
-				dispatch({type: ActionTypes.AUTH_USER, id: response.data.id, username: response.data.username});
+	return (dispatch) => {
+		axios.post("/api/signup", { email, password, username })
+			.then(resp => {
+
+				dispatch({
+					type: ActionTypes.AUTH_USER, 
+					id: resp.data.id, 
+					username: resp.data.username
+				});
+
 				//Save token and user ID to local storage
-				localStorage.setItem('token', response.data.token);
-				localStorage.setItem('id', response.data.id);
-				localStorage.setItem('username', response.data.username);
+				localStorage.setItem('token', resp.data.token);
+				localStorage.setItem('id', resp.data.id);
+				localStorage.setItem('username', resp.data.username);
+
 				//Redirect back
 				browserHistory.push('/posts');
-				dispatch(getNotifications(response.data.id));
+				dispatch(getNotifications(resp.data.id));
+
 			})
-			.catch(error => {
-				dispatch(authError(error.response.data.error));
-			})
-	}
-	
+			.catch(err => {
+				dispatch(authError(err));
+			});
+	}	
 }
 
 export function fetchMessage() {
@@ -128,8 +139,8 @@ export function fetchMessage() {
 		axios.get("/", {
 			headers: {authorization: localStorage.getItem('token')}
 		})
-			.then(response => {
-				console.log(response);
-			});
+		.then(response => {
+			console.log(response);
+		});
 	}
 }

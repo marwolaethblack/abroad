@@ -1,29 +1,33 @@
-var UserModel = require('../models/User');
-var NotificationModel = require('../models/Notification');
+// var UserModel = require('../models/User');
+// var NotificationModel = require('../models/Notification');
 var express = require('express');
 var passport = require('passport');
 
+import User from '../models/UserNew';
+import Notification from '../models/NotificationNew';
 
-module.exports = function(notificationSocket) {
 
-	var router = express.Router();
-	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+module.exports = (notificationSocket) => {
+
+	const router = express.Router();
+	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
 	//LATEST NOTIFICATIONS
-	router.get('/api/notifications-latest', requireAuth, (req,res) => {
+	router.get('/api/notifications-latest', requireAuth, (req, res) => {
 		
 		//number of returned notifications;
 		const limit = req.query.limit || 5;
 
-		UserModel.findById(req.query.id)
-			    .populate({path: 'notifications', options: {limit, lean: true, sort:{createdAt: -1}, populate : {path : 'author', options: {lean: true, select: '_id username'}}}})
-				.exec((err, user) => {
-					if(err || !user) {
-						console.log(err);
-						return res.status(422).send({error:err});
-					}
-					res.json(user.notifications);
-				});
+		Notification.findAll({ 
+			where: { ownerId: req.query.id }, 
+			limit 
+		})
+		.then(notifications => {
+			res.json(notifications);
+		})
+		.catch(err => {
+			return res.status(422).send({ error:err });
+		});
 	});
 
 
@@ -57,28 +61,39 @@ module.exports = function(notificationSocket) {
 
 
 	//change notifications's property 'seen' to true
-	router.put('/api/notifications/seen', requireAuth, function(req,res) {
+	router.put('/api/notifications/seen', requireAuth, (req, res) => {
 
-		UserModel.findById(req.body.userId)
-			.lean()
-			.exec(function(err, user) {
-				if(err || !user) {
-					return res.status(422).send({error:err});
-				}
+		Notification.update(
+			{ seen: true }, 
+			{ where: { ownerId: req.body.userId } }
+		)
+		.then(() => {
+			res.status(200);
+		})
+		.catch(err => {
+			return res.status(422).send({error:err});
+		});
 
-				NotificationModel.update(
-				 { "_id": { $in: user.notifications }},
-				 {"$set": { "seen":true }},
-				 {"multi": true}, //for multiple documents
-				 function(err){
-				 	if(err) return console.error(err);   
-				 }
-				)
-			});
+		// UserModel.findById(req.body.userId)
+		// 	.lean()
+		// 	.exec(function(err, user) {
+		// 		if(err || !user) {
+		// 			return res.status(422).send({error:err});
+		// 		}
+
+		// 		NotificationModel.update(
+		// 		 { "_id": { $in: user.notifications }},
+		// 		 {"$set": { "seen":true }},
+		// 		 {"multi": true}, //for multiple documents
+		// 		 function(err){
+		// 		 	if(err) return console.error(err);   
+		// 		 }
+		// 		)
+		// 	});
 	});
 
 
-	router.put('/api/notifications/addSubscription', requireAuth, function(req,res) {
+	router.put('/api/notifications/addSubscription', requireAuth, (req, res) => {
 
 		UserModel.findById(req.user._id)
 			.exec(function(err, user) {
@@ -94,7 +109,7 @@ module.exports = function(notificationSocket) {
 			});
 	});
 
-	router.delete('/api/notifications/deleteSubscription', requireAuth, function(req,res) {
+	router.delete('/api/notifications/deleteSubscription', requireAuth, (req, res) => {
 
 		UserModel.findById(req.user._id)
 			.exec(function(err, user) {

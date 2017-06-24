@@ -47,3 +47,58 @@ const ModelClass = mongoose.model('User', userSchema);
 
 //export the model
 module.exports = ModelClass;
+
+
+// import Sequelize from 'sequelize';
+// import connection from './db';
+// // const bcrypt = require("bcrypt-nodejs");
+
+
+// const User = connection.define('user', {
+//   id: { 
+//   	type: Sequelize.UUID, 
+//   	primaryKey: true, 
+//   	defaultValue: Sequelize.UUIDV4,
+//     allowNull: false
+//   },
+
+//   socialId: { type: Sequelize.STRING , unique: true},
+
+//   provider: { type: Sequelize.STRING },
+
+//   username: { type: Sequelize.STRING, allowNull: false },
+
+//   email: { 
+//    type: Sequelize.STRING,
+//    unique: true, 
+//    set(val) {
+//   	this.setDataValue('email', title.toString().toLowerCase());
+//    }
+//   },
+
+//   password: { type: Sequelize.STRING, allowNull: false },
+
+//   image: { type: Sequelize.STRING },
+
+//   about: { type: Sequelize.STRING },
+
+//   countryFrom: { type: Sequelize.STRING, allowNull: false},
+
+//   countryIn: { type: Sequelize.STRING, allowNull: false},
+
+//   subscriptions: { type: Sequelize.ARRAY(Sequelize.UUID), defaultValue: [] },
+
+//   },
+//   {
+//   	instanceMethods: {
+//   	comparePassword: function(candidatePassword, callback) {
+// 		bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
+// 			if(err) { console.log(err);return callback(err) }
+// 			callback(null, isMatch);
+// 		});
+// 	}
+//   }
+// });
+
+
+// module.exports = User;

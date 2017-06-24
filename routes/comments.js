@@ -11,9 +11,9 @@ import { spaceToDash } from '../services/textFormatting';
 
 module.exports = function(postSocket, notificationSocket) {
 
-	var router = express.Router();
+	const router = express.Router();
 
-	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
 	router.put('/api/addComment', requireAuth, (req,res) => {
 		var { postId, comment, parentId } = req.body;

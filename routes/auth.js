@@ -13,7 +13,7 @@ module.exports = function (notifSocket) {
 	const requireSignin = passport.authenticate('local', { session: false });
 
 	router.post('/api/signin', requireSignin, Authentication.signin);
-	router.post("/api/signup", Authentication.signup);
+	router.post('/api/signup', Authentication.signup);
 	
 
 	return router;

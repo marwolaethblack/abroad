@@ -10,8 +10,11 @@ var morgan = require('morgan');
 var passport = require('passport');
 var compression = require('compression');
 
-app.use(compression());
+var sequelize = require('sequelize');
 
+
+
+app.use(compression());
 
 app.set('port', (process.env.PORT || 3001));
 if (process.env.NODE_ENV === 'production') {
@@ -32,6 +35,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", function(err) {
   if(err) console.log(err);
 });
+
 
 
 //Socket namespaces

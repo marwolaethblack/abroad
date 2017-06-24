@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchUser } from '../actions/userActions';
-import { fetchPostsByIds } from '../../post/actions/postActions';
+import { fetchPostsByIds, fetchPostsByUserId } from '../../post/actions/postActions';
 
 
 import MyProfilePage from '../MyProfilePage';
@@ -23,12 +23,11 @@ class MyProfileContainer extends Component {
 			}
 			return (<MyProfilePage 
 					  {...user} 
-					  userId={ myUserId }
 					  usersPosts={usersPosts}
 					  postsPages={postsPages}
 					  location={this.props.location}
 					  authenticated={authenticated} 
-					  loadUsersPosts={this.props.getPostsByIds} 
+					  getPostsByUserId={this.props.getPostsByUserId} 
 					  isFetching={isFetching} />
 			);
 		}
@@ -52,8 +51,8 @@ const mapDispatchToProps = (dispatch) => {
 		getUser(id) {
 			dispatch(fetchUser(id));
 		},
-		getPostsByIds(postsIds,page,limit){
-			dispatch(fetchPostsByIds(postsIds,page,limit))
+		getPostsByUserId(userId,page,limit){
+			dispatch(fetchPostsByUserId(userId,page,limit))
 		}
 	}
 }

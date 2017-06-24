@@ -89,7 +89,7 @@ export const fetchSinglePost = id => dispatch => {
     
     dispatch({ type: ActionTypes.FETCH_SINGLE_POST });
 
-    axios.get('/api/singlePost',{params:id })
+    axios.get('/api/postById',{params: id })
         .then(resp => {
             dispatch({
                 type: ActionTypes.RECEIVED_SINGLE_POST,
@@ -107,6 +107,35 @@ export const fetchSinglePost = id => dispatch => {
         });
 };
 
+//Get user's posts
+export const fetchPostsByUserId = (userId, page=1, limit=5) => dispatch => {
+
+    dispatch({ type: ActionTypes.FETCH_POSTS });
+
+    axios.get('/api/postsByUserId',{ params: { userId, page, limit }})
+         .then(resp => {
+
+            dispatch({
+                type: ActionTypes.RECEIVED_POSTS_BY_USER,
+                posts: resp.data.posts,
+                pages: resp.data.pages
+            });
+
+            dispatch({
+                type: ActionTypes.FETCH_POSTS_DONE
+            });
+
+         })
+         .catch(err => {
+            dispatch({
+                type: ActionTypes.FETCH_POSTS_ERROR,
+                message: err
+            });
+         });
+};
+
+
+// ??????????????????????????????
 //Get posts by array of post Ids
 //used to get user's posts for pagination
 export const fetchPostsByIds = (Ids, page=1, limit=5) => dispatch => {
@@ -156,8 +185,8 @@ export const addPost = (newPost) => (dispatch) =>{
                 newPost: resp.data
             });
 
-            const { _id, country_in, title, category } = resp.data;
-            browserHistory.push(`/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`);
+            const { id, countryIn, title, category } = resp.data;
+            browserHistory.push(`/posts/${id}/${spaceToDash(countryIn)}/${category}/${beautifyUrlSegment(title)}`);
         })
         .catch(err => {
             console.log(err);
@@ -168,10 +197,10 @@ export const addPost = (newPost) => (dispatch) =>{
         });
 }
 
-//postInfo = { editedFields, postId, posttAuthorId }
+//postInfo = { editedFields, postId, postAuthorId }
 export const editPost = (postInfo) => (dispatch) => {
 
-    dispatch({type:ActionTypes.EDITING_POST});
+    dispatch({ type:ActionTypes.EDITING_POST });
 
     //replace all multiple new lines with one line /n
     postInfo.editedFields.content = removeMultipleNewLines(postInfo.editedFields.content);
@@ -180,22 +209,20 @@ export const editPost = (postInfo) => (dispatch) => {
                 {headers: {authorization: localStorage.getItem('token')} })
         .then(resp => {
 
-            //resp is the edited post from the server
             dispatch({
                 type: ActionTypes.RECEIVED_EDITED_POST,
-                newContent: resp.data
+                editedPost: resp.data
             });
 
             dispatch({
-                type: ActionTypes.POST_EDITED,
-                editedPost: resp.data
+                type: ActionTypes.POST_EDITED
             });
         })
         .catch(err => {
             console.log(err);
             dispatch({
                 type: ActionTypes.EDIT_POST_ERROR,
-                message: err.response.data.error
+                message: 'Failed to edit the post.'
             });
         });
 }

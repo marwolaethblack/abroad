@@ -25,23 +25,23 @@ const isInputAllowed = (value, allowedSet) => {
 }
 
 const validate = (values) => {
-  const { title, country_from, country_in, category, content } = values;
+  const { title, countryFrom, countryIn, category, content } = values;
   let errors = {};
 
     if(isInputEmpty(title)){
       errors.title = "required field";
     }
 
-    if(isInputEmpty(country_from)){
-      errors.country_from = "required field";
-    } else if(!isInputAllowed(country_from, countries)){
-      errors.country_from = "value not allowed";
+    if(isInputEmpty(countryFrom)){
+      errors.countryFrom = "required field";
+    } else if(!isInputAllowed(countryFrom, countries)){
+      errors.countryFrom = "value not allowed";
     }
 
-    if(isInputEmpty(country_in)){
-      errors.country_in = "required field";
-    } else if(!isInputAllowed(country_in, countries)){
-      errors.country_in = "value not allowed";
+    if(isInputEmpty(countryIn)){
+      errors.countryIn = "required field";
+    } else if(!isInputAllowed(countryIn, countries)){
+      errors.countryIn = "value not allowed";
     }
 
     if(isInputEmpty(category)){
@@ -140,7 +140,7 @@ const AddPostForm = props => {
         label="Content" />
 
       <Field 
-        name="country_from" 
+        name="countryFrom" 
         component={renderField} 
         type="select"
         initialText="Choose a country"
@@ -148,7 +148,7 @@ const AddPostForm = props => {
         label="From" />
    
       <Field 
-        name="country_in" 
+        name="countryIn" 
         component={renderField} 
         type="select"
         initialText="Choose a country"

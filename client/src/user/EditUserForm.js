@@ -106,14 +106,14 @@ class EditUserForm extends Component {
 					<h2>Edit your profile</h2>
 					<div>
 						{ userImage && <img alt="profile-pic" src={userImage} className="profile-pic" /> }
-						<label htmlFor="country_from">I'm from: </label>
-						<Field name="country_from" component="select">
+						<label htmlFor="countryFrom">I'm from: </label>
+						<Field name="countryFrom" component="select">
 						<option key="-1" value="">Choose a country you're from</option>
 							{ Object.values(countries).map((country,i) => <option key={i} value={country}>{country}</option> ) }
 						</Field>
 
-						<label htmlFor="country_in">I currently live in: </label>
-						<Field name="country_in" component="select">
+						<label htmlFor="countryIn">I currently live in: </label>
+						<Field name="countryIn" component="select">
 						<option key="-1" value="">Choose a country you live in</option>
 							{ Object.values(countries).map((country,i) => <option key={i} value={country}>{country}</option> ) }
 						</Field>
@@ -154,8 +154,8 @@ EditUserForm = reduxForm({
 EditUserForm = connect(
   state => {
   	if(state.user.userData){
-  		let { country_from, country_in, username, image, about, _id } = state.user.userData;
-	  	return { initialValues: { country_from, country_in, username, about, image, _id } }
+  		let { countryFrom, countryIn, username, image, about, id } = state.user.userData;
+	  	return { initialValues: { countryFrom, countryIn, username, about, image, id } }
   	}
   	return {};
   }

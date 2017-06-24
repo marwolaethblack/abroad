@@ -9,7 +9,7 @@ export const singlePost = (state={},action) => {
             return {...action.singlePost, comments: layeredComments};
         }
         case ActionTypes.RECEIVED_EDITED_POST: {
-            return {...state,content: action.newContent};
+            return { ...state, ...action.editedPost };
         }
         case ActionTypes.COMMENT_ADDED: 
         case ActionTypes.COMMENT_EDITED: {

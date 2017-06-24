@@ -30,9 +30,11 @@ import { ActionTypes } from './constants/actionTypes';
 const token = localStorage.getItem("token");
 const id = localStorage.getItem('id');
 const username = localStorage.getItem('username');
-const subscriptions = JSON.parse(localStorage.getItem('subscriptions'));
+// const subscriptions = JSON.parse(localStorage.getItem('subscriptions'));
 if(token) {
-  store.dispatch({type: ActionTypes.AUTH_USER, id, username, subscriptions});
+  // ???????????????????????????????????????
+  // subscriptions will be done differently
+  store.dispatch({type: ActionTypes.AUTH_USER, id, username, subscriptions: []});
 }
 
 ReactDOM.render(
@@ -41,7 +43,7 @@ ReactDOM.render(
   		<Route path="/" component={App}>
   		  <IndexRoute component={FrontPage} />
   			<Route path="posts" component={PostsPage} />
-  		  <Route path="posts/:id(/:country_in)(/:category)(/:title)" component={ExtendedPostPage} />
+  		  <Route path="posts/:id(/:countryIn)(/:category)(/:title)" component={ExtendedPostPage} />
         <Route path="add-post" component={RequireAuth(NewPostPage)} />
         <Route path="user/:id(/:username)" component={UserPageContainer} />
         <Route path="my-profile" component={RequireAuth(MyProfileContainer)} />

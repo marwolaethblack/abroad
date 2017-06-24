@@ -12,7 +12,7 @@ class RelatedPosts extends Component {
        <div className="related-posts">
           
           {relatedPosts.map(post => 
-               <RelatedPost key={post._id} {...post} />
+               <RelatedPost key={post.id} {...post} />
           )}       
        </div>
       </div>

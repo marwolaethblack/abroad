@@ -6,7 +6,7 @@ import UsersPosts from '../post/UsersPosts';
 
 
 export default function UserPage(props) {
-	const { username, image, about, country_in, country_from, email, comments, posts, _id } = props.userData;
+	const { username, image, about, countryIn, countryFrom, email, comments, posts, _id } = props.userData;
 	const { loadUsersPosts, usersPosts, postsPages, isFetching, location} = props; //ID from the URL 
 
 	return(
@@ -15,8 +15,8 @@ export default function UserPage(props) {
 				<figcaption>
 					<h1>{username}</h1>
 					{ about && <Linkify> <p>{about}</p> </Linkify> }
-					{ country_from && <p>I'm from {country_from}</p> }
-					{ country_in && <p>I currently live in {country_in} </p> }
+					{ countryFrom && <p>I'm from {countryFrom}</p> }
+					{ countryIn && <p>I currently live in {countryIn} </p> }
 				</figcaption>
 				<img src={image ? image : "http://placehold.it/350x150"} className="profile-pic"/>
 			</figure>

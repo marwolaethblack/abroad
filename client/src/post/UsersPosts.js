@@ -5,18 +5,18 @@ import { Link } from 'react-router';
 class UsersPosts extends Component {
 
   componentWillMount() {
-    const { location, postsIds, loadUsersPosts } = this.props;
+    const { location, userId, getPostsByUserId } = this.props;
 
       let page = location.query.page || 1;
       //3rd parameter => limit
-      loadUsersPosts(postsIds, page, 3);
+      getPostsByUserId(userId, page, 3);
   }
 
   componentWillUpdate(nextProps){
-    const { location, postsIds, loadUsersPosts } = this.props;
+    const { location, userId, getPostsByUserId } = this.props;
 
     if(nextProps.location.query.page !== location.query.page){
-      loadUsersPosts(postsIds, nextProps.location.query.page,3);
+      getPostsByUserId(userId, nextProps.location.query.page, 3);
     }
   }
 
@@ -46,7 +46,7 @@ class UsersPosts extends Component {
   render() {
     const { isFetching, usersPosts } = this.props;
 
-    if(this.props.postsIds.length === 0) 
+    if(usersPosts && usersPosts.length === 0) 
       return <span style={{color:"red", fontSize:"2em"}}>No posts found.</span>
 
     //RelatedPost components is used also for user's posts
@@ -55,7 +55,7 @@ class UsersPosts extends Component {
         <h3>MY POSTS</h3>
        
           <div id="usersPosts">
-            {usersPosts.map((post,index) => <RelatedPost key={post._id} {...post} />)}
+            {usersPosts.map((post,i) => <RelatedPost key={i} {...post} />)}
             <span className="loader">{ this.props.isFetching.posts && 'loading...' }</span>
 
             <div className="pagination">

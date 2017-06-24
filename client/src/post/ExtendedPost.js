@@ -41,14 +41,14 @@ class ExtendedPost extends Component {
 
   componentWillMount() { 
     const { socket }  = this.props;
-    socket.emit('roomPost', this.props._id);
+    socket.emit('roomPost', this.props.id);
     socket.on('add comment', (payload) => this.props.socketAddComment(payload));
   }
 
   componentDidMount(){
      //create meta tags for FB sharing
-    const {image, title, content, category, country_in } = this.props;
-    const url = `http:/\/abroad-react-redux.herokuapp.com/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`
+    const {image, title, content, category, countryIn } = this.props;
+    const url = `http:/\/abroad-react-redux.herokuapp.com/${spaceToDash(countryIn)}/${category}/${beautifyUrlSegment(title)}`
     this.addMetaTags({image, title, description: content, url });
   }
 
@@ -70,14 +70,14 @@ class ExtendedPost extends Component {
 
               return comments.map(comment => 
               <Comment {...comment} 
-                       key={comment._id}
-                       postId={this.props._id}
+                       key={comment.id}
+                       postId={this.props.id}
                        deleteComment={deleteComment}
                        answerPost={this.props.answerPost} 
                        removePostAnswer={this.props.removePostAnswer}
                        editComment={this.props.editComment}
                        authenticated={this.props.authenticated}
-                       isPostAuthor = {loggedUserId === this.props.author._id}
+                       isPostAuthor = {loggedUserId === this.props.authorId}
                        isPostAnswered={this.props.isAnswered} />
               ) 
             }
@@ -85,7 +85,7 @@ class ExtendedPost extends Component {
   }
 
   handleDeletePost = () => {
-        this.props.deletePost(this.props._id);
+        this.props.deletePost(this.props.id);
   }
 
   openEditPostModal = () => {
@@ -97,10 +97,10 @@ class ExtendedPost extends Component {
   }
     
   render() {
-    const { upvotes, image, title, content, category, author, _id, deleteComment, editPost, country_from, country_in } = this.props;
+    const { upvotes, image, title, content, category, author, authorId, id, deleteComment, editPost, countryFrom, countryIn } = this.props;
     const comments = this.props.comments || [];
     const { authenticated } = this.props;
-    const datePosted = postDateDiff(_id);
+    const datePosted = this.props.createdAt;
     const loggedUserId = localStorage.getItem('id');
 
   
@@ -111,8 +111,8 @@ class ExtendedPost extends Component {
                onClose={this.closeEditPostModal}
                title="EDIT POST">
 
-          <EditPostForm postId={_id} 
-            authorId={author._id} 
+          <EditPostForm postId={id} 
+            authorId={authorId} 
             editPost={editPost}
             onSubmitted={this.closeEditPostModal}
             postContent={content} />
@@ -121,7 +121,7 @@ class ExtendedPost extends Component {
 
       <FacebookProvider appId={fbConfig.appID}>
         <Share
-         href={`http://abroad-react-redux.herokuapp.com/posts/${_id}/${spaceToDash(country_in)}/${category}/${beautifyUrlSegment(title)}`}>
+         href={`http://abroad-react-redux.herokuapp.com/posts/${id}/${spaceToDash(countryIn)}/${category}/${beautifyUrlSegment(title)}`}>
             <button>SHARE ON FB</button>
          </Share>
       </FacebookProvider>
@@ -129,15 +129,15 @@ class ExtendedPost extends Component {
         <span>Upvotes {upvotes}</span>
              <img className="title-img" alt={title} src={image ? image : `/images/post-categories/${category}.jpg`} />
             <h1>{title}</h1>
-            <p>{country_from + " > " + country_in}</p>
-            <span>Submitted {datePosted} ago by <Link to={`/user/${author._id}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
+            <p>{countryFrom + " > " + countryIn}</p>
+            <span>Submitted {datePosted} ago by <Link to={`/user/${authorId}/${spaceToDash(author.username)}`}>{author.username }</Link> to {category}</span>
             <section className="post-content">
               <Linkify properties={{target: '_blank'}}>
                 { newLineToBreak(content) }
               </Linkify>
             </section>
-        { loggedUserId === author._id && <button onClick={this.handleDeletePost}>DELETE POST</button> }
-        { loggedUserId === author._id && <button onClick={this.openEditPostModal}>EDIT POST</button> }
+        { loggedUserId === authorId && <button onClick={this.handleDeletePost}>DELETE POST</button> }
+        { loggedUserId === authorId && <button onClick={this.openEditPostModal}>EDIT POST</button> }
             <section className="post-comments">
               <p>{comments.length + " comments"}</p>
               {authenticated ? <AddComment /> : <Link to="/signin">Sign in to add a comment.</Link>}

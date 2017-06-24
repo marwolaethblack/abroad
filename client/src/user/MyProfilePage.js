@@ -5,8 +5,8 @@ import Post from '../post/Post';
 import UsersPosts from '../post/UsersPosts';
 
 export default function MyProfilePage(props) {
-	const { username, image, about, country_in, country_from, comments, posts } = props.userData;
-	const { loadUsersPosts, usersPosts, postsPages, isFetching, location} = props; 
+	const { id, username, image, about, countryIn, countryFrom, comments, posts } = props.userData;
+	const { getPostsByUserId, usersPosts, postsPages, isFetching, location} = props; 
 
 	return(
 		<section className="container main-page-content">
@@ -14,8 +14,8 @@ export default function MyProfilePage(props) {
 				<figcaption>
 					<h1>{username}</h1>
 					{ about && <Linkify> <p>{about}</p> </Linkify> }
-					{ country_from && <p>I'm from {country_from}</p> }
-					{ country_in && <p>I currently live in {country_in} </p> }
+					{ countryFrom && <p>I'm from {countryFrom}</p> }
+					{ countryIn && <p>I currently live in {countryIn} </p> }
 					<Link to={'/my-profile/edit'}>Edit profile</Link>
 					<br/>
 					<Link to={'/my-profile/subscriptions'}>Edit my notification subscriptions</Link>
@@ -26,10 +26,10 @@ export default function MyProfilePage(props) {
 			<section>
 				<UsersPosts
 				 location={location} 
-				 loadUsersPosts={loadUsersPosts}
+				 getPostsByUserId={getPostsByUserId}
 				 usersPosts={usersPosts}
 				 postsPages={postsPages}
-				 postsIds={posts} 
+				 userId={id} 
 				 isFetching={isFetching} />
 			</section>
 		</section>

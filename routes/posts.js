@@ -10,15 +10,15 @@ import mkdirp from 'mkdirp';
 import multer from 'multer';
 import fs from 'fs';
 
-
-
+import connection from '../models/db';
+import Sequelize from 'sequelize';
+import Post from '../models/PostNew';
+import User from '../models/UserNew';
+import Comment from '../models/CommentNew';
 
 module.exports = (postSocket, notificationSocket) => {
 
 	var router = express.Router();
-
-	// //destination to the folder with uploaded files
-	// var upload = multer({ 'dest': __dirname+'/uploads/posts' });
 		
 	router.get('/api/posts', function(req,res){
 
@@ -163,28 +163,54 @@ module.exports = (postSocket, notificationSocket) => {
 
 
 	//Get a single post
-	router.get('/api/singlePost',function(req,res) {
-		var roomId = req.query.id;
-		postSocket.once('connection', function(socket) {
+	router.get('/api/postById', (req, res) => {
+		const roomId = req.query.id;
+		postSocket.once('connection', (socket) => {
 			socket.join(roomId);
 		});
 
-		PostModel.findById(req.query.id)
-		.populate({path: 'comments', options: {lean: true},  populate : {path : 'author', options: {lean: true, select: '_id username'}}})
-		.populate({path: 'author', options: {lean: true, select: '_id username'}})
-		.exec(function(err, singlePost){
-			if(err){
-				console.log(err);
-				res.status(500).send({error:err});
-			} 
+		Post.findById( req.query.id, { raw: true })
+			.then(foundPost => {
+				if(foundPost){
+					User.findById(
+						foundPost.authorId, 
+						{ raw:true, 
+						  attributes: ['id','username','image','countryFrom','countryIn'] 
+						})
+						.then(foundUser => {
+							if(foundUser){
+								
+								foundPost.author = foundUser;
 
-			res.json(singlePost);
-		});
+								Comment.findAll({
+									where: { postId: foundPost.id }
+								})
+								.then(foundComments => {
+									foundPost.comments = foundComments || [];
+									res.json(foundPost);
 
+								})
+								.catch(err => {
+									res.status(500).send({error: err+": Couldn't fetch post's comments "})
+								});
+							} else {
+								res.status(404).send({error:'User not found.'});
+							}
+						})
+						.catch(err => {
+							res.status(500).send({error:err+':find user by id error'});
+						});
+				} else {
+					res.status(404).send({error:'Post not found.'});
+				}
+			})
+			.catch(err => {
+				res.status(500).send({error:err+':find post by id error'});
+			});
 	});
 
 	// //Get posts by IDs
-	router.get('/api/postsByIds',function(req,res) {
+	router.get('/api/postsByIds', (req,res) => {
 		if(req.query.Ids){
 			let postsIds = Object.values(req.query.Ids);
 			postsIds = Array.isArray(postsIds) ? postsIds : [postsIds];
@@ -205,13 +231,42 @@ module.exports = (postSocket, notificationSocket) => {
 		}
 	});
 
+	//Get posts by userId
+	router.get('/api/postsByUserId', (req,res) => {
+
+		const { userId } = req.query;
+
+		if(userId){
+
+			const page = req.query.page*1 || 1;
+			const limit = req.query.limit*1 || 10;
+
+			Post.findAndCountAll({
+			   where: {
+			      authorId: userId
+			   },
+			   offset: (page-1)*limit,
+			   limit
+			})
+			.then(posts => {
+				res.json({ 
+					posts: posts.rows,
+					pages: Math.ceil(posts.count / limit)
+				});
+			})
+			.catch(err => {
+				res.status(500).send({ error: err+":Couldn't fetch user's posts." });
+			});
+		}
+	});
+
 	//Add a new post
 	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
 	// configuring Multer to use files directory for storing files
 	const storage =   multer.diskStorage({
-	  destination: function (req, file, callback) {
-	  	const dir = './uploads/posts/'+createFilePath(file.originalname);
+	  destination: (req, file, callback) => {
+	  	const dir = './uploads/posts/' + createFilePath(file.originalname);
 	  	mkdirp(dir, function (err) {
 		    if (err){
 		    	console.error(err);
@@ -221,7 +276,7 @@ module.exports = (postSocket, notificationSocket) => {
 		    }
 		});
 	  },
-	  filename: function (req, file, callback) {
+	  filename: (req, file, callback) => {
 	    callback(null, file.originalname.substring(0,file.originalname.lastIndexOf('.')) + '-' + Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'),file.originalname.length));
 	  }
 	});
@@ -245,15 +300,15 @@ module.exports = (postSocket, notificationSocket) => {
 
 	const upload = multer({ storage, fileFilter, limits: { fileSize: 3000000, files: 1 }, });
 
-	router.post('/api/addPost', requireAuth, upload.single('image'), function(req,res) {
+	router.post('/api/addPost', requireAuth, upload.single('image'), (req, res) => {
 
-		var newPost = req.body;
-		var userId = req.user._id;
-		var reqUsername = req.user.username;
+		let newPost = req.body;
+		const userId = req.user.id;
+		const reqUsername = req.user.username;
 
 		if(newPost){
-			newPost.author = { _id : userId};
-			newPost.comments = [];
+			// newPost.author = { _id : userId};
+			// newPost.comments = [];
 
 			if(req.file){
 				//remove 'uploads' from the file destination
@@ -263,82 +318,120 @@ module.exports = (postSocket, notificationSocket) => {
 			} else {
 				// newPost.image = "https://placehold.it/350x150";
 			}
+
+			connection.sync()
+			.then(() => {
+				Post.create({
+			        ...newPost,
+			        authorId: userId
+			     })
+			    .then(createdPost => res.status(201).send(createdPost))
+			    .catch(err => res.status(400).send(err));
+			})
+			.catch(err => console.log("SYNC ERR: " + err));	
+
+			// var post = new PostModel(newPost);
 			
+			// post.save(function(err,newPost) {
+			// 	if(err) console.log(err);
 
-			var post = new PostModel(newPost);
-			
-			post.save(function(err,newPost) {
-				if(err) console.log(err);
+			// 	UserModel.findById(userId, function(err, foundAuthor) {
+			// 		if(err) {
+			// 			return res.status(422).send({error:err});
+			// 		}
 
-				UserModel.findById(userId, function(err, foundAuthor) {
-					if(err) {
-						return res.status(422).send({error:err});
-					}
+			// 		foundAuthor.posts.push(newPost);	
+			// 		foundAuthor.save(function(err) {
 
-					foundAuthor.posts.push(newPost);	
-					foundAuthor.save(function(err) {
+			// 			UserModel.find({
+			// 				$and: [
+			// 					{ 'subscriptions.notifications_country': newPost.country_in },
+			// 					{ 'subscriptions.notifications_category': newPost.category }
+			// 				]
+			// 			})
+			// 			.exec(function(err, foundUsers) {
+			// 				if(err) {
+			// 					console.log(err);
+			// 				}
 
-						UserModel.find({
-							$and: [
-								{ 'subscriptions.notifications_country': newPost.country_in },
-								{ 'subscriptions.notifications_category': newPost.category }
-							]
-						})
-						.exec(function(err, foundUsers) {
-							if(err) {
-								console.log(err);
-							}
+			// 				var notif = new NotificationModel();
+			// 					notif.postId = newPost._id;
+			// 					notif.author = { _id: userId }
+			// 					notif.text = ` has added a new post to the category ${newPost.category} in ${newPost.country_in}.`;
+			// 					notif.save(function(err) {
 
-							var notif = new NotificationModel();
-								notif.postId = newPost._id;
-								notif.author = { _id: userId }
-								notif.text = ` has added a new post to the category ${newPost.category} in ${newPost.country_in}.`;
-								notif.save(function(err) {
+			// 						for (var i = 0; i < foundUsers.length; i++) {
+			// 							if(foundUsers[i].username.toString() === reqUsername.toString()) {
+			// 								break;
+			// 							}
+			// 							foundUsers[i].notifications.push(notif);
+			// 							foundUsers[i].save();
+			// 							notificationSocket
+			// 							.to(newPost.country_in.toString() + newPost.category.toString())
+			// 							.emit("new notification", {...notif._doc,  author: { _id:userId, username: reqUsername } });
+			// 						}	
 
-									for (var i = 0; i < foundUsers.length; i++) {
-										if(foundUsers[i].username.toString() === reqUsername.toString()) {
-											break;
-										}
-										foundUsers[i].notifications.push(notif);
-										foundUsers[i].save();
-										notificationSocket
-										.to(newPost.country_in.toString() + newPost.category.toString())
-										.emit("new notification", {...notif._doc,  author: { _id:userId, username: reqUsername } });
-									}	
+			// 					});					
 
-								});					
+			// 			})
+			// 		});
+			// 	});
 
-						})
-					});
-				});
-
-				res.json(newPost);
+				// res.json(newPost);
 				
-			});
+			// });
 		} else {
 			return res.status(422).send({error:"Wuut? No post was sent."});
 		}
 	});
 
 	//EDIT A POST
-	router.put('/api/editPost', requireAuth, function(req,res) {
+	router.put('/api/editPost', requireAuth, (req, res) => {
 
-		var postInfo = req.body.postInfo;
-		var userId = req.user._id;
+		const postInfo = req.body.postInfo;
+		const userId = req.user.id;
 
 		if(Object.keys(postInfo).length){
 			if(JSON.stringify(postInfo.authorId) === JSON.stringify(userId)) {		
 				
 				//update a post and return the edited post
-				PostModel.findOneAndUpdate(
-					{ _id: postInfo.postId },
-					postInfo.editedFields, 
-					{new: true}
-				)
-				.exec(function(err,editedPost) {
-						if(err) console.log(err);
-						res.json(editedPost.content);
-				});
+				console.log("editedPost:");
+						console.log(postInfo.editedPost);
+						console.log("===============");
+
+				Post.update(
+						{ ...postInfo.editedFields }, 
+						{ where: { id: postInfo.postId },
+						  raw: true,
+						  returning: true
+						}
+	
+					)
+					.then(result => {
+
+						const affectedCount = result[0];
+						const affectedRows = result[1];
+
+						if(affectedCount > 0){
+							res.json(affectedRows[0]);
+						} else {
+							res.status(500).send({error: "failed to update a post" });
+						}
+					})
+					.catch(err => {
+						res.status(500).send({ error: err + ": failed to update a post" });
+					});
+
+				//update a post and return the edited post
+				// PostModel.findOneAndUpdate(
+				// 	{ _id: postInfo.postId },
+				// 	postInfo.editedFields, 
+				// 	{new: true}
+				// )
+				// .exec(function(err, editedPost) {
+				// 		if(err) console.log(err);
+				// 		res.json(editedPost.content);
+				// });
 			} else {
 				return res.status(401).send({error:"Unauthorized"});
 			}
@@ -347,45 +440,39 @@ module.exports = (postSocket, notificationSocket) => {
 		}
 	});
 
-	router.delete("/api/deletePost", requireAuth, function(req, res) {
-		var postId = req.query.postId;
-		var _id = req.user._id;
+	router.delete("/api/deletePost", requireAuth, (req, res) => {
 
-		PostModel.findById(postId).lean().exec(function(err, foundPost) {
-			if(err) {
-				console.log(err);
-			}
+		const postId = req.query.postId;
+		const userId = req.user.id;
 
-			if(JSON.stringify(foundPost.author) === JSON.stringify(_id)) {
-				PostModel.findOneAndRemove({ _id: postId }, function(err,removedDoc) {
-					 if(err) console.log(err);
+		Post.findById(postId, { raw: true, attributes: ['authorId'] })
+			.then(foundPost => {
+				if(JSON.stringify(foundPost.authorId) === JSON.stringify(userId)) {
 
-					 //delete an image of the deleted post from the file system
-					 const imgPath = './uploads'+removedDoc.image;
-					 //check if the image exists
-					 fs.stat(imgPath, (err,stats) => {
-					 	if(stats){
-					 		//delete the image
-					 		fs.unlink(imgPath, (err) => {
-							  if (err) console.log(err);
-							});
-						 } 
-					 }); 
-				});
+					Post.destroy({ where: { id: postId }},{ limit: 1 })
+						.then(deletedPost => {
+							res.json(deletedPost);
 
-				UserModel.findById(_id, function(err, foundAuthor) {
-					if(err) {
-						return res.status(422).send({error:err});
-					}
-
-					var postIndex = foundAuthor.posts.indexOf(postId);
-					foundAuthor.posts.splice(postIndex,1);	
-					foundAuthor.save();	
-				});
-
-					res.json(postId);	
-			}
-		});
+							//delete an image of the deleted post from the file system
+							 const imgPath = './uploads' + deletedPost.image;
+							 //check if the image exists
+							 fs.stat(imgPath, (err,stats) => {
+							 	if(stats){
+							 		//delete the image
+							 		fs.unlink(imgPath, (err) => {
+									  if (err) console.log(err);
+									});
+								 } 
+							 }); 
+						})
+						.catch(err => {
+							res.status(500).send({ error: err + ": Failed to delete the post" });
+						});
+				}
+			})
+			.catch(err => {
+				res.status(500).send({ error: err + ": Failed to delete the post" });
+			});
 	});
 
 	return router;

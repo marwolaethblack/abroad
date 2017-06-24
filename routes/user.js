@@ -9,86 +9,167 @@ import mkdirp from 'mkdirp';
 import multer from 'multer';
 import fs from 'fs';
 
+import UserNew from '../models/UserNew';
+import PostNew from '../models/PostNew';
+import Notification from '../models/NotificationNew';
+
 
 module.exports = function() {
-	var router = express.Router();
-	var requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
+	const router = express.Router();
+	const requireAuth = passport.authenticate('jwt', { session: false }); //Route middleware for authentication
 
-	router.get('/api/user', function(req,res) {
-		UserModel.findById(req.query.id, {password: 0})
-			// .populate('posts comments')
-				.lean()
-				.exec(function(err, user) {
-			if(err) {
-				return res.status(422).send({error:err});
+	router.get('/api/user', (req, res) => {
+
+		UserNew.findById(
+			req.query.id,
+			{
+				attributes:['id','username','image','about','countryFrom','countryIn'],
+				raw: true
+		})
+		.then(foundUser => {
+			if(foundUser){
+				res.json(foundUser);
+			} else {
+				return res.status(404).send({ error: 'User not found.' });
 			}
-			res.json(user);
+		})
+		.catch(err => {
+			console.log(err);
+			return res.status(422).send({ error:err });
 		});
 	});
 
-	router.get('/api/socialUser', function(req,res) {
+	router.get('/api/socialUser', (req, res) => {
 
-		var userInfo = req.query;
+		const userInfo = req.query;
 
-		UserModel.findOne({socialId: userInfo.id, provider: userInfo.provider})
-		.lean()
-		.exec(function(err, user) {
-			if(err) {
-				return res.status(422).send({error:err});
-			}
-
-			if(user){			
-				res.json({
-                        token: Authentication.tokenForUser({ id: user._id }),
-                        id: user._id,
-                        username: user.username 
+		UserNew.findOne({ 
+			where: { 
+				socialId: userInfo.id, 
+				provider: userInfo.provider 
+			},
+			attributes: ['id','username'],
+			raw: true 
+		})
+	   .then(foundUser => {
+	   		if(foundUser){
+	   			res.json({
+                    token: Authentication.tokenForUser({ id: foundUser.id }),
+                    id: foundUser.id,
+                    username: foundUser.username 
                 });
-
-			} else {
-		        var user = new UserModel({
+	   		} else {
+	   			 let newUser = {
 		        	socialId: userInfo.id,
 		            username: userInfo.name,
 		            email: userInfo.email,
 		            provider: userInfo.provider,
-		            notifications: []
-		        });
+		        };
 
-		        if(userInfo.provider === 'facebook'){
-		        	user['image'] = 'https://graph.facebook.com/'+req.query.id+'/picture?type=large';
+		         if(newUser.provider === 'facebook'){
+		        	newUser['image'] = 'https://graph.facebook.com/'+req.query.id+'/picture?type=large';
+
+		        	//get a user's country from FB locale - en_US -> <language>_<country>
+			        if(userInfo.locale){
+			        	const countryCode = userInfo.locale.slice(-2);
+			        	newUser.countryFrom = countries.default[countryCode];
+			        }
 		        }
 
-		        //get a user's country from FB locale - en_US -> <language>_<country>
-		        if(userInfo.locale){
-		        	var country_code = userInfo.locale.slice(-2);
-		        	user['country_from'] = countries.default[country_code];
-		        }
+		        UserNew.create(newUser)
+		        .then(createdUser => {
 
-		         var newNotif = new NotificationModel({
-		            text: "Welcome to abroad"
-		        });
+                    const newNotif = {
+                        text: "Welcome to Abroad",
+                        type: 'administration',
+                        ownerId: createdUser.id,
+                        authorId: '70fcdf77-0786-46b7-80b8-712d5d5b0945' //this should be ID of admin
+                    };
 
-		        newNotif.save();
-		        user.notifications.push(newNotif);
+                    Notification.create(newNotif)
+                    .then(() => {
 
-		        user.save(function(err){
-                    if(err) {res.json(err)}
+                        res.json({
+                            token: exports.tokenForUser(createdUser),
+                            id: createdUser.id,
+                            username: createdUser.username 
+                        });
 
-                    res.json({
-                        token: Authentication.tokenForUser({ id: user._id }),
-                        id: user._id,
-                        username: user.username 
-                   	});
-				});
-		    }
-		});
+                    })
+                    .catch(err => {
+                        console.log(err);
+						return res.status(422).send({ error:err });
+                    });
+                 })
+		        .catch(err => {
+                    console.log(err);
+					return res.status(422).send({ error:err });
+                });
+	   		}
+	   })
+	   .catch(err => {
+	   	return res.status(422).send({ error:err });
+	   });
+
+		// UserModel.findOne({ socialId: userInfo.id, provider: userInfo.provider })
+		// .lean()
+		// .exec(function(err, user) {
+		// 	if(err) {
+		// 		return res.status(422).send({error:err});
+		// 	}
+
+		// 	if(user){			
+				// res.json({
+    //                     token: Authentication.tokenForUser({ id: user._id }),
+    //                     id: user._id,
+    //                     username: user.username 
+    //             });
+
+		// 	} else {
+		        // var user = new UserModel({
+		        // 	socialId: userInfo.id,
+		        //     username: userInfo.name,
+		        //     email: userInfo.email,
+		        //     provider: userInfo.provider,
+		        //     notifications: []
+		        // });
+
+		        // if(userInfo.provider === 'facebook'){
+		        // 	user['image'] = 'https://graph.facebook.com/'+req.query.id+'/picture?type=large';
+		        // }
+
+		        // //get a user's country from FB locale - en_US -> <language>_<country>
+		        // if(userInfo.locale){
+		        // 	var country_code = userInfo.locale.slice(-2);
+		        // 	user['country_from'] = countries.default[country_code];
+		        // }
+
+		//          var newNotif = new NotificationModel({
+		//             text: "Welcome to abroad"
+		//         });
+
+		//         newNotif.save();
+		//         user.notifications.push(newNotif);
+
+		//         user.save(function(err){
+  //                   if(err) {res.json(err)}
+
+  //                   res.json({
+  //                       token: Authentication.tokenForUser({ id: user._id }),
+  //                       id: user._id,
+  //                       username: user.username 
+  //                  	});
+		// 		});
+		//     }
+		// });
 	});
 
 	//EDIT USER
 
 	// configuring Multer to use files directory for storing files
 	const storage =   multer.diskStorage({
-	  destination: function (req, file, callback) {
-	  	const dir = './uploads/userProfiles/'+createFilePath(file.originalname);
+	  destination: (req, file, callback) => {
+	  	const dir = './uploads/userProfiles/' + createFilePath(file.originalname);
 	  	mkdirp(dir, function (err) {
 		    if (err){
 		    	console.error(err);
@@ -98,7 +179,7 @@ module.exports = function() {
 		    }
 		});
 	  },
-	  filename: function (req, file, callback) {
+	  filename: (req, file, callback) => {
 	    callback(null, file.originalname.substring(0,file.originalname.lastIndexOf('.')) + '-' + Date.now() + file.originalname.substring(file.originalname.lastIndexOf('.'),file.originalname.length));
 	  }
 	});
@@ -122,13 +203,13 @@ module.exports = function() {
 
 	const upload = multer({ storage, fileFilter, limits: { fileSize: 3000000, files: 1 }, });
 
-	router.put('/api/editUser', requireAuth, upload.single('image'), function(req,res) {
+	router.put('/api/editUser', requireAuth, upload.single('image'), (req, res) => {
 
 		let userInfo = req.body;
-		const userId = req.user._id;
+		const userId = req.user.id;
 
 		if(Object.keys(userInfo).length){
-			if(JSON.stringify(userInfo._id) === JSON.stringify(userId)) {		
+			if(JSON.stringify(userInfo.id) === JSON.stringify(userId)) {		
 
 				if(req.file){
 					//remove 'uploads' from the file destination path
@@ -138,31 +219,58 @@ module.exports = function() {
 				}
 				
 				//update the user
-				UserModel.findOneAndUpdate(
-					{ _id: userId },
-					userInfo
-				)
-				.exec(function(err,oldUserData) {
-						if(err) console.log(err);
+					UserNew.update(
+						userInfo,
+						{ where: { id: userId } }
+					)
+					.then(updatedUser => {
+						if(updatedUser){
+							//if a user changes a profile pic,
+							//delete the former one
+							if(userInfo.image){
+								const imgPath = './uploads'+userInfo.image;
+								//check if the image exists
+								fs.stat(imgPath, (err, stats) => {
+								 	if(stats){
+								 		//delete the image
+								 		fs.unlink(imgPath, (err) => {
+										  if (err) console.log(err);
+										});
+									 } 
+								}); 
+							}
 
-					//if a user changes a profile pic,
-					//delete the former one
-					if(oldUserData.image){
-						 //delete an image of the deleted post from the file system
-						 const imgPath = './uploads'+oldUserData.image;
-						 //check if the image exists
-						 fs.stat(imgPath, (err,stats) => {
-						 	if(stats){
-						 		//delete the image
-						 		fs.unlink(imgPath, (err) => {
-								  if (err) console.log(err);
-								});
-							 } 
-						 }); 
-					}
+							res.json(updatedUser);
+						}
+					})
+					.catch(err => {
+						res.status(500).send('Sorry, uploading user went wrong.');
+					});
+				// UserModel.findOneAndUpdate(
+				// 	{ _id: userId },
+				// 	userInfo
+				// )
+				// .exec(function(err,oldUserData) {
+				// 		if(err) console.log(err);
 
-					res.json(oldUserData);
-				});
+					// if a user changes a profile pic,
+					// delete the former one
+				// 	if(oldUserData.image){
+				// 		 //delete an image of the deleted post from the file system
+						 // const imgPath = './uploads'+oldUserData.image;
+						 // //check if the image exists
+						 // fs.stat(imgPath, (err,stats) => {
+						 // 	if(stats){
+						 // 		//delete the image
+						 // 		fs.unlink(imgPath, (err) => {
+							// 	  if (err) console.log(err);
+							// 	});
+							//  } 
+						 // }); 
+				// 	}
+
+				// 	res.json(oldUserData);
+				// });
 			} else {
 				return res.status(401).send({error:"Unauthorized"});
 			}
@@ -170,7 +278,6 @@ module.exports = function() {
 			return res.status(422).send({error:"Wuut? User profile is WRONG!."});
 		}
 	});
-
 
 	return router;
 }
