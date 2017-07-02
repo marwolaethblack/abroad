@@ -2,14 +2,13 @@ var mongoose = require('mongoose');
 var passport = require("passport");
 var express = require('express');
 
-// Models
 var CommentModel = require('../db/models/mongoDB/Comment');
 var PostModel = require('../db/models/mongoDB/Post');
 var UserModel = require('../db/models/mongoDB/User');
 var NotificationModel = require('../db/models/mongoDB/Notification');
 
-var Authentication = require("../auth/controllers/authentication");
-var passportService = require("../auth/services/passport");
+import Authentication from "../auth/controllers/authentication";
+import passportService from "../auth/services/passport";
 import { spaceToDash } from '../helpers/textFormatting';
 
 

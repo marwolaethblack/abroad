@@ -4,15 +4,13 @@ import mkdirp from 'mkdirp';
 import multer from 'multer';
 import fs from 'fs';
 
-import User from '../db/models/UserNew';
-import Post from '../db/models/PostNew';
-import Notification from '../db/models/NotificationNew';
+import Post from '../db/models/Post';
+import Notification from '../db/models/Notification';
+import User from '../db/models/User';
 import Authentication from '../auth/controllers/authentication';
 import countries from '../../constants/countries.js';
 import { createFilePath } from '../helpers/fileUpload';
-// import UserNew from '../models/UserNew';
 
-// import Notification from '../db/models/NotificationNew';
 
 
 module.exports = function() {

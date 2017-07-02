@@ -5,16 +5,19 @@ import multer from 'multer';
 import fs from 'fs';
 import Sequelize from 'sequelize';
 
+//temporary models
 var PostModel = require('../db/models/mongoDB/Post');
 var CommentModel = require('../db/models/mongoDB/Comment');
 var UserModel = require('../db/models/mongoDB/User');
 var NotificationModel = require('../db/models/mongoDB/Notification');
 
+import Post from '../db/models/Post';
+import User from '../db/models/User';
+import Comment from '../db/models/Comment';
 import { date_ranges, getDateTimestamp } from '../helpers/postCreatedRanges';
 import { createFilePath } from '../helpers/fileUpload';
-import Post from '../db/models/PostNew';
-import User from '../db/models/UserNew';
-import Comment from '../db/models/CommentNew';
+import postController from '../controllers/postController'; 
+
 
 
 module.exports = (postSocket, notificationSocket) => {
@@ -164,51 +167,7 @@ module.exports = (postSocket, notificationSocket) => {
 
 
 	//Get a single post
-	router.get('/api/postById', (req, res) => {
-		const roomId = req.query.id;
-		postSocket.once('connection', (socket) => {
-			socket.join(roomId);
-		});
-
-		Post.findById( req.query.id, { raw: true })
-			.then(foundPost => {
-				if(foundPost){
-					User.findById(
-						foundPost.authorId, 
-						{ raw:true, 
-						  attributes: ['id','username','image','countryFrom','countryIn'] 
-						})
-						.then(foundUser => {
-							if(foundUser){
-								
-								foundPost.author = foundUser;
-
-								Comment.findAll({
-									where: { postId: foundPost.id }
-								})
-								.then(foundComments => {
-									foundPost.comments = foundComments || [];
-									res.json(foundPost);
-
-								})
-								.catch(err => {
-									res.status(500).send({error: err+": Couldn't fetch post's comments "})
-								});
-							} else {
-								res.status(404).send({error:'User not found.'});
-							}
-						})
-						.catch(err => {
-							res.status(500).send({error:err+':find user by id error'});
-						});
-				} else {
-					res.status(404).send({error:'Post not found.'});
-				}
-			})
-			.catch(err => {
-				res.status(500).send({error:err+':find post by id error'});
-			});
-	});
+	router.get('/api/postById', postController.getPostById);
 
 	// //Get posts by IDs
 	router.get('/api/postsByIds', (req,res) => {

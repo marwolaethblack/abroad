@@ -1,21 +1,19 @@
-// var User = require("../../models/User");
-// var NotificationModel = require("../../models/Notification");
-var jwt = require("jwt-simple");
-var config = require('../../config');
-var bcrypt = require("bcrypt-nodejs");
+import jwt from "jwt-simple";
+import bcrypt from "bcrypt-nodejs";
 import isEmail from 'validator/lib/isEmail';
-import UserNew from '../../db/models/UserNew';
-import Notification from '../../db/models/NotificationNew';
 
-exports.tokenForUser = (user) => {
-    var timestamp = new Date().getTime();
-    return jwt.encode({ sub: user.id, iat: timestamp}, config.secret);
+import config from '../../config';
+import { User, Notification } from '../../db/models';
+
+
+export const tokenForUser = (user) => {
+    const timestamp = new Date().getTime();
+    return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
 }
 
 
-exports.signin = (req, res, next) => {
+export const signIn = (req, res, next) => {
     //User has already their email and password auth we just need to give them a token
-
     res.send({ 
        token: exports.tokenForUser(req.user),
        id: req.user.id,
@@ -24,7 +22,7 @@ exports.signin = (req, res, next) => {
     });
 }
 
-exports.signup = (req, res, next) => {
+export const signUp = (req, res, next) => {
 
     const email = req.body.email;
     const password = req.body.password;
@@ -38,12 +36,14 @@ exports.signup = (req, res, next) => {
         return res.status(422).send({error: "Invalid email"});
     }
 
-    //see if given user with email exists
-    UserNew.findOne({
+    //see if a given user with email exists
+    User
+    .findOne({
       where: { email },
       attributes: ['id'],
       raw: true
-    }).then(existingUser => {
+    })
+    .then(existingUser => {
         //if yes return error
         if(existingUser){
             return res.status(422).send({error: "Email already in use"});
@@ -63,15 +63,14 @@ exports.signup = (req, res, next) => {
                 //overwrite plaintext password with encrypted password
                 newUser.password = hash;
 
-                UserNew.create(newUser)
+                User
+                .create(newUser)
                 .then(createdUser => {
 
-                        const newNotif = {
-                            text: "Welcome to Abroad",
-                            type: 'administration',
-                            ownerId: createdUser.id,
-                            authorId: '70fcdf77-0786-46b7-80b8-712d5d5b0945' //this should be ID of admin
-                        };
+                    const newNotif = {
+                        content: "Welcome to Abroad",
+                        ownerId: createdUser.id,
+                    };
 
                     Notification.create(newNotif)
                     .then(() => {
@@ -80,14 +79,14 @@ exports.signup = (req, res, next) => {
                             id: createdUser.id,
                             username: createdUser.username 
                         });
-
                     }).catch(err => {
                         return next(err);
                     });
-                });
+                })
+                .catch(err => {
+                    return next(err);
+                });;
             });
-        }).catch(err => {
-            return next(err);
         });
     });
 }
