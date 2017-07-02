@@ -1,7 +1,7 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import { trimFormValues,createFileFormData } from '../../services/formHandling';
+import { trimFormValues,createFileFormData } from '../../helpers/formHandling';
 
 export function fetchUser(id) {
 	return function(dispatch) {

@@ -4,8 +4,8 @@ var jwt = require("jwt-simple");
 var config = require('../../config');
 var bcrypt = require("bcrypt-nodejs");
 import isEmail from 'validator/lib/isEmail';
-import UserNew from '../../models/UserNew';
-import Notification from '../../models/NotificationNew';
+import UserNew from '../../db/models/UserNew';
+import Notification from '../../db/models/NotificationNew';
 
 exports.tokenForUser = (user) => {
     var timestamp = new Date().getTime();

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
-import postDateDiff from '../services/dateDifference';
-import { beautifyUrlSegment, spaceToDash } from '../services/textFormatting';
+import postDateDiff from '../helpers/dateDifference';
+import { beautifyUrlSegment, spaceToDash } from '../helpers/textFormatting';
 
 
 class RelatedPost extends Component {

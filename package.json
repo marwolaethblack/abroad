@@ -34,7 +34,7 @@
   },
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "babel-node server.js",
+    "server": "babel-node ./server/index.js",
     "client": "babel-node start-client.js"
   },
   "devDependencies": {
@@ -44,6 +44,7 @@
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.2.0",
     "eslint-plugin-jsx-a11y": "4.0.0",
-    "eslint-plugin-react": "6.9.0"
+    "eslint-plugin-react": "6.9.0",
+    "tracer": "^0.8.9"
   }
 }

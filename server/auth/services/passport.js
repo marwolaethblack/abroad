@@ -5,7 +5,7 @@ const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const LocalStrategy = require("passport-local");
 
-import UserNew from '../../models/UserNew';
+import UserNew from '../../db/models/UserNew';
 
 //Create local strategy
 const localOptions = { usernameField: 'email' };

@@ -1,17 +1,18 @@
-var UserModel = require('../models/User');
-var NotificationModel = require('../models/Notification');
-var express = require('express');
-var passport = require('passport');
-var Authentication = require('../auth/controllers/authentication');
-var countries = require('../client/src/constants/countries');
-import { createFilePath } from '../services/fileUpload';
+import express from 'express';
+import passport from 'passport';
 import mkdirp from 'mkdirp';
 import multer from 'multer';
 import fs from 'fs';
 
-import UserNew from '../models/UserNew';
-import PostNew from '../models/PostNew';
-import Notification from '../models/NotificationNew';
+import User from '../db/models/UserNew';
+import Post from '../db/models/PostNew';
+import Notification from '../db/models/NotificationNew';
+import Authentication from '../auth/controllers/authentication';
+import countries from '../../constants/countries.js';
+import { createFilePath } from '../helpers/fileUpload';
+// import UserNew from '../models/UserNew';
+
+// import Notification from '../db/models/NotificationNew';
 
 
 module.exports = function() {

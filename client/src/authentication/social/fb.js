@@ -1,4 +1,4 @@
-import FbConfig from '../../../../auth/config/fb';
+import FbConfig from '../../constants/fb';
 
 
 export const fbPromises = {

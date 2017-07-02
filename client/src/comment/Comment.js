@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Linkify from 'react-linkify';
-import postDateDiff from '../services/dateDifference';
+import postDateDiff from '../helpers/dateDifference';
 import EditCommentForm from './EditCommentForm';
 import ReplyCommentForm from './ReplyCommentForm';
 import Modal from '../widgets/Modal';
 import { Link } from 'react-router';
-import { spaceToDash } from '../services/textFormatting';
+import { spaceToDash } from '../helpers/textFormatting';
 
 
 class Comment extends Component {

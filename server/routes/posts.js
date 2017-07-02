@@ -1,20 +1,21 @@
-var PostModel = require('../models/Post');
-var CommentModel = require('../models/Comment');
-var UserModel = require('../models/User');
-var NotificationModel = require('../models/Notification');
-var express = require('express');
-var passport = require('passport');
-import { date_ranges, getDateTimestamp } from '../client/src/constants/post_created_ranges';
-import { createFilePath } from '../services/fileUpload';
+import express from 'express';
+import passport from 'passport';
 import mkdirp from 'mkdirp';
 import multer from 'multer';
 import fs from 'fs';
-
-import connection from '../models/db';
 import Sequelize from 'sequelize';
-import Post from '../models/PostNew';
-import User from '../models/UserNew';
-import Comment from '../models/CommentNew';
+
+var PostModel = require('../db/models/mongoDB/Post');
+var CommentModel = require('../db/models/mongoDB/Comment');
+var UserModel = require('../db/models/mongoDB/User');
+var NotificationModel = require('../db/models/mongoDB/Notification');
+
+import { date_ranges, getDateTimestamp } from '../helpers/postCreatedRanges';
+import { createFilePath } from '../helpers/fileUpload';
+import Post from '../db/models/PostNew';
+import User from '../db/models/UserNew';
+import Comment from '../db/models/CommentNew';
+
 
 module.exports = (postSocket, notificationSocket) => {
 
@@ -319,16 +320,14 @@ module.exports = (postSocket, notificationSocket) => {
 				// newPost.image = "https://placehold.it/350x150";
 			}
 
-			connection.sync()
-			.then(() => {
-				Post.create({
-			        ...newPost,
-			        authorId: userId
-			     })
-			    .then(createdPost => res.status(201).send(createdPost))
-			    .catch(err => res.status(400).send(err));
-			})
-			.catch(err => console.log("SYNC ERR: " + err));	
+			Post.create({
+		        ...newPost,
+		        authorId: userId
+		     })
+		    .then(createdPost => res.status(201).send(createdPost))
+		    .catch(err => res.status(400).send(err));
+
+
 
 			// var post = new PostModel(newPost);
 			

@@ -1,5 +1,5 @@
 import { ActionTypes } from '../../constants/actionTypes';
-import layerComments from '../../services/layerComments';
+import layerComments from '../../helpers/layerComments';
 
 
 export const singlePost = (state={},action) => {

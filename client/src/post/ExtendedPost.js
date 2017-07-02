@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import Linkify from 'react-linkify';
-import postDateDiff from '../services/dateDifference';
+import postDateDiff from '../helpers/dateDifference';
 import Comment from '../comment/Comment';
 import AddComment from '../comment/AddComment';
 import Modal from '../widgets/Modal';
 import EditPostForm from './EditPostForm';
 import SharePost from './SharePost';
 import ReplyCommentForm from '../comment/ReplyCommentForm';
-import { newLineToBreak, spaceToDash, beautifyUrlSegment } from '../services/textFormatting';
+import { newLineToBreak, spaceToDash, beautifyUrlSegment } from '../helpers/textFormatting';
 import { fbPromises } from '../authentication/social/fb';
-import fbConfig from '../../../auth/config/fb';
+import fbConfig from '../constants/fb';
 import FacebookProvider, { Share } from 'react-facebook';
 
 

@@ -1,10 +1,10 @@
 import { ActionTypes } from '../../constants/actionTypes';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
-import { beautifyUrlSegment, spaceToDash, removeMultipleNewLines } from '../../services/textFormatting';
+import { beautifyUrlSegment, spaceToDash, removeMultipleNewLines } from '../../helpers/textFormatting';
 import { getUserCountryCode }  from '../../services/userLocation';
 // import { changeFilename }  from '../../services/fileUpload';
-import { trimFormValues,createFileFormData } from '../../services/formHandling';
+import { trimFormValues,createFileFormData } from '../../helpers/formHandling';
 import countries from '../../constants/countries'
 import { FILE_FIELD_NAME } from '../../widgets/FileUploader';
 

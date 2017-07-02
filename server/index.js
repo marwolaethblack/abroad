@@ -12,6 +12,7 @@ var compression = require('compression');
 
 var sequelize = require('sequelize');
 
+var db = require('./db/models');
 
 
 app.use(compression());
@@ -30,6 +31,16 @@ app.use(express.static('./uploads'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+// db.sequelize
+//   .authenticate()
+//   .then(() => {
+//     console.log('Connection has been established successfully.');
+//     db.sequelize.sync({ force: true });
+//   })
+//   .catch(err => {
+//     console.error('Unable to connect to the database:', err);
+//   });
 
 // mongoose.Promise = global.Promise; only if the browser-console shows promise Warning
 mongoose.connect("mongodb://abroad:dansko123@ds113650.mlab.com:13650/abroad", function(err) {
@@ -96,8 +107,11 @@ if(process.env.NODE_ENV === 'production') {
 	});
 }
 
-
-http.listen(app.get('port'), function() {
-  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+db.sequelize.sync({ force: true }).then(function() {
+	http.listen(app.get('port'), function() {
+	  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+	});
 });
+
+
 

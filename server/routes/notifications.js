@@ -3,8 +3,8 @@
 var express = require('express');
 var passport = require('passport');
 
-import User from '../models/UserNew';
-import Notification from '../models/NotificationNew';
+import User from '../db/models/UserNew';
+import Notification from '../db/models/NotificationNew';
 
 
 module.exports = (notificationSocket) => {

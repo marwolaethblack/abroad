@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { getNotificationsOnPage } from '../actions/notifActions';
-import { formatDate, spaceToDash } from '../../services/textFormatting';
+import { formatDate, spaceToDash } from '../../helpers/textFormatting';
 
 
 class Notifications extends Component {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { signoutUser } from '../authentication/actions/authentication';
 import { getLatestNotifications, socketNotificationsUpdate, notificationsWereSeen } from '../notification/actions/notifActions';
 import io from 'socket.io-client';
-import { spaceToDash, beautifyUrlSegment } from '../services/textFormatting';
+import { spaceToDash, beautifyUrlSegment } from '../helpers/textFormatting';
 import onClickOutside from 'react-onclickoutside';
 
 

@@ -1,13 +1,17 @@
-var CommentModel = require('../models/Comment');
-var PostModel = require('../models/Post');
-var UserModel = require('../models/User');
-var NotificationModel = require('../models/Notification');
 var mongoose = require('mongoose');
-var Authentication = require("../auth/controllers/authentication");
-var passportService = require("../auth/services/passport");
 var passport = require("passport");
 var express = require('express');
-import { spaceToDash } from '../services/textFormatting';
+
+// Models
+var CommentModel = require('../db/models/mongoDB/Comment');
+var PostModel = require('../db/models/mongoDB/Post');
+var UserModel = require('../db/models/mongoDB/User');
+var NotificationModel = require('../db/models/mongoDB/Notification');
+
+var Authentication = require("../auth/controllers/authentication");
+var passportService = require("../auth/services/passport");
+import { spaceToDash } from '../helpers/textFormatting';
+
 
 module.exports = function(postSocket, notificationSocket) {
 
